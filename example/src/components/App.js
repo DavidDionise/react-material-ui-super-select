@@ -1,13 +1,12 @@
 import React from 'react';
-
-import './styles.scss';
+import { hot } from 'react-hot-loader';
 
 const App = () => {
   return (
     <div className='app-continer'>
-      HELLO WOOOOORLD
+      HELLO WOOOOORLDss
     </div>
   )
 }
 
-export default App;
+export default hot(module)(App);

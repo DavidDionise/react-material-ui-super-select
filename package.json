@@ -1,19 +1,18 @@
 {
-  "name": "react-youtube-channel",
+  "name": "react-material-ui-super-select-example",
   "version": "1.0.0",
   "description": "",
-  "main": "webpack.config.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server"
+    "start": "node_modules/.bin/webpack-dev-server"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-hot-loader": "^3.0.0-beta.7"
+    "@material-ui/core": "^1.2.3",
+    "react-hot-loader": "^4.3.3",
+    "webpack-cli": "^3.0.8"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
@@ -23,9 +22,11 @@
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.4",
     "node-sass": "^4.5.3",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
     "sass-loader": "^6.0.5",
     "style-loader": "^0.18.1",
-    "webpack": "^2.6.1",
-    "webpack-dev-server": "^2.4.5"
+    "webpack": "^4.12.1",
+    "webpack-dev-server": "^3.1.4"
   }
 }
