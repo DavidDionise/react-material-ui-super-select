@@ -30,11 +30,14 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'react-material-ui-super-select': path.resolve(__dirname, 'src/index'),
+      'react-material-ui-super-select': path.resolve(__dirname, 'src/index.jsx'),
     },
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin({}),
-    new webpack.NamedModulesPlugin()
+    new webpack.NamedModulesPlugin(),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+    })
   ]
 };
