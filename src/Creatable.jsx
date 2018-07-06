@@ -8,21 +8,25 @@ import _ from 'lodash';
 const RMSS_CREATABLE_VALUE = '___rmss_creatable_value___';
 
 class Creatable extends MultiSelect {
-  constructor(props) {
-    super(props);
-  }
-
   handleKeyDown = (event) => {
     switch (event.keyCode) {
       case 13: {
         event.preventDefault();
-        // if creation is possible . . .
-        if ((this.getFilteredOptions()[0] || {}).value == RMSS_CREATABLE_VALUE) {
-          this.props.onCreate({
-            value: this.state.input_value,
-            label: this.state.input_value,
-          });
-          this.handleSelectItem(this.getFilteredOptions()[0]);
+        if (this.state.focused_option) {
+          // if creation is possible . . .
+          if (
+            this.state.focused_option.id == RMSS_CREATABLE_VALUE &&
+            !this.props.options.find(opt => opt.value == this.state.input_value)
+          ) {
+            const new_option_props = {
+              id: this.state.input_value,
+              label: this.state.input_value
+            };
+            this.props.onCreate(new_option_props);
+            this.handleSelectOption(new_option_props);
+          } else {
+            this.handleSelectOption(this.state.focused_option);
+          }
         }
         break;
       }
@@ -31,19 +35,10 @@ class Creatable extends MultiSelect {
       }
     }
   }
-  handleSelectItem(value) {
-    const { input_value } = this.state;
-    if (value == RMSS_CREATABLE_VALUE) {
-      this.props.onCreate({ value: input_value, label: input_value });
-    } else {
-      MultiSelect.prototype.handleSelectItem.call(this, value);
-    }
-  }
-  getFilteredOptions = () => {
-    const { input_value } = this.state;
+  getFilteredOptions = (input_value) => {
     const filtered_options = MultiSelect.prototype.getFilteredOptions.call(this, input_value);
-    const matched_option = filtered_options.find(opt => (
-      new RegExp(`^${input_value || ''}$`, 'i').test(opt.value) ||
+    const matched_option = this.props.options.find(opt => (
+      new RegExp(`^${input_value || ''}$`, 'i').test(opt.id) ||
       new RegExp(`^${input_value || ''}$`, 'i').test(opt.label)
     ));
     // if the input doesn't match one of the options, AND creation
@@ -51,10 +46,10 @@ class Creatable extends MultiSelect {
     if (
       input_value &&
       !matched_option &&
-      !((filtered_options[0] || {}).value == RMSS_CREATABLE_VALUE)
+      !((filtered_options[0] || {}).id == RMSS_CREATABLE_VALUE)
     ) {
       return [
-        { value: RMSS_CREATABLE_VALUE, label: `Create "${input_value}"` },
+        { id: RMSS_CREATABLE_VALUE, label: `Create "${input_value}"` },
         ...filtered_options
       ];
     } else {
@@ -62,32 +57,34 @@ class Creatable extends MultiSelect {
     }
   }
 
-  generateInputContainer = () => (
-    <div className={this.props.classes.rmss_multi_input_container}>
-      <div className={this.props.classes.rmss_multi_selected_value_container}>
-        {(this.props.value || [])
-          .filter(item => this.props.options.find(opt => opt.value == item))
+  generateInputContainer = () => {
+    const { classes } = this.props;
+    const { clientWidth: input_width } = (this.widthCalculatorRef.current || {});
+
+    return (
+      <div className={classes.rmss_creatable_input_container}>
+        {(this.props.selected_value || [])
+          .filter(item => this.props.options.find(opt => opt.id == item.id))
           .map(item => (
             <Chip
-              key={item}
-              label={this.props.options.find(opt => opt.value === item).label}
+              key={item.id}
+              label={item.label}
               onDelete={() => this.handleDeleteItem(item)}
-              className={this.props.classes.rmss_chip}
+              className={classes.rmss_chip}
             />
           ))}
+        <TextField
+          fullWidth
+          onChange={this.handleInputChange}
+          onClick={() => this.setState({ menu_open: true })}
+          value={this.state.entering_text ? this.state.input_value : ''}
+          onKeyDown={this.handleKeyDown}
+          onFocus={this.handleTextFocus}
+          placeholder={this.props.selected_value ? '' : this.props.placeholder}
+        />
       </div>
-      <TextField
-        fullWidth
-        multiline
-        onChange={this.handleInputChange}
-        value={this.state.entering_text ? this.state.input_value : ''}
-        onKeyDown={this.handleKeyDown}
-        onFocus={this.handleTextFocus}
-        onBlur={() => this.setState({ entering_text: false })}
-        placeholder={this.props.value ? '' : this.props.placeholder}
-      />
-    </div>
-  )
+    )
+  }
 }
 
 Creatable.propTypes = {

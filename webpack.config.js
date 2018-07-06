@@ -11,7 +11,7 @@ module.exports = {
     publicPath: '/'
   },
 
-  devtool: 'inline-source-map',
+  devtool: 'eval-source-map',
 
   devServer: {
     hot: true,

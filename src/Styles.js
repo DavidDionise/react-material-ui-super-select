@@ -1,9 +1,42 @@
 export default theme => ({
-  rmss_container: {
+  // Global
+  rmss_global_container: {
     display: 'flex',
     flexDirection: 'column',
   },
+  rmss_global_input_container: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  rmss_global_menu_container: {
+    position: 'relative',
+  },
+  rmss_global_menu_item: {
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+    '&.selected': {
+      backgroundColor: `${theme.palette.grey[100]} !important`,
+    },
+    '&.focused': {
+      backgroundColor: `${theme.palette.grey[200]} !important`,
+    },
+  },
+  rmss_global_actions_container: {
+    flex: '2',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  rmss_global_close_button_container: {
+    color: theme.palette.grey[700],
+    '&:hover': {
+      cursor: 'pointer',
+    }
+  },
+
+  // Select
   rmss_input_container: {
+    flex: '8',
     position: 'relative',
     display: 'flex',
     flexDirection: 'row',
@@ -16,26 +49,14 @@ export default theme => ({
       bottom: '10px',
     },
   },
-  rmss_menu_container: {
-    position: 'relative',
-  },
-  rmss_menu_item: {
-    '&:hover': {
-      backgroundColor: 'white',
-    },
-    '&.selected': {
-      backgroundColor: `${theme.palette.grey[100]} !important`,
-    },
-    '&.focused': {
-      backgroundColor: `${theme.palette.grey[200]} !important`,
-    },
-  },
 
-  // Multi
+  // MultiSelect
   rmss_multi_input_container: {
+    flex: '8',
     position: 'relative',
     display: 'flex',
     flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   rmss_multi_selected_value_container: {
     position: 'relative',
@@ -43,6 +64,25 @@ export default theme => ({
     flexDirection: 'row',
   },
   rmss_chip: {
-    marginRight: theme.spacing.unit,
-  }
+    margin: `0 ${theme.spacing.unit}px ${theme.spacing.unit}px 0`,
+  },
+
+  // Creatable
+  rmss_creatable_input_container: {
+    flex: '8',
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  rmss_creatable_selected_value_container: {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  rmss_creatable_input_field_container: {
+    flex: '1'
+  },
+
 });
