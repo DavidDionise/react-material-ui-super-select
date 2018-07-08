@@ -74,38 +74,77 @@ class Select extends React.Component {
       }
       // Arrow Down
       case 40: {
-        const options = this.getFilteredOptions(this.state.input_value);
-        let updated_focused_option;
-        const focused_option_idx = options.findIndex(opt => (
-          opt.id == this.state.focused_option.id
-        ));
-        if (focused_option_idx != -1) {
-          updated_focused_option = focused_option_idx == options.length - 1 ?
-            options[0] :
-            options[focused_option_idx + 1];
-        } else {
-          updated_focused_option = options[0];
-        }
-        this.setState({ focused_option: updated_focused_option });
+        const filtered_options = this.getFilteredOptions(this.state.input_value);
+        const next_focused_option = this.state.focused_option ?
+          filtered_options.reduce((acc, opt, idx, options) => {
+            if (opt.id == this.state.focused_option.id) {
+              acc = options[idx + 1] || options[0];
+            }
+            return acc;
+          }, null) :
+          filtered_options[0];
+
+        this.focusOption(next_focused_option, event.keyCode);
         break;
       }
       // Arrow Up
       case 38: {
-        const options = this.getFilteredOptions(this.state.input_value);
-        let updated_focused_option;
-        const focused_option_idx = options.findIndex(opt => (
-          opt.id == this.state.focused_option.id
-        ));
-        if (focused_option_idx != -1) {
-          updated_focused_option = focused_option_idx == 0 ?
-            options[options.length - 1] :
-            options[focused_option_idx - 1];
-        } else {
-          updated_focused_option = options[0];
-        }
-        this.setState({ focused_option: updated_focused_option });
+        const filtered_options = this.getFilteredOptions(this.state.input_value);
+        const next_focused_option = this.state.focused_option ?
+          filtered_options.reduce((acc, opt, idx, options) => {
+            if (opt.id == this.state.focused_option.id) {
+              acc = options[idx - 1] || options[options.length - 1];
+            }
+            return acc;
+          }, null) :
+          filtered_options[filtered_options.length - 1];
+
+        this.focusOption(next_focused_option, event.keyCode);
         break;
       }
+    }
+  }
+  focusOption = (focused_option, key_code) => {
+    this.setState({ focused_option });
+
+    const focused_element = $(`#rmss-menu-item-${focused_option.id}`)[0];
+    const menu_container_element = $(`.${this.props.classes.rmss_global_menu_paper_container}`)[0];
+    const menu_list_element = $('#rmss-menu-list')[0];
+    const {
+      clientHeight: menu_container_height,
+      scrollTop: menu_container_scroll_top,
+    } = menu_container_element;
+    const {
+      scrollHeight: focused_element_height,
+      offsetTop: focused_element_offset,
+    } = focused_element;
+    const { clientHeight: menu_list_height } = menu_list_element;
+    const filtered_options = this.getFilteredOptions(this.state.input_value);
+    const focused_element_idx = filtered_options.findIndex(e => (
+      e.id == focused_option.id
+    ));
+    let new_scroll_height;
+    if (key_code == 38) {           // Arrow up
+      if (focused_element_idx == filtered_options.length - 1) {
+        new_scroll_height = menu_list_height;
+      } else if (focused_element_offset <= menu_container_scroll_top) {
+        new_scroll_height = focused_element_offset;
+      }
+    } else if (key_code == 40) {    // Arrow down
+      if (focused_element_idx == 0) {
+        new_scroll_height = 0;
+      } else if (menu_container_height + menu_container_scroll_top <= focused_element_height + focused_element_offset) {
+        new_scroll_height = focused_element_offset - (menu_container_height - focused_element_height);
+      }
+    } else {
+      console.warn(`Calling 'focusOption' with a keyCode that is neither arrow up or arrow down.`);
+    }
+
+    if (new_scroll_height !== undefined) {
+      // prevents UI flicker
+      setTimeout(() => {
+        $(menu_container_element).scrollTop(new_scroll_height);
+      }, 100);
     }
   }
   handleSelectOption(option) {
@@ -175,8 +214,8 @@ class Select extends React.Component {
                   }
                   className='select-click-away-listener'
                 >
-                  <Paper>
-                    <MenuList>
+                  <Paper classes={{ root: classes.rmss_global_menu_paper_container }}>
+                    <MenuList id='rmss-menu-list'>
                       {this.getFilteredOptions(this.state.input_value).map(opt => {
                         const selected = opt.id == (this.props.selected_value || {}).id;
                         const focused = opt.id == (this.state.focused_option || {}).id;
@@ -184,6 +223,7 @@ class Select extends React.Component {
                         return this.props.menuItemRenderer ? this.props.menuItemRenderer(opt) : (
                           <MenuItem
                             key={opt.id}
+                            id={`rmss-menu-item-${opt.id}`}
                             onClick={() => this.handleSelectOption(opt)}
                             onMouseEnter={() => this.setState({ focused_option: opt })}
                             className={`${classes.rmss_global_menu_item} ${selected && !focused ? 'selected' : focused ? 'focused' : ''}`}

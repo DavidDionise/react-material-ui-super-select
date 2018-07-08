@@ -33,6 +33,10 @@ export default theme => ({
       cursor: 'pointer',
     }
   },
+  rmss_global_menu_paper_container: {
+    overflowY: 'scroll',
+    maxHeight: '200px',
+  },
 
   // Select
   rmss_input_container: {

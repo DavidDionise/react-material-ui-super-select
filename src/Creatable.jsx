@@ -56,35 +56,6 @@ class Creatable extends MultiSelect {
       return filtered_options;
     }
   }
-
-  generateInputContainer = () => {
-    const { classes } = this.props;
-    const { clientWidth: input_width } = (this.widthCalculatorRef.current || {});
-
-    return (
-      <div className={classes.rmss_creatable_input_container}>
-        {(this.props.selected_value || [])
-          .filter(item => this.props.options.find(opt => opt.id == item.id))
-          .map(item => (
-            <Chip
-              key={item.id}
-              label={item.label}
-              onDelete={() => this.handleDeleteItem(item)}
-              className={classes.rmss_chip}
-            />
-          ))}
-        <TextField
-          fullWidth
-          onChange={this.handleInputChange}
-          onClick={() => this.setState({ menu_open: true })}
-          value={this.state.entering_text ? this.state.input_value : ''}
-          onKeyDown={this.handleKeyDown}
-          onFocus={this.handleTextFocus}
-          placeholder={this.props.selected_value ? '' : this.props.placeholder}
-        />
-      </div>
-    )
-  }
 }
 
 Creatable.propTypes = {

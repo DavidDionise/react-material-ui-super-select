@@ -95,8 +95,8 @@ class MultiSelect extends Select {
           ))}
         <TextField
           fullWidth
-          onClick={() => this.setState({ menu_open: true })}
           onChange={this.handleInputChange}
+          onClick={() => this.setState({ menu_open: true })}
           value={this.state.entering_text ? this.state.input_value : ''}
           onKeyDown={this.handleKeyDown}
           onFocus={this.handleTextFocus}
