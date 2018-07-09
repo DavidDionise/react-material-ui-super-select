@@ -1,8 +1,8 @@
 import withStyles from '@material-ui/core/styles/withStyles';
 import selectStyles from './Styles';
-import UnStyledSelect from './Select.jsx';
-import UnStyledMultiSelect from './MultiSelect.jsx';
-import UnStyledCreatable from './Creatable.jsx';
+import UnStyledSelect from './Select';
+import UnStyledMultiSelect from './MultiSelect';
+import UnStyledCreatable from './Creatable';
 
 const Select = withStyles(selectStyles)(UnStyledSelect);
 const MultiSelect = withStyles(selectStyles)(UnStyledMultiSelect);

@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from './Select.jsx';
+import Select from './Select';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';

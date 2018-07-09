@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
-import MultiSelect from './MultiSelect.jsx';
+import MultiSelect from './MultiSelect';
 import $ from 'jquery';
 import _ from 'lodash';
 

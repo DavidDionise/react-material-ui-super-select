@@ -1,22 +1,62 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _TextField = require('@material-ui/core/TextField');
+
+var _TextField2 = _interopRequireDefault(_TextField);
+
+var _Grow = require('@material-ui/core/Grow');
+
+var _Grow2 = _interopRequireDefault(_Grow);
+
+var _ClickAwayListener = require('@material-ui/core/ClickAwayListener');
+
+var _ClickAwayListener2 = _interopRequireDefault(_ClickAwayListener);
+
+var _Paper = require('@material-ui/core/Paper');
+
+var _Paper2 = _interopRequireDefault(_Paper);
+
+var _MenuList = require('@material-ui/core/MenuList');
+
+var _MenuList2 = _interopRequireDefault(_MenuList);
+
+var _MenuItem = require('@material-ui/core/MenuItem');
+
+var _MenuItem2 = _interopRequireDefault(_MenuItem);
+
+var _Close = require('@material-ui/icons/Close');
+
+var _Close2 = _interopRequireDefault(_Close);
+
+var _CircularProgress = require('@material-ui/core/CircularProgress');
+
+var _CircularProgress2 = _interopRequireDefault(_CircularProgress);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-import React from 'react';
-import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import Grow from '@material-ui/core/Grow';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Paper from '@material-ui/core/Paper';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
-import CloseIcon from '@material-ui/icons/Close';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import $ from 'jquery';
 
 var Select = function (_React$Component) {
   _inherits(Select, _React$Component);
@@ -47,9 +87,9 @@ var Select = function (_React$Component) {
     _this.focusOption = function (focused_option, key_code) {
       _this.setState({ focused_option: focused_option });
 
-      var focused_element = $('#rmss-menu-item-' + focused_option.id)[0];
-      var menu_container_element = $('.' + _this.props.classes.rmss_global_menu_paper_container)[0];
-      var menu_list_element = $('#rmss-menu-list')[0];
+      var focused_element = (0, _jquery2.default)('#rmss-menu-item-' + focused_option.id)[0];
+      var menu_container_element = (0, _jquery2.default)('.' + _this.props.classes.rmss_global_menu_paper_container)[0];
+      var menu_list_element = (0, _jquery2.default)('#rmss-menu-list')[0];
       var menu_container_height = menu_container_element.clientHeight,
           menu_container_scroll_top = menu_container_element.scrollTop;
       var focused_element_height = focused_element.scrollHeight,
@@ -82,7 +122,7 @@ var Select = function (_React$Component) {
       if (new_scroll_height !== undefined) {
         // prevents UI flicker
         setTimeout(function () {
-          $(menu_container_element).scrollTop(new_scroll_height);
+          (0, _jquery2.default)(menu_container_element).scrollTop(new_scroll_height);
         }, 100);
       }
     };
@@ -99,19 +139,19 @@ var Select = function (_React$Component) {
     };
 
     _this.generateInputContainer = function () {
-      return React.createElement(
+      return _react2.default.createElement(
         'div',
         { className: _this.props.classes.rmss_input_container },
-        React.createElement(
+        _react2.default.createElement(
           'div',
           { className: _this.props.classes.rmss_selected_value_container },
-          _this.state.entering_text && _this.state.input_value ? null : _this.props.selected_value ? React.createElement(
+          _this.state.entering_text && _this.state.input_value ? null : _this.props.selected_value ? _react2.default.createElement(
             'p',
             null,
             _this.props.selected_value.label
           ) : null
         ),
-        React.createElement(TextField, {
+        _react2.default.createElement(_TextField2.default, {
           fullWidth: true,
           disabled: _this.props.loading,
           onChange: _this.handleInputChange,
@@ -232,49 +272,49 @@ var Select = function (_React$Component) {
 
       var menu_open = this.state.menu_open && this.getFilteredOptions(this.state.input_value).length != 0;
 
-      return React.createElement(
+      return _react2.default.createElement(
         'div',
         { className: classes.rmss_global_container },
-        React.createElement(
+        _react2.default.createElement(
           'div',
           { className: classes.rmss_global_input_container },
           this.generateInputContainer(),
-          React.createElement(
+          _react2.default.createElement(
             'div',
             { className: classes.rmss_global_actions_container },
-            this.props.loading ? React.createElement(CircularProgress, { size: 20 }) : React.createElement(CloseIcon, {
+            this.props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : _react2.default.createElement(_Close2.default, {
               className: classes.rmss_global_close_button_container,
               onClick: this.props.handleClearValue
             })
           )
         ),
-        React.createElement(
+        _react2.default.createElement(
           'div',
           { className: classes.rmss_global_menu_container },
-          React.createElement(
-            Grow,
+          _react2.default.createElement(
+            _Grow2.default,
             { 'in': menu_open > 0 },
             menu_open > 0 ? // prevents UI flicker
-            React.createElement(
-              ClickAwayListener,
+            _react2.default.createElement(
+              _ClickAwayListener2.default,
               {
                 onClickAway: this.state.menu_open ? function () {
                   return _this3.setState({ menu_open: false });
                 } : function () {},
                 className: 'select-click-away-listener'
               },
-              React.createElement(
-                Paper,
+              _react2.default.createElement(
+                _Paper2.default,
                 { classes: { root: classes.rmss_global_menu_paper_container } },
-                React.createElement(
-                  MenuList,
+                _react2.default.createElement(
+                  _MenuList2.default,
                   { id: 'rmss-menu-list' },
                   this.getFilteredOptions(this.state.input_value).map(function (opt) {
                     var selected = opt.id == (_this3.props.selected_value || {}).id;
                     var focused = opt.id == (_this3.state.focused_option || {}).id;
 
-                    return _this3.props.menuItemRenderer ? _this3.props.menuItemRenderer(opt) : React.createElement(
-                      MenuItem,
+                    return _this3.props.menuItemRenderer ? _this3.props.menuItemRenderer(opt) : _react2.default.createElement(
+                      _MenuItem2.default,
                       {
                         key: opt.id,
                         id: 'rmss-menu-item-' + opt.id,
@@ -291,7 +331,7 @@ var Select = function (_React$Component) {
                   })
                 )
               )
-            ) : React.createElement('div', null)
+            ) : _react2.default.createElement('div', null)
           )
         )
       );
@@ -299,24 +339,24 @@ var Select = function (_React$Component) {
   }]);
 
   return Select;
-}(React.Component);
+}(_react2.default.Component);
 
 Select.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired
+  options: _propTypes2.default.arrayOf(_propTypes2.default.shape({
+    id: _propTypes2.default.string.isRequired,
+    label: _propTypes2.default.string.isRequired
   })).isRequired,
-  handleChange: PropTypes.func.isRequired,
-  textFieldRenderer: PropTypes.func,
-  menuItemRenderer: PropTypes.func,
-  stay_open_after_selection: PropTypes.bool,
-  selected_value: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired
+  handleChange: _propTypes2.default.func.isRequired,
+  textFieldRenderer: _propTypes2.default.func,
+  menuItemRenderer: _propTypes2.default.func,
+  stay_open_after_selection: _propTypes2.default.bool,
+  selected_value: _propTypes2.default.shape({
+    id: _propTypes2.default.string.isRequired,
+    label: _propTypes2.default.string.isRequired
   }),
-  placeholder: PropTypes.string,
-  handleClearValue: PropTypes.func,
-  loading: PropTypes.bool
+  placeholder: _propTypes2.default.string,
+  handleClearValue: _propTypes2.default.func,
+  loading: _propTypes2.default.bool
 };
 
 Select.defaultProps = {
@@ -329,4 +369,4 @@ Select.defaultProps = {
   loading: false
 };
 
-export default Select;
+exports.default = Select;

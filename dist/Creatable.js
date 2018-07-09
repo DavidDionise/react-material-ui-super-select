@@ -1,6 +1,42 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _TextField = require('@material-ui/core/TextField');
+
+var _TextField2 = _interopRequireDefault(_TextField);
+
+var _Chip = require('@material-ui/core/Chip');
+
+var _Chip2 = _interopRequireDefault(_Chip);
+
+var _MultiSelect2 = require('./MultiSelect');
+
+var _MultiSelect3 = _interopRequireDefault(_MultiSelect2);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -9,14 +45,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-import React from 'react';
-import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import Chip from '@material-ui/core/Chip';
-import MultiSelect from './MultiSelect.jsx';
-import $ from 'jquery';
-import _ from 'lodash';
 
 var RMSS_CREATABLE_VALUE = '___rmss_creatable_value___';
 
@@ -58,11 +86,11 @@ var Creatable = function (_MultiSelect) {
           }
         default:
           {
-            MultiSelect.prototype.handleKeyDown.call(_this, event);
+            _MultiSelect3.default.prototype.handleKeyDown.call(_this, event);
           }
       }
     }, _this.getFilteredOptions = function (input_value) {
-      var filtered_options = MultiSelect.prototype.getFilteredOptions.call(_this, input_value);
+      var filtered_options = _MultiSelect3.default.prototype.getFilteredOptions.call(_this, input_value);
       var matched_option = _this.props.options.find(function (opt) {
         return new RegExp('^' + (input_value || '') + '$', 'i').test(opt.id) || new RegExp('^' + (input_value || '') + '$', 'i').test(opt.label);
       });
@@ -79,17 +107,17 @@ var Creatable = function (_MultiSelect) {
   _createClass(Creatable, [{
     key: 'render',
     value: function render() {
-      return MultiSelect.prototype.render.call(this);
+      return _MultiSelect3.default.prototype.render.call(this);
     }
   }]);
 
   return Creatable;
-}(MultiSelect);
+}(_MultiSelect3.default);
 
-Creatable.propTypes = _extends({}, MultiSelect.propTypes, {
-  onCreate: PropTypes.func.isRequired
+Creatable.propTypes = _extends({}, _MultiSelect3.default.propTypes, {
+  onCreate: _propTypes2.default.func.isRequired
 });
 
-Creatable.defaultProps = _extends({}, MultiSelect.defaultProps);
+Creatable.defaultProps = _extends({}, _MultiSelect3.default.defaultProps);
 
-export default Creatable;
+exports.default = Creatable;
