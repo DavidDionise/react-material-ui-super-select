@@ -67,6 +67,17 @@ export default theme => ({
     display: 'flex',
     flexDirection: 'row',
   },
+  rmss_multi_text_field_wrapper: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minWidth: '50px',
+  },
+  rmss_multi_text_field_width_tracker: {
+    position: 'absolute',
+    'visibility': 'hidden',
+    ...theme.typography.subheading,
+  },
   rmss_chip: {
     margin: `0 ${theme.spacing.unit}px ${theme.spacing.unit}px 0`,
   },

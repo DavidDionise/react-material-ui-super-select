@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import Chip from '@material-ui/core/Chip';
 import MultiSelect from './MultiSelect.jsx';
+import Chip from '@material-ui/core/Chip';
+import TextField from '@material-ui/core/TextField';
 import _ from 'lodash';
 
 const RMSS_CREATABLE_VALUE = '___rmss_creatable_value___';
@@ -55,6 +55,39 @@ class Creatable extends MultiSelect {
     } else {
       return filtered_options;
     }
+  }
+
+  generateInputContainer = () => {
+    const { classes } = this.props;
+    return (
+      <div className={classes.rmss_multi_input_container}>
+        {(this.props.selected_value || [])
+          .filter(item => this.props.options.find(opt => opt.id == item.id))
+          .map(item => (
+            <Chip
+              key={item.id}
+              label={item.label}
+              onDelete={() => this.handleDeleteItem(item)}
+              className={classes.rmss_chip}
+            />
+          ))}
+          <div style={{ width: this.textFieldWidth() }}>
+          {/* <div> */}
+            <TextField
+              fullWidth
+              onChange={this.handleInputChange}
+              onClick={() => this.setState({ menu_open: true })}
+              value={this.state.entering_text ? this.state.input_value : ''}
+              onKeyDown={this.handleKeyDown}
+              onFocus={this.handleTextFocus}
+              onBlur={() => this.setState({ entering_text: false })}
+              placeholder={this.props.selected_value ? '' : this.props.placeholder}
+            />
+          </div>
+          <div className={classes.rmss_multi_text_field_width_tracker}>{this.state.input_value}</div>
+          {/* <button onClick={() => console.log('** width : ', this.lastChipRowWidth())}>YEAH</button> */}
+      </div>
+    )
   }
 }
 

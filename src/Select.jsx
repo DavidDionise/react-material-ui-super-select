@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import CloseIcon from '@material-ui/icons/Close';
+import $ from 'jquery';
 
 class Select extends React.Component {
   constructor(props) {

@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
 import DoneIcon from '@material-ui/icons/Done';
 import _ from 'lodash';
+import $ from 'jquery'
 
 class MultiSelect extends Select {
   constructor(props) {
@@ -13,19 +14,8 @@ class MultiSelect extends Select {
     this.getFilteredOptions = this.getFilteredOptions.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleSelectOption = this.handleSelectOption.bind(this);
-
-    this.text_field_area;
-    this.select_area;
-    this.input_area_tracker;
   }
 
-  componentDidMount() {
-    const { classes } = this.props;
-    this.select_area = $(`.${classes.rmss_multi_selected_value_container}`)[0];
-    this.text_field_area = $(`.${classes.rmss_multi_text_field_root}`)[0];
-    this.input_area_tracker = $(`.${classes.rmss_multi_input_width_tracker}`)[0];
-    this.container_width = ($(`.${classes.rmss_multi_input_container}`)[0] || {}).clientWidth;
-  }
   getFilteredOptions(input_value) {
     return _.differenceWith(
       Select.prototype.getFilteredOptions.call(this, input_value),
@@ -71,18 +61,57 @@ class MultiSelect extends Select {
       this.props.handleChange(this.props.selected_value.filter(v => v.id != item.id));
     }
   }
+  lastChipRowWidth = () => {
+    const chip_elements = $(`.${this.props.classes.rmss_chip}`);
+    if (chip_elements.length == 0) {
+      return 0;
+    }
+
+    const last_row_height = Array.from(chip_elements)
+      .reduce((acc, chip) => {
+        const { offsetTop: chip_offset } = chip;
+        if (chip_offset >= acc) {
+          acc = chip_offset;
+        }
+        return acc;
+      }, 0);
+
+    const last_row_width = Array.from(chip_elements)
+      .filter(chip => chip.offsetTop == last_row_height)
+      .reduce((acc, chip) => {
+        const { marginRight, marginLeft } = window.getComputedStyle(chip);
+        acc += chip.clientWidth + parseFloat(marginRight) + parseFloat(marginLeft);
+        return acc;
+      }, 0);
+
+    return last_row_width;
+  }
   textFieldWidth = () => {
-    const { clientWidth: input_width } = this.input_area || {};
-    const { clientWidth: text_field_width } = this.text_field_area || {};
+    const { clientWidth: input_container_width } = $(`.${this.props.classes.rmss_multi_input_container}`)[0] || {};
+    const { clientWidth: input_value_width } = $(`.${this.props.classes.rmss_multi_text_field_width_tracker}`)[0] || {};
+    const last_row_width = this.lastChipRowWidth();
 
-    // can happen if this is hit before values have been calculated
-    if (input_width != null && text_field_width != null) {
+    console.log('last_row_width : ', last_row_width);
 
+    if (input_container_width === undefined) {
+      return '100%';
+    } else if (last_row_width > input_container_width - 50) {
+      console.log('returning : ', `${input_container_width}px`);
+      return `${input_container_width}px`;
+    } else {
+      const new_width = Math.min(
+        input_container_width,
+        Math.max(input_value_width, (input_container_width - last_row_width))
+      );
+      console.log('returning : ', `${new_width}px`);
+      return `${new_width}px`;
     }
   }
+
   generateInputContainer = () => {
+    const { classes } = this.props;
     return (
-      <div className={this.props.classes.rmss_multi_input_container}>
+      <div className={classes.rmss_multi_input_container}>
         {(this.props.selected_value || [])
           .filter(item => this.props.options.find(opt => opt.id == item.id))
           .map(item => (
@@ -90,19 +119,24 @@ class MultiSelect extends Select {
               key={item.id}
               label={item.label}
               onDelete={() => this.handleDeleteItem(item)}
-              className={this.props.classes.rmss_chip}
+              className={classes.rmss_chip}
             />
           ))}
-        <TextField
-          fullWidth
-          onChange={this.handleInputChange}
-          onClick={() => this.setState({ menu_open: true })}
-          value={this.state.entering_text ? this.state.input_value : ''}
-          onKeyDown={this.handleKeyDown}
-          onFocus={this.handleTextFocus}
-          onBlur={() => this.setState({ entering_text: false })}
-          placeholder={this.props.selected_value ? '' : this.props.placeholder}
-        />
+          <div style={{ width: this.textFieldWidth() }}>
+          {/* <div> */}
+            <TextField
+              fullWidth
+              onChange={this.handleInputChange}
+              onClick={() => this.setState({ menu_open: true })}
+              value={this.state.entering_text ? this.state.input_value : ''}
+              onKeyDown={this.handleKeyDown}
+              onFocus={this.handleTextFocus}
+              onBlur={() => this.setState({ entering_text: false })}
+              placeholder={this.props.selected_value ? '' : this.props.placeholder}
+            />
+          </div>
+          <div className={classes.rmss_multi_text_field_width_tracker}>{this.state.input_value}</div>
+          {/* <button onClick={() => console.log('** width : ', this.lastChipRowWidth())}>YEAH</button> */}
       </div>
     )
   }
