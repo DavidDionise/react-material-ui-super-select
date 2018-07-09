@@ -18,11 +18,15 @@ class Select extends React.Component {
       input_value: '',
       menu_open: false,
       entering_text: false,
+      // multi select
+      input_width: '100%',
     };
 
     this.getFilteredOptions = this.getFilteredOptions.bind(this);
     this.handleSelectOption = this.handleSelectOption.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleClearValue = this.handleClearValue.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   componentWillMount() {
@@ -39,7 +43,7 @@ class Select extends React.Component {
       return this.props.options;
     }
   }
-  handleInputChange = (event) => {
+  handleInputChange(event) {
     const options = this.getFilteredOptions(event.target.value);
     if (event.target.value) {
       this.setState({
@@ -104,6 +108,9 @@ class Select extends React.Component {
         break;
       }
     }
+  }
+  handleClearValue() {
+    this.props.handleClearValue();
   }
   focusOption = (focused_option, key_code) => {
     this.setState({ focused_option });
@@ -200,7 +207,7 @@ class Select extends React.Component {
             <div className={classes.rmss_global_actions_container}>
               <CloseIcon
                 className={classes.rmss_global_close_button_container}
-                onClick={this.props.handleClearValue}
+                onClick={this.handleClearValue}
               />
             </div>
           </div>
