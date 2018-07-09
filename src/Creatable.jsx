@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
 import MultiSelect from './MultiSelect.jsx';
+import $ from 'jquery';
 import _ from 'lodash';
 
 const RMSS_CREATABLE_VALUE = '___rmss_creatable_value___';

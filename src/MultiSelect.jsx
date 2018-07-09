@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
 import DoneIcon from '@material-ui/icons/Done';
+import $ from 'jquery';
 import _ from 'lodash';
 
 class MultiSelect extends Select {
@@ -69,15 +70,6 @@ class MultiSelect extends Select {
       this.props.handleChange(null);
     } else {
       this.props.handleChange(this.props.selected_value.filter(v => v.id != item.id));
-    }
-  }
-  textFieldWidth = () => {
-    const { clientWidth: input_width } = this.input_area || {};
-    const { clientWidth: text_field_width } = this.text_field_area || {};
-
-    // can happen if this is hit before values have been calculated
-    if (input_width != null && text_field_width != null) {
-
     }
   }
   generateInputContainer = () => {
