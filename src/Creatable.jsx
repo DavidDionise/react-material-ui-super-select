@@ -57,6 +57,9 @@ class Creatable extends MultiSelect {
       return filtered_options;
     }
   }
+  render() {
+    return MultiSelect.prototype.render.call(this);
+  }
 }
 
 Creatable.propTypes = {

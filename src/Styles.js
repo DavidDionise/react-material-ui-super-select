@@ -5,8 +5,10 @@ export default theme => ({
     flexDirection: 'column',
   },
   rmss_global_input_container: {
-    display: 'flex',
-    flexDirection: 'row',
+    position: 'relative',
+  },
+  rmss_global_input_element: {
+    paddingRight: '20px',
   },
   rmss_global_menu_container: {
     position: 'relative',
@@ -23,9 +25,9 @@ export default theme => ({
     },
   },
   rmss_global_actions_container: {
-    flex: '2',
-    display: 'flex',
-    flexDirection: 'row',
+    position: 'absolute',
+    right: '0px',
+    bottom: '0px',
   },
   rmss_global_close_button_container: {
     color: theme.palette.grey[700],
@@ -40,7 +42,7 @@ export default theme => ({
 
   // Select
   rmss_input_container: {
-    flex: '8',
+    flex: '1',
     position: 'relative',
     display: 'flex',
     flexDirection: 'row',
@@ -56,7 +58,7 @@ export default theme => ({
 
   // MultiSelect
   rmss_multi_input_container: {
-    flex: '8',
+    flex: '1',
     position: 'relative',
     display: 'flex',
     flexDirection: 'row',
@@ -66,6 +68,17 @@ export default theme => ({
     position: 'relative',
     display: 'flex',
     flexDirection: 'row',
+  },
+  rmss_multi_text_field_wrapper: {
+    display: 'flex',
+    flex: '1',
+    flexDirection: 'column',
+    minWidth: '50px',
+  },
+  rmss_multi_text_field_width_tracker: {
+    position: 'absolute',
+    'visibility': 'hidden',
+    ...theme.typography.subheading,
   },
   rmss_chip: {
     margin: `0 ${theme.spacing.unit}px ${theme.spacing.unit}px 0`,

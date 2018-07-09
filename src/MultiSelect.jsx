@@ -87,6 +87,7 @@ class MultiSelect extends Select {
           ))}
         <TextField
           fullWidth
+          disabled={this.props.loading}
           onChange={this.handleInputChange}
           onClick={() => this.setState({ menu_open: true })}
           value={this.state.entering_text ? this.state.input_value : ''}
@@ -94,9 +95,14 @@ class MultiSelect extends Select {
           onFocus={this.handleTextFocus}
           onBlur={() => this.setState({ entering_text: false })}
           placeholder={this.props.selected_value ? '' : this.props.placeholder}
+          inputProps={{ style: { paddingRight: '30px' } }}
         />
       </div>
     )
+  }
+
+  render() {
+    return Select.prototype.render.call(this);
   }
 }
 
