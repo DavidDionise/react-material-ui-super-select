@@ -302,7 +302,7 @@ var Select = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: classes.rmss_global_container },
+        { className: classes.classes.rmss_global_container + ' ' + this.props.container_class_name },
         this.generateInputContainer(),
         _react2.default.createElement(
           'div',
@@ -362,6 +362,7 @@ Select.propTypes = {
     id: _propTypes2.default.string.isRequired,
     label: _propTypes2.default.string.isRequired
   })).isRequired,
+  container_class_name: _propTypes2.default.string,
   handleChange: _propTypes2.default.func.isRequired,
   textFieldRenderer: _propTypes2.default.func,
   menuItemRenderer: _propTypes2.default.func,
@@ -382,7 +383,8 @@ Select.defaultProps = {
   selected_value: null,
   placeholder: 'Select ...',
   handleClearValue: function handleClearValue() {},
-  loading: false
+  loading: false,
+  container_class_name: ''
 };
 
 exports.default = Select;
