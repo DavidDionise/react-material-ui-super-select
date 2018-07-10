@@ -213,7 +213,7 @@ class Select extends React.Component {
     const menu_open = this.state.menu_open && this.getFilteredOptions(this.state.input_value).length != 0;
 
     return (
-      <div className={classes.rmss_global_container}>
+      <div className={`${classes.classes.rmss_global_container} ${this.props.container_class_name}`}>
         {this.generateInputContainer()}
         <div className={classes.rmss_global_menu_container}>
           <Grow in={menu_open > 0}>
@@ -264,6 +264,7 @@ Select.propTypes = {
       label: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  container_class_name: PropTypes.string,
   handleChange: PropTypes.func.isRequired,
   textFieldRenderer: PropTypes.func,
   menuItemRenderer: PropTypes.func,
@@ -285,6 +286,7 @@ Select.defaultProps = {
   placeholder: 'Select ...',
   handleClearValue: () => {},
   loading: false,
+  container_class_name: '',
 };
 
 export default Select;
