@@ -30,7 +30,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'react-material-ui-super-select': path.resolve(__dirname, 'src/index.jsx'),
+      'react-material-ui-super-select': path.resolve(__dirname, 'src/index.js'),
     },
   },
   plugins: [

@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MultiSelect from './MultiSelect.jsx';
-import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
+import Chip from '@material-ui/core/Chip';
+import MultiSelect from './MultiSelect';
+import $ from 'jquery';
 import _ from 'lodash';
 
 const RMSS_CREATABLE_VALUE = '___rmss_creatable_value___';
@@ -56,7 +58,6 @@ class Creatable extends MultiSelect {
       return filtered_options;
     }
   }
-
   generateInputContainer = () => {
     const { classes } = this.props;
     return (
@@ -88,6 +89,10 @@ class Creatable extends MultiSelect {
           {/* <button onClick={() => console.log('** width : ', this.lastChipRowWidth())}>YEAH</button> */}
       </div>
     )
+  }
+  
+  render() {
+    return MultiSelect.prototype.render.call(this);
   }
 }
 

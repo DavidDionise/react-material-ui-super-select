@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import CloseIcon from '@material-ui/icons/Close';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import $ from 'jquery';
 
 class Select extends React.Component {
@@ -32,7 +33,6 @@ class Select extends React.Component {
   componentWillMount() {
     this.setState({ focused_option: this.props.options[0] });
   }
-
   getFilteredOptions(input_value) {
     if (input_value) {
       return this.props.options.filter(opt => (
@@ -185,6 +185,7 @@ class Select extends React.Component {
       </div>
       <TextField
         fullWidth
+        disabled={this.props.loading}
         onChange={this.handleInputChange}
         onClick={() => this.setState({ menu_open: true })}
         value={this.state.entering_text ? this.state.input_value : ''}
@@ -192,6 +193,7 @@ class Select extends React.Component {
         onFocus={this.handleTextFocus}
         onBlur={() => this.setState({ entering_text: false })}
         placeholder={this.props.selected_value ? '' : this.props.placeholder}
+        inputProps={{ style: { paddingRight: '30px' } }}
       />
     </div>
   )
@@ -202,52 +204,56 @@ class Select extends React.Component {
 
     return (
       <div className={classes.rmss_global_container}>
-          <div className={classes.rmss_global_input_container}>
-            {this.generateInputContainer()}
-            <div className={classes.rmss_global_actions_container}>
+        <div className={classes.rmss_global_input_container}>
+          {this.generateInputContainer()}
+          <div className={classes.rmss_global_actions_container}>
+            {this.props.loading ? (
+              <CircularProgress size={20} />
+            ) : (
               <CloseIcon
                 className={classes.rmss_global_close_button_container}
                 onClick={this.handleClearValue}
               />
-            </div>
+            )}
           </div>
-          <div className={classes.rmss_global_menu_container}>
-            <Grow in={menu_open > 0}>
-              {menu_open > 0 ? (   // prevents UI flicker
-                <ClickAwayListener
-                  onClickAway={
-                    this.state.menu_open ?
-                    () => this.setState({ menu_open: false }) :
-                    () => {}
-                  }
-                  className='select-click-away-listener'
-                >
-                  <Paper classes={{ root: classes.rmss_global_menu_paper_container }}>
-                    <MenuList id='rmss-menu-list'>
-                      {this.getFilteredOptions(this.state.input_value).map(opt => {
-                        const selected = opt.id == (this.props.selected_value || {}).id;
-                        const focused = opt.id == (this.state.focused_option || {}).id;
+        </div>
+        <div className={classes.rmss_global_menu_container}>
+          <Grow in={menu_open > 0}>
+            {menu_open > 0 ? (   // prevents UI flicker
+              <ClickAwayListener
+                onClickAway={
+                  this.state.menu_open ?
+                  () => this.setState({ menu_open: false }) :
+                  () => {}
+                }
+                className='select-click-away-listener'
+              >
+                <Paper classes={{ root: classes.rmss_global_menu_paper_container }}>
+                  <MenuList id='rmss-menu-list'>
+                    {this.getFilteredOptions(this.state.input_value).map(opt => {
+                      const selected = opt.id == (this.props.selected_value || {}).id;
+                      const focused = opt.id == (this.state.focused_option || {}).id;
 
-                        return this.props.menuItemRenderer ? this.props.menuItemRenderer(opt) : (
-                          <MenuItem
-                            key={opt.id}
-                            id={`rmss-menu-item-${opt.id}`}
-                            onClick={() => this.handleSelectOption(opt)}
-                            onMouseEnter={() => this.setState({ focused_option: opt })}
-                            className={`${classes.rmss_global_menu_item} ${selected && !focused ? 'selected' : focused ? 'focused' : ''}`}
-                          >
-                            {this.props.menuItemRenderer ? (
-                              this.props.menuItemRenderer(opt)
-                            ) : opt.label}
-                          </MenuItem>
-                        );
-                      })}
-                    </MenuList>
-                  </Paper>
-                </ClickAwayListener>
-              ) : <div />}
-            </Grow>
-          </div>
+                      return this.props.menuItemRenderer ? this.props.menuItemRenderer(opt) : (
+                        <MenuItem
+                          key={opt.id}
+                          id={`rmss-menu-item-${opt.id}`}
+                          onClick={() => this.handleSelectOption(opt)}
+                          onMouseEnter={() => this.setState({ focused_option: opt })}
+                          className={`${classes.rmss_global_menu_item} ${selected && !focused ? 'selected' : focused ? 'focused' : ''}`}
+                        >
+                          {this.props.menuItemRenderer ? (
+                            this.props.menuItemRenderer(opt)
+                          ) : opt.label}
+                        </MenuItem>
+                      );
+                    })}
+                  </MenuList>
+                </Paper>
+              </ClickAwayListener>
+            ) : <div />}
+          </Grow>
+        </div>
       </div>
     )
   }
@@ -270,6 +276,7 @@ Select.propTypes = {
   }),
   placeholder: PropTypes.string,
   handleClearValue: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 Select.defaultProps = {
@@ -278,7 +285,8 @@ Select.defaultProps = {
   stay_open_after_selection: false,
   selected_value: null,
   placeholder: 'Select ...',
-  handleClearValue: () => {}
+  handleClearValue: () => {},
+  loading: false,
 };
 
 export default Select;

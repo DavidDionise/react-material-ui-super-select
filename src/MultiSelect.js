@@ -1,11 +1,11 @@
 import React from 'react';
-import Select from './Select.jsx';
+import Select from './Select';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
 import DoneIcon from '@material-ui/icons/Done';
+import $ from 'jquery';
 import _ from 'lodash';
-import $ from 'jquery'
 
 class MultiSelect extends Select {
   constructor(props) {
@@ -158,6 +158,10 @@ class MultiSelect extends Select {
           {/* <button onClick={() => console.log('** width : ', this.lastChipRowWidth())}>YEAH</button> */}
       </div>
     )
+  }
+
+  render() {
+    return Select.prototype.render.call(this);
   }
 }
 
