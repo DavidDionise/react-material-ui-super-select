@@ -302,7 +302,7 @@ var Select = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: classes.classes.rmss_global_container + ' ' + this.props.container_class_name },
+        { className: classes.rmss_global_container + ' ' + this.props.container_class_name },
         this.generateInputContainer(),
         _react2.default.createElement(
           'div',

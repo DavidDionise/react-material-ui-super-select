@@ -213,7 +213,7 @@ class Select extends React.Component {
     const menu_open = this.state.menu_open && this.getFilteredOptions(this.state.input_value).length != 0;
 
     return (
-      <div className={`${classes.classes.rmss_global_container} ${this.props.container_class_name}`}>
+      <div className={`${classes.rmss_global_container} ${this.props.container_class_name}`}>
         {this.generateInputContainer()}
         <div className={classes.rmss_global_menu_container}>
           <Grow in={menu_open > 0}>
