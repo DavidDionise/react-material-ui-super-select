@@ -6,6 +6,8 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import $ from 'jquery';
@@ -20,7 +22,7 @@ class Select extends React.Component {
       menu_open: false,
       entering_text: false,
       // multi select
-      input_width: '100%',
+      input_style: { flex: '1' },
     };
 
     this.getFilteredOptions = this.getFilteredOptions.bind(this);
@@ -193,7 +195,15 @@ class Select extends React.Component {
         onFocus={this.handleTextFocus}
         onBlur={() => this.setState({ entering_text: false })}
         placeholder={this.props.selected_value ? '' : this.props.placeholder}
-        inputProps={{ style: { paddingRight: '30px' } }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position='end'>
+              <IconButton onClick={this.handleClearValue}>
+                {this.props.loading ? <CircularProgress size={20} /> : <CloseIcon />}
+              </IconButton>
+            </InputAdornment>
+          )
+        }}
       />
     </div>
   )
@@ -204,19 +214,7 @@ class Select extends React.Component {
 
     return (
       <div className={classes.rmss_global_container}>
-        <div className={classes.rmss_global_input_container}>
-          {this.generateInputContainer()}
-          <div className={classes.rmss_global_actions_container}>
-            {this.props.loading ? (
-              <CircularProgress size={20} />
-            ) : (
-              <CloseIcon
-                className={classes.rmss_global_close_button_container}
-                onClick={this.handleClearValue}
-              />
-            )}
-          </div>
-        </div>
+        {this.generateInputContainer()}
         <div className={classes.rmss_global_menu_container}>
           <Grow in={menu_open > 0}>
             {menu_open > 0 ? (   // prevents UI flicker

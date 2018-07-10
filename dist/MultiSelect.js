@@ -28,9 +28,21 @@ var _Chip = require('@material-ui/core/Chip');
 
 var _Chip2 = _interopRequireDefault(_Chip);
 
-var _Done = require('@material-ui/icons/Done');
+var _Close = require('@material-ui/icons/Close');
 
-var _Done2 = _interopRequireDefault(_Done);
+var _Close2 = _interopRequireDefault(_Close);
+
+var _InputAdornment = require('@material-ui/core/InputAdornment');
+
+var _InputAdornment2 = _interopRequireDefault(_InputAdornment);
+
+var _IconButton = require('@material-ui/core/IconButton');
+
+var _IconButton2 = _interopRequireDefault(_IconButton);
+
+var _CircularProgress = require('@material-ui/core/CircularProgress');
+
+var _CircularProgress2 = _interopRequireDefault(_CircularProgress);
 
 var _jquery = require('jquery');
 
@@ -58,6 +70,16 @@ var MultiSelect = function (_Select) {
 
     var _this = _possibleConstructorReturn(this, (MultiSelect.__proto__ || Object.getPrototypeOf(MultiSelect)).call(this, props));
 
+    _this.handleInputChange = function (event) {
+      _Select3.default.prototype.handleInputChange.call(_this, event);
+      _this.calculateTextFieldStyle();
+    };
+
+    _this.handleClearValue = function () {
+      _Select3.default.prototype.handleClearValue.call(_this);
+      _this.calculateTextFieldStyle();
+    };
+
     _this.handleDeleteItem = function (item) {
       if (_this.props.selected_value.length == 1) {
         _this.props.handleChange(null);
@@ -66,66 +88,71 @@ var MultiSelect = function (_Select) {
           return v.id != item.id;
         }));
       }
+      _this.calculateTextFieldStyle();
     };
 
-    _this.generateInputContainer = function () {
-      return _react2.default.createElement(
-        'div',
-        { className: _this.props.classes.rmss_multi_input_container },
-        (_this.props.selected_value || []).filter(function (item) {
-          return _this.props.options.find(function (opt) {
-            return opt.id == item.id;
-          });
-        }).map(function (item) {
-          return _react2.default.createElement(_Chip2.default, {
-            key: item.id,
-            label: item.label,
-            onDelete: function onDelete() {
-              return _this.handleDeleteItem(item);
-            },
-            className: _this.props.classes.rmss_chip
-          });
-        }),
-        _react2.default.createElement(_TextField2.default, {
-          fullWidth: true,
-          disabled: _this.props.loading,
-          onChange: _this.handleInputChange,
-          onClick: function onClick() {
-            return _this.setState({ menu_open: true });
-          },
-          value: _this.state.entering_text ? _this.state.input_value : '',
-          onKeyDown: _this.handleKeyDown,
-          onFocus: _this.handleTextFocus,
-          onBlur: function onBlur() {
-            return _this.setState({ entering_text: false });
-          },
-          placeholder: _this.props.selected_value ? '' : _this.props.placeholder,
-          inputProps: { style: { paddingRight: '30px' } }
-        })
-      );
+    _this.lastChipRowWidth = function () {
+      var chip_elements = (0, _jquery2.default)('.' + _this.props.classes.rmss_chip);
+      if (chip_elements.length == 0) {
+        return 0;
+      }
+
+      var last_row_height = Array.from(chip_elements).reduce(function (acc, chip) {
+        var chip_offset = chip.offsetTop;
+
+        if (chip_offset >= acc) {
+          acc = chip_offset;
+        }
+        return acc;
+      }, 0);
+
+      var last_row_width = Array.from(chip_elements).filter(function (chip) {
+        return chip.offsetTop == last_row_height;
+      }).reduce(function (acc, chip) {
+        var _window$getComputedSt = window.getComputedStyle(chip),
+            marginRight = _window$getComputedSt.marginRight,
+            marginLeft = _window$getComputedSt.marginLeft;
+
+        var _chip$getBoundingClie = chip.getBoundingClientRect(),
+            chip_width = _chip$getBoundingClie.width;
+
+        acc += Math.ceil(chip_width) + parseFloat(marginRight) + parseFloat(marginLeft);
+        return acc;
+      }, 0);
+
+      return last_row_width;
+    };
+
+    _this.calculateTextFieldStyle = function () {
+      var input_container = (0, _jquery2.default)('.' + _this.props.classes.rmss_multi_input_container)[0];
+      var input_value_container = (0, _jquery2.default)('.' + _this.props.classes.rmss_multi_text_field_width_tracker)[0];
+      if (!input_container || !input_value_container) {
+        _this.setState({ input_style: { flex: '1' } });
+      }
+
+      var _input_container$getB = input_container.getBoundingClientRect(),
+          input_container_width = _input_container$getB.width;
+
+      var _input_value_containe = input_value_container.getBoundingClientRect(),
+          input_value_width = _input_value_containe.width;
+
+      var last_row_width = _this.lastChipRowWidth();
+
+      if (input_value_width > input_container_width - last_row_width - 60) {
+        _this.setState({ input_style: { width: input_container_width + 'px' } });
+      } else {
+        _this.setState({ input_style: { flex: 1 } });
+      }
     };
 
     _this.getFilteredOptions = _this.getFilteredOptions.bind(_this);
     _this.handleKeyDown = _this.handleKeyDown.bind(_this);
     _this.handleSelectOption = _this.handleSelectOption.bind(_this);
-
-    _this.text_field_area;
-    _this.select_area;
-    _this.input_area_tracker;
+    _this.generateInputContainer = _this.generateInputContainer.bind(_this);
     return _this;
   }
 
   _createClass(MultiSelect, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var classes = this.props.classes;
-
-      this.select_area = (0, _jquery2.default)('.' + classes.rmss_multi_selected_value_container)[0];
-      this.text_field_area = (0, _jquery2.default)('.' + classes.rmss_multi_text_field_root)[0];
-      this.input_area_tracker = (0, _jquery2.default)('.' + classes.rmss_multi_input_width_tracker)[0];
-      this.container_width = ((0, _jquery2.default)('.' + classes.rmss_multi_input_container)[0] || {}).clientWidth;
-    }
-  }, {
     key: 'getFilteredOptions',
     value: function getFilteredOptions(input_value) {
       return _lodash2.default.differenceWith(_Select3.default.prototype.getFilteredOptions.call(this, input_value), this.props.selected_value || [], function (item1, item2) {
@@ -165,6 +192,68 @@ var MultiSelect = function (_Select) {
     key: 'handleSelectOption',
     value: function handleSelectOption(option) {
       _Select3.default.prototype.handleSelectOption.call(this, [].concat(_toConsumableArray(this.props.selected_value || []), [option]));
+      this.calculateTextFieldStyle();
+    }
+  }, {
+    key: 'generateInputContainer',
+    value: function generateInputContainer() {
+      var _this2 = this;
+
+      var classes = this.props.classes;
+
+      return _react2.default.createElement(
+        'div',
+        { className: classes.rmss_multi_input_container },
+        (this.props.selected_value || []).filter(function (item) {
+          return _this2.props.options.find(function (opt) {
+            return opt.id == item.id;
+          });
+        }).map(function (item) {
+          return _react2.default.createElement(_Chip2.default, {
+            key: item.id,
+            label: item.label,
+            onDelete: function onDelete() {
+              return _this2.handleDeleteItem(item);
+            },
+            className: classes.rmss_chip
+          });
+        }),
+        _react2.default.createElement(
+          'div',
+          { style: this.state.input_style },
+          _react2.default.createElement(_TextField2.default, {
+            fullWidth: true,
+            disabled: this.props.loading,
+            onChange: this.handleInputChange,
+            onClick: function onClick() {
+              return _this2.setState({ menu_open: true });
+            },
+            value: this.state.entering_text ? this.state.input_value : '',
+            onKeyDown: this.handleKeyDown,
+            onFocus: this.handleTextFocus,
+            onBlur: function onBlur() {
+              return _this2.setState({ entering_text: false });
+            },
+            placeholder: this.props.selected_value ? '' : this.props.placeholder,
+            InputProps: {
+              endAdornment: _react2.default.createElement(
+                _InputAdornment2.default,
+                { position: 'end' },
+                _react2.default.createElement(
+                  _IconButton2.default,
+                  { onClick: this.handleClearValue },
+                  this.props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : _react2.default.createElement(_Close2.default, null)
+                )
+              )
+            }
+          })
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: classes.rmss_multi_text_field_width_tracker },
+          this.state.input_value
+        )
+      );
     }
   }, {
     key: 'render',

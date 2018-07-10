@@ -6,6 +6,8 @@ export default theme => ({
   },
   rmss_global_input_container: {
     position: 'relative',
+    display: 'flex',
+    flexDirection: 'row',
   },
   rmss_global_input_element: {
     paddingRight: '20px',
@@ -25,12 +27,13 @@ export default theme => ({
     },
   },
   rmss_global_actions_container: {
-    position: 'absolute',
-    right: '0px',
-    bottom: '0px',
+    position: 'relative',
+    display: 'inline-block',
+    width: '20px',
   },
   rmss_global_close_button_container: {
     color: theme.palette.grey[700],
+    fontSize: '20px',
     '&:hover': {
       cursor: 'pointer',
     }
@@ -58,22 +61,11 @@ export default theme => ({
 
   // MultiSelect
   rmss_multi_input_container: {
-    flex: '1',
+    flex: 1,
     position: 'relative',
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-  },
-  rmss_multi_selected_value_container: {
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  rmss_multi_text_field_wrapper: {
-    display: 'flex',
-    flex: '1',
-    flexDirection: 'column',
-    minWidth: '50px',
   },
   rmss_multi_text_field_width_tracker: {
     position: 'absolute',

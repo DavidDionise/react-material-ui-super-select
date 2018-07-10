@@ -3,7 +3,10 @@ import Select from './Select';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
-import DoneIcon from '@material-ui/icons/Done';
+import CloseIcon from '@material-ui/icons/Close';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import $ from 'jquery';
 import _ from 'lodash';
 
@@ -14,15 +17,16 @@ class MultiSelect extends Select {
     this.getFilteredOptions = this.getFilteredOptions.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleSelectOption = this.handleSelectOption.bind(this);
+    this.generateInputContainer = this.generateInputContainer.bind(this);
   }
 
   handleInputChange = event => {
-    this.calculateTextFieldWidth();
     Select.prototype.handleInputChange.call(this, event);
+    this.calculateTextFieldStyle();
   }
   handleClearValue = () => {
-    this.calculateTextFieldWidth();
     Select.prototype.handleClearValue.call(this);
+    this.calculateTextFieldStyle();
   }
   getFilteredOptions(input_value) {
     return _.differenceWith(
@@ -61,7 +65,7 @@ class MultiSelect extends Select {
   }
   handleSelectOption(option) {
     Select.prototype.handleSelectOption.call(this, [ ...(this.props.selected_value || []), option ]);
-    this.calculateTextFieldWidth();
+    this.calculateTextFieldStyle();
   }
   handleDeleteItem = (item) => {
     if (this.props.selected_value.length == 1) {
@@ -69,7 +73,7 @@ class MultiSelect extends Select {
     } else {
       this.props.handleChange(this.props.selected_value.filter(v => v.id != item.id));
     }
-    this.calculateTextFieldWidth();
+    this.calculateTextFieldStyle();
   }
   lastChipRowWidth = () => {
     const chip_elements = $(`.${this.props.classes.rmss_chip}`);
@@ -97,37 +101,24 @@ class MultiSelect extends Select {
 
     return last_row_width;
   }
-  calculateTextFieldWidth = () => {
-    setTimeout(() => {
-      const input_container = $(`.${this.props.classes.rmss_multi_input_container}`)[0];
-      const input_value_container = $(`.${this.props.classes.rmss_multi_text_field_width_tracker}`)[0];
-      if (!input_container || !input_value_container) {
-        console.log('returning 100%');
-        this.setState({ input_width: '100%' });
-      }
+  calculateTextFieldStyle = () => {
+    const input_container = $(`.${this.props.classes.rmss_multi_input_container}`)[0];
+    const input_value_container = $(`.${this.props.classes.rmss_multi_text_field_width_tracker}`)[0];
+    if (!input_container || !input_value_container) {
+      this.setState({ input_style: { flex: '1' } });
+    }
 
-      const { width: input_container_width } = input_container.getBoundingClientRect();
-      const { width: input_value_width } = input_value_container.getBoundingClientRect();
-      const last_row_width = this.lastChipRowWidth();
+    const { width: input_container_width } = input_container.getBoundingClientRect();
+    const { width: input_value_width } = input_value_container.getBoundingClientRect();
+    const last_row_width = this.lastChipRowWidth();
 
-      console.log('input_container_width : ', input_container_width);
-      console.log('last_row_width : ', last_row_width);
-
-      if (last_row_width > input_container_width - 50) {
-        console.log('returning : ', `${input_container_width}px`);
-        this.setState({ input_width: `${input_container_width}px` });
-      } else {
-        const new_width = Math.min(
-          input_container_width,
-          Math.max(input_value_width, (input_container_width - last_row_width))
-        );
-        console.log('returning : ', `${new_width}px`);
-        this.setState({ input_width: `${new_width}px` });
-      }
-    }, 0);
+    if (input_value_width > input_container_width - last_row_width - 60) {
+      this.setState({ input_style: { width: `${input_container_width}px` } });
+    } else {
+      this.setState({ input_style: { flex: 1 } });
+    }
   }
-
-  generateInputContainer = () => {
+  generateInputContainer() {
     const { classes } = this.props;
     return (
       <div className={classes.rmss_multi_input_container}>
@@ -141,21 +132,29 @@ class MultiSelect extends Select {
               className={classes.rmss_chip}
             />
           ))}
-          <div style={{ width: this.state.input_width }}>
-          {/* <div> */}
+          <div style={this.state.input_style}>
             <TextField
               fullWidth
+              disabled={this.props.loading}
               onChange={this.handleInputChange}
               onClick={() => this.setState({ menu_open: true })}
               value={this.state.entering_text ? this.state.input_value : ''}
               onKeyDown={this.handleKeyDown}
               onFocus={this.handleTextFocus}
-              // onBlur={() => this.setState({ entering_text: false })}
+              onBlur={() => this.setState({ entering_text: false })}
               placeholder={this.props.selected_value ? '' : this.props.placeholder}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <IconButton onClick={this.handleClearValue}>
+                      {this.props.loading ? <CircularProgress size={20} /> : <CloseIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
             />
           </div>
           <div className={classes.rmss_multi_text_field_width_tracker}>{this.state.input_value}</div>
-          {/* <button onClick={() => console.log('** width : ', this.lastChipRowWidth())}>YEAH</button> */}
       </div>
     )
   }

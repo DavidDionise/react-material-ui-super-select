@@ -61,17 +61,17 @@ class App extends React.Component {
 
         <div className={classes.divider} />
 
-        {/* <h4>Multi Select : Creatable</h4>
+        <h4>Multi Select : Creatable</h4>
         <Creatable
           options={this.state.creatable_options}
           handleChange={value => this.setState({ creatable_value: value })}
           handleClearValue={() => this.setState({ creatable_value: null })}
           selected_value={this.state.creatable_value}
           onCreate={value => this.setState({ creatable_options: this.state.creatable_options.concat(value) })}
-        /> */}
+        />
       </div>
     );
   }
 }
 
-export default withStyles(exampleSyles)(App);
+export default withStyles(exampleSyles)(hot(module)(App));

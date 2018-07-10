@@ -16,6 +16,10 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _MultiSelect2 = require('./MultiSelect');
+
+var _MultiSelect3 = _interopRequireDefault(_MultiSelect2);
+
 var _TextField = require('@material-ui/core/TextField');
 
 var _TextField2 = _interopRequireDefault(_TextField);
@@ -23,10 +27,6 @@ var _TextField2 = _interopRequireDefault(_TextField);
 var _Chip = require('@material-ui/core/Chip');
 
 var _Chip2 = _interopRequireDefault(_Chip);
-
-var _MultiSelect2 = require('./MultiSelect');
-
-var _MultiSelect3 = _interopRequireDefault(_MultiSelect2);
 
 var _jquery = require('jquery');
 
@@ -101,6 +101,8 @@ var Creatable = function (_MultiSelect) {
       } else {
         return filtered_options;
       }
+    }, _this.generateInputContainer = function () {
+      return _MultiSelect3.default.prototype.generateInputContainer.call(_this);
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 

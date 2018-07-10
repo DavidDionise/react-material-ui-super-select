@@ -38,6 +38,14 @@ var _MenuItem = require('@material-ui/core/MenuItem');
 
 var _MenuItem2 = _interopRequireDefault(_MenuItem);
 
+var _InputAdornment = require('@material-ui/core/InputAdornment');
+
+var _InputAdornment2 = _interopRequireDefault(_InputAdornment);
+
+var _IconButton = require('@material-ui/core/IconButton');
+
+var _IconButton2 = _interopRequireDefault(_IconButton);
+
 var _Close = require('@material-ui/icons/Close');
 
 var _Close2 = _interopRequireDefault(_Close);
@@ -65,24 +73,6 @@ var Select = function (_React$Component) {
     _classCallCheck(this, Select);
 
     var _this = _possibleConstructorReturn(this, (Select.__proto__ || Object.getPrototypeOf(Select)).call(this, props));
-
-    _this.handleInputChange = function (event) {
-      var options = _this.getFilteredOptions(event.target.value);
-      if (event.target.value) {
-        _this.setState({
-          input_value: event.target.value,
-          focused_option: options[0],
-          entering_text: true,
-          menu_open: true
-        });
-      } else {
-        _this.setState({
-          input_value: '',
-          focused_option: options[0],
-          entering_text: false
-        });
-      }
-    };
 
     _this.focusOption = function (focused_option, key_code) {
       _this.setState({ focused_option: focused_option });
@@ -165,7 +155,17 @@ var Select = function (_React$Component) {
             return _this.setState({ entering_text: false });
           },
           placeholder: _this.props.selected_value ? '' : _this.props.placeholder,
-          inputProps: { style: { paddingRight: '30px' } }
+          InputProps: {
+            endAdornment: _react2.default.createElement(
+              _InputAdornment2.default,
+              { position: 'end' },
+              _react2.default.createElement(
+                _IconButton2.default,
+                { onClick: _this.handleClearValue },
+                _this.props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : _react2.default.createElement(_Close2.default, null)
+              )
+            )
+          }
         })
       );
     };
@@ -174,12 +174,16 @@ var Select = function (_React$Component) {
       focused_option: null,
       input_value: '',
       menu_open: false,
-      entering_text: false
+      entering_text: false,
+      // multi select
+      input_style: { flex: '1' }
     };
 
     _this.getFilteredOptions = _this.getFilteredOptions.bind(_this);
     _this.handleSelectOption = _this.handleSelectOption.bind(_this);
     _this.handleKeyDown = _this.handleKeyDown.bind(_this);
+    _this.handleClearValue = _this.handleClearValue.bind(_this);
+    _this.handleInputChange = _this.handleInputChange.bind(_this);
     return _this;
   }
 
@@ -197,6 +201,25 @@ var Select = function (_React$Component) {
         });
       } else {
         return this.props.options;
+      }
+    }
+  }, {
+    key: 'handleInputChange',
+    value: function handleInputChange(event) {
+      var options = this.getFilteredOptions(event.target.value);
+      if (event.target.value) {
+        this.setState({
+          input_value: event.target.value,
+          focused_option: options[0],
+          entering_text: true,
+          menu_open: true
+        });
+      } else {
+        this.setState({
+          input_value: '',
+          focused_option: options[0],
+          entering_text: false
+        });
       }
     }
   }, {
@@ -253,6 +276,11 @@ var Select = function (_React$Component) {
       }
     }
   }, {
+    key: 'handleClearValue',
+    value: function handleClearValue() {
+      this.props.handleClearValue();
+    }
+  }, {
     key: 'handleSelectOption',
     value: function handleSelectOption(option) {
       this.setState({
@@ -275,19 +303,7 @@ var Select = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         { className: classes.rmss_global_container },
-        _react2.default.createElement(
-          'div',
-          { className: classes.rmss_global_input_container },
-          this.generateInputContainer(),
-          _react2.default.createElement(
-            'div',
-            { className: classes.rmss_global_actions_container },
-            this.props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : _react2.default.createElement(_Close2.default, {
-              className: classes.rmss_global_close_button_container,
-              onClick: this.props.handleClearValue
-            })
-          )
-        ),
+        this.generateInputContainer(),
         _react2.default.createElement(
           'div',
           { className: classes.rmss_global_menu_container },
