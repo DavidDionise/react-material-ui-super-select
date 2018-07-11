@@ -128,20 +128,20 @@ var MultiSelect = function (_Select) {
       var input_value_container = (0, _jquery2.default)('.' + _this.props.classes.rmss_multi_text_field_width_tracker)[0];
       if (!input_container || !input_value_container) {
         _this.setState({ input_style: { flex: '1' } });
-      }
-
-      var _input_container$getB = input_container.getBoundingClientRect(),
-          input_container_width = _input_container$getB.width;
-
-      var _input_value_containe = input_value_container.getBoundingClientRect(),
-          input_value_width = _input_value_containe.width;
-
-      var last_row_width = _this.lastChipRowWidth();
-
-      if (input_value_width > input_container_width - last_row_width - 60) {
-        _this.setState({ input_style: { width: input_container_width + 'px' } });
       } else {
-        _this.setState({ input_style: { flex: 1 } });
+        var _input_container$getB = input_container.getBoundingClientRect(),
+            input_container_width = _input_container$getB.width;
+
+        var _input_value_containe = input_value_container.getBoundingClientRect(),
+            input_value_width = _input_value_containe.width;
+
+        var last_row_width = _this.lastChipRowWidth();
+
+        if (input_value_width > input_container_width - last_row_width - 60) {
+          _this.setState({ input_style: { width: input_container_width + 'px' } });
+        } else {
+          _this.setState({ input_style: { flex: 1 } });
+        }
       }
     };
 
