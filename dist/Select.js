@@ -129,6 +129,13 @@ var Select = function (_React$Component) {
     };
 
     _this.generateInputContainer = function () {
+      var label = void 0;
+      if (!_this.state.entering_text && !_this.props.selected_value) {
+        label = _this.props.label;
+      } else {
+        label = ' ';
+      }
+
       return _react2.default.createElement(
         'div',
         { className: _this.props.classes.rmss_input_container },
@@ -155,7 +162,7 @@ var Select = function (_React$Component) {
             return _this.setState({ entering_text: false });
           },
           placeholder: _this.props.selected_value ? '' : _this.props.placeholder,
-          label: _this.props.label,
+          label: label,
           InputProps: {
             endAdornment: _react2.default.createElement(
               _InputAdornment2.default,

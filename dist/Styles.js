@@ -64,9 +64,10 @@ exports.default = function (theme) {
     },
     rmss_selected_value_container: {
       position: 'absolute',
-      '& p': _extends({}, theme.typography.body2, {
-        position: 'relative',
-        bottom: '10px'
+      bottom: '4px',
+      '& p': _extends({}, theme.typography.subheading, {
+        margin: '0 0 0 0',
+        position: 'relative'
       })
     },
 
@@ -76,14 +77,15 @@ exports.default = function (theme) {
       position: 'relative',
       display: 'flex',
       flexDirection: 'row',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
+      alignItems: 'flex-end'
     },
     rmss_multi_text_field_width_tracker: _extends({
       position: 'absolute',
       'visibility': 'hidden'
     }, theme.typography.subheading),
     rmss_chip: {
-      margin: '0 ' + theme.spacing.unit + 'px ' + theme.spacing.unit + 'px 0'
+      margin: theme.spacing.unit + 'px ' + theme.spacing.unit + 'px 0 0'
     },
 
     // Creatable

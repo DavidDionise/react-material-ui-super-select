@@ -72,12 +72,10 @@ var MultiSelect = function (_Select) {
 
     _this.handleInputChange = function (event) {
       _Select3.default.prototype.handleInputChange.call(_this, event);
-      _this.calculateTextFieldStyle();
     };
 
     _this.handleClearValue = function () {
       _Select3.default.prototype.handleClearValue.call(_this);
-      _this.calculateTextFieldStyle();
     };
 
     _this.handleDeleteItem = function (item) {
@@ -88,7 +86,6 @@ var MultiSelect = function (_Select) {
           return v.id != item.id;
         }));
       }
-      _this.calculateTextFieldStyle();
     };
 
     _this.lastChipRowWidth = function () {
@@ -127,21 +124,21 @@ var MultiSelect = function (_Select) {
       var input_container = (0, _jquery2.default)('.' + _this.props.classes.rmss_multi_input_container)[0];
       var input_value_container = (0, _jquery2.default)('.' + _this.props.classes.rmss_multi_text_field_width_tracker)[0];
       if (!input_container || !input_value_container) {
-        _this.setState({ input_style: { flex: '1' } });
+        return { flex: '1' };
+      }
+
+      var _input_container$getB = input_container.getBoundingClientRect(),
+          input_container_width = _input_container$getB.width;
+
+      var _input_value_containe = input_value_container.getBoundingClientRect(),
+          input_value_width = _input_value_containe.width;
+
+      var last_row_width = _this.lastChipRowWidth();
+
+      if (input_value_width > input_container_width - last_row_width - 60) {
+        return { width: input_container_width + 'px' };
       } else {
-        var _input_container$getB = input_container.getBoundingClientRect(),
-            input_container_width = _input_container$getB.width;
-
-        var _input_value_containe = input_value_container.getBoundingClientRect(),
-            input_value_width = _input_value_containe.width;
-
-        var last_row_width = _this.lastChipRowWidth();
-
-        if (input_value_width > input_container_width - last_row_width - 60) {
-          _this.setState({ input_style: { width: input_container_width + 'px' } });
-        } else {
-          _this.setState({ input_style: { flex: 1 } });
-        }
+        return { flex: 1 };
       }
     };
 
@@ -153,6 +150,14 @@ var MultiSelect = function (_Select) {
   }
 
   _createClass(MultiSelect, [{
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      var updated_style = this.calculateTextFieldStyle();
+      if (!_lodash2.default.isEqual(updated_style, this.state.input_style)) {
+        this.setState({ input_style: updated_style });
+      }
+    }
+  }, {
     key: 'getFilteredOptions',
     value: function getFilteredOptions(input_value) {
       return _lodash2.default.differenceWith(_Select3.default.prototype.getFilteredOptions.call(this, input_value), this.props.selected_value || [], function (item1, item2) {
@@ -192,7 +197,6 @@ var MultiSelect = function (_Select) {
     key: 'handleSelectOption',
     value: function handleSelectOption(option) {
       _Select3.default.prototype.handleSelectOption.call(this, [].concat(_toConsumableArray(this.props.selected_value || []), [option]));
-      this.calculateTextFieldStyle();
     }
   }, {
     key: 'generateInputContainer',
@@ -200,6 +204,13 @@ var MultiSelect = function (_Select) {
       var _this2 = this;
 
       var classes = this.props.classes;
+
+      var label = void 0;
+      if (!this.state.entering_text && (this.props.selected_value || []).length == 0) {
+        label = this.props.label;
+      } else {
+        label = ' ';
+      }
 
       return _react2.default.createElement(
         'div',
@@ -235,7 +246,7 @@ var MultiSelect = function (_Select) {
               return _this2.setState({ entering_text: false });
             },
             placeholder: this.props.selected_value ? '' : this.props.placeholder,
-            label: this.props.label,
+            label: label,
             InputProps: {
               endAdornment: _react2.default.createElement(
                 _InputAdornment2.default,
