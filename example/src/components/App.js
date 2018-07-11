@@ -42,6 +42,7 @@ class App extends React.Component {
       <div className={classes.app_container}>
         <h4>Default Select</h4>
         <Select
+          label='Select'
           options={this.state.select_options}
           handleChange={value => this.setState({ default_value: value })}
           handleClearValue={() => this.setState({ default_value: null })}
@@ -52,6 +53,7 @@ class App extends React.Component {
 
         <h4>Multi Select</h4>
         <MultiSelect
+          label='MultiSelect'
           options={this.state.multi_options}
           handleChange={value => this.setState({ multi_value: value })}
           handleClearValue={() => this.setState({ multi_value: null })}
@@ -63,6 +65,7 @@ class App extends React.Component {
 
         <h4>Multi Select : Creatable</h4>
         <Creatable
+          label='Creatable'
           options={this.state.creatable_options}
           handleChange={value => this.setState({ creatable_value: value })}
           handleClearValue={() => this.setState({ creatable_value: null })}

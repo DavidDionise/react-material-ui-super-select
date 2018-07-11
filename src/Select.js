@@ -195,6 +195,7 @@ class Select extends React.Component {
         onFocus={this.handleTextFocus}
         onBlur={() => this.setState({ entering_text: false })}
         placeholder={this.props.selected_value ? '' : this.props.placeholder}
+        label={this.props.label}
         InputProps={{
           endAdornment: (
             <InputAdornment position='end'>
@@ -274,6 +275,7 @@ Select.propTypes = {
     label: PropTypes.string.isRequired,
   }),
   placeholder: PropTypes.string,
+  label: PropTypes.string,
   handleClearValue: PropTypes.func,
   loading: PropTypes.bool,
 };
@@ -284,6 +286,7 @@ Select.defaultProps = {
   stay_open_after_selection: false,
   selected_value: null,
   placeholder: 'Select ...',
+  label: '',
   handleClearValue: () => {},
   loading: false,
   container_class_name: '',
