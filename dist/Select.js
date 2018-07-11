@@ -155,6 +155,7 @@ var Select = function (_React$Component) {
             return _this.setState({ entering_text: false });
           },
           placeholder: _this.props.selected_value ? '' : _this.props.placeholder,
+          label: _this.props.label,
           InputProps: {
             endAdornment: _react2.default.createElement(
               _InputAdornment2.default,
@@ -372,6 +373,7 @@ Select.propTypes = {
     label: _propTypes2.default.string.isRequired
   }),
   placeholder: _propTypes2.default.string,
+  label: _propTypes2.default.string,
   handleClearValue: _propTypes2.default.func,
   loading: _propTypes2.default.bool
 };
@@ -382,6 +384,7 @@ Select.defaultProps = {
   stay_open_after_selection: false,
   selected_value: null,
   placeholder: 'Select ...',
+  label: '',
   handleClearValue: function handleClearValue() {},
   loading: false,
   container_class_name: ''
