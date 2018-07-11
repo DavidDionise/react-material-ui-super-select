@@ -41,6 +41,9 @@ export default theme => ({
   rmss_global_menu_paper_container: {
     overflowY: 'scroll',
     maxHeight: '200px',
+    position: 'absolute',
+    width: '100%',
+    zIndex: 100,
   },
 
   // Select

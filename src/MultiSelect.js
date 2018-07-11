@@ -106,16 +106,16 @@ class MultiSelect extends Select {
     const input_value_container = $(`.${this.props.classes.rmss_multi_text_field_width_tracker}`)[0];
     if (!input_container || !input_value_container) {
       this.setState({ input_style: { flex: '1' } });
-    }
-
-    const { width: input_container_width } = input_container.getBoundingClientRect();
-    const { width: input_value_width } = input_value_container.getBoundingClientRect();
-    const last_row_width = this.lastChipRowWidth();
-
-    if (input_value_width > input_container_width - last_row_width - 60) {
-      this.setState({ input_style: { width: `${input_container_width}px` } });
     } else {
-      this.setState({ input_style: { flex: 1 } });
+      const { width: input_container_width } = input_container.getBoundingClientRect();
+      const { width: input_value_width } = input_value_container.getBoundingClientRect();
+      const last_row_width = this.lastChipRowWidth();
+
+      if (input_value_width > input_container_width - last_row_width - 60) {
+        this.setState({ input_style: { width: `${input_container_width}px` } });
+      } else {
+        this.setState({ input_style: { flex: 1 } });
+      }
     }
   }
   generateInputContainer() {
