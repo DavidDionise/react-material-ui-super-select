@@ -292,7 +292,7 @@ var Select = function (_React$Component) {
     key: 'handleSelectOption',
     value: function handleSelectOption(option) {
       this.setState({
-        menu_open: this.props.stay_open_after_selection !== null,
+        menu_open: this.props.stay_open_after_selection != false,
         focused_option: null,
         input_value: ''
       });
