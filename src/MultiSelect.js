@@ -20,13 +20,17 @@ class MultiSelect extends Select {
     this.generateInputContainer = this.generateInputContainer.bind(this);
   }
 
+   componentDidUpdate() {
+     const updated_style = this.calculateTextFieldStyle();
+     if (!_.isEqual(updated_style, this.state.input_style)) {
+       this.setState({ input_style: updated_style });
+     }
+   }
   handleInputChange = event => {
     Select.prototype.handleInputChange.call(this, event);
-    this.calculateTextFieldStyle();
   }
   handleClearValue = () => {
     Select.prototype.handleClearValue.call(this);
-    this.calculateTextFieldStyle();
   }
   getFilteredOptions(input_value) {
     return _.differenceWith(
@@ -65,7 +69,6 @@ class MultiSelect extends Select {
   }
   handleSelectOption(option) {
     Select.prototype.handleSelectOption.call(this, [ ...(this.props.selected_value || []), option ]);
-    this.calculateTextFieldStyle();
   }
   handleDeleteItem = (item) => {
     if (this.props.selected_value.length == 1) {
@@ -73,7 +76,6 @@ class MultiSelect extends Select {
     } else {
       this.props.handleChange(this.props.selected_value.filter(v => v.id != item.id));
     }
-    this.calculateTextFieldStyle();
   }
   lastChipRowWidth = () => {
     const chip_elements = $(`.${this.props.classes.rmss_chip}`);
@@ -105,21 +107,31 @@ class MultiSelect extends Select {
     const input_container = $(`.${this.props.classes.rmss_multi_input_container}`)[0];
     const input_value_container = $(`.${this.props.classes.rmss_multi_text_field_width_tracker}`)[0];
     if (!input_container || !input_value_container) {
-      this.setState({ input_style: { flex: '1' } });
-    } else {
-      const { width: input_container_width } = input_container.getBoundingClientRect();
-      const { width: input_value_width } = input_value_container.getBoundingClientRect();
-      const last_row_width = this.lastChipRowWidth();
+      return { flex: '1' };
+    }
 
-      if (input_value_width > input_container_width - last_row_width - 60) {
-        this.setState({ input_style: { width: `${input_container_width}px` } });
-      } else {
-        this.setState({ input_style: { flex: 1 } });
-      }
+    const { width: input_container_width } = input_container.getBoundingClientRect();
+    const { width: input_value_width } = input_value_container.getBoundingClientRect();
+    const last_row_width = this.lastChipRowWidth();
+
+    if (input_value_width > input_container_width - last_row_width - 60) {
+      return { width: `${input_container_width}px` };
+    } else {
+      return { flex: 1 };
     }
   }
   generateInputContainer() {
     const { classes } = this.props;
+    let label;
+    if (
+      !this.state.entering_text &&
+      (this.props.selected_value || []).length == 0
+    ) {
+      label = this.props.label;
+    } else {
+      label = ' ';
+    }
+
     return (
       <div className={classes.rmss_multi_input_container}>
         {(this.props.selected_value || [])
@@ -143,7 +155,7 @@ class MultiSelect extends Select {
               onFocus={this.handleTextFocus}
               onBlur={() => this.setState({ entering_text: false })}
               placeholder={this.props.selected_value ? '' : this.props.placeholder}
-              label={this.props.label}
+              label={label}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position='end'>

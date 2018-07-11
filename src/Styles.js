@@ -55,10 +55,11 @@ export default theme => ({
   },
   rmss_selected_value_container: {
     position: 'absolute',
+    bottom: '4px',
     '& p': {
-      ...theme.typography.body2,
+      ...theme.typography.subheading,
+      margin: '0 0 0 0',
       position: 'relative',
-      bottom: '10px',
     },
   },
 
@@ -69,6 +70,7 @@ export default theme => ({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
+    alignItems: 'flex-end',
   },
   rmss_multi_text_field_width_tracker: {
     position: 'absolute',
@@ -76,7 +78,7 @@ export default theme => ({
     ...theme.typography.subheading,
   },
   rmss_chip: {
-    margin: `0 ${theme.spacing.unit}px ${theme.spacing.unit}px 0`,
+    margin: `${theme.spacing.unit}px ${theme.spacing.unit}px 0 0`,
   },
 
   // Creatable

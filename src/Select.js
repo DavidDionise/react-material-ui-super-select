@@ -176,38 +176,50 @@ class Select extends React.Component {
       this.setState({ menu_open: true });
     }
   }
-  generateInputContainer = () => (
-    <div className={this.props.classes.rmss_input_container}>
-      <div className={this.props.classes.rmss_selected_value_container}>
-        {this.state.entering_text && this.state.input_value ? null : (
-          this.props.selected_value ? (
-            <p>{this.props.selected_value.label}</p>
-          ) : null
-        )}
+  generateInputContainer = () => {
+    let label;
+    if (
+      !this.state.entering_text &&
+      !this.props.selected_value
+    ) {
+      label = this.props.label;
+    } else {
+      label = ' ';
+    }
+
+    return (
+      <div className={this.props.classes.rmss_input_container}>
+        <div className={this.props.classes.rmss_selected_value_container}>
+          {this.state.entering_text && this.state.input_value ? null : (
+            this.props.selected_value ? (
+              <p>{this.props.selected_value.label}</p>
+            ) : null
+          )}
+        </div>
+        <TextField
+          fullWidth
+          disabled={this.props.loading}
+          onChange={this.handleInputChange}
+          onClick={() => this.setState({ menu_open: true })}
+          value={this.state.entering_text ? this.state.input_value : ''}
+          onKeyDown={this.handleKeyDown}
+          onFocus={this.handleTextFocus}
+          onBlur={() => this.setState({ entering_text: false })}
+          placeholder={this.props.selected_value ? '' : this.props.placeholder}
+          label={label}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position='end'>
+                <IconButton onClick={this.handleClearValue}>
+                  {this.props.loading ? <CircularProgress size={20} /> : <CloseIcon />}
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+        />
       </div>
-      <TextField
-        fullWidth
-        disabled={this.props.loading}
-        onChange={this.handleInputChange}
-        onClick={() => this.setState({ menu_open: true })}
-        value={this.state.entering_text ? this.state.input_value : ''}
-        onKeyDown={this.handleKeyDown}
-        onFocus={this.handleTextFocus}
-        onBlur={() => this.setState({ entering_text: false })}
-        placeholder={this.props.selected_value ? '' : this.props.placeholder}
-        label={this.props.label}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position='end'>
-              <IconButton onClick={this.handleClearValue}>
-                {this.props.loading ? <CircularProgress size={20} /> : <CloseIcon />}
-              </IconButton>
-            </InputAdornment>
-          )
-        }}
-      />
-    </div>
-  )
+    )
+  }
 
   render() {
     const { classes } = this.props;
