@@ -120,62 +120,9 @@ var Select = function (_React$Component) {
     _this.handleTextFocus = function () {
       if (_this.state.input_value.length > 0) {
         _this.setState({
-          entering_text: true,
-          menu_open: true
+          entering_text: true
         });
-      } else {
-        _this.setState({ menu_open: true });
       }
-    };
-
-    _this.generateInputContainer = function () {
-      var label = void 0;
-      if (!_this.state.entering_text && !_this.props.selected_value) {
-        label = _this.props.label;
-      } else {
-        label = ' ';
-      }
-
-      return _react2.default.createElement(
-        'div',
-        { className: _this.props.classes.rmss_input_container },
-        _react2.default.createElement(
-          'div',
-          { className: _this.props.classes.rmss_selected_value_container },
-          _this.state.entering_text && _this.state.input_value ? null : _this.props.selected_value ? _react2.default.createElement(
-            'p',
-            null,
-            _this.props.selected_value.label
-          ) : null
-        ),
-        _react2.default.createElement(_TextField2.default, {
-          fullWidth: true,
-          disabled: _this.props.loading,
-          onChange: _this.handleInputChange,
-          onClick: function onClick() {
-            return _this.setState({ menu_open: true });
-          },
-          value: _this.state.entering_text ? _this.state.input_value : '',
-          onKeyDown: _this.handleKeyDown,
-          onFocus: _this.handleTextFocus,
-          onBlur: function onBlur() {
-            return _this.setState({ entering_text: false });
-          },
-          placeholder: _this.props.selected_value ? '' : _this.props.placeholder,
-          label: label,
-          InputProps: {
-            endAdornment: _react2.default.createElement(
-              _InputAdornment2.default,
-              { position: 'end' },
-              _react2.default.createElement(
-                _IconButton2.default,
-                { onClick: _this.handleClearValue },
-                _this.props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : _react2.default.createElement(_Close2.default, null)
-              )
-            )
-          }
-        })
-      );
     };
 
     _this.state = {
@@ -192,6 +139,7 @@ var Select = function (_React$Component) {
     _this.handleKeyDown = _this.handleKeyDown.bind(_this);
     _this.handleClearValue = _this.handleClearValue.bind(_this);
     _this.handleInputChange = _this.handleInputChange.bind(_this);
+    _this.generateInputContainer = _this.generateInputContainer.bind(_this);
     return _this;
   }
 
@@ -285,7 +233,11 @@ var Select = function (_React$Component) {
     }
   }, {
     key: 'handleClearValue',
-    value: function handleClearValue() {
+    value: function handleClearValue(e) {
+      e.stopPropagation();
+      if (this.state.menu_open) {
+        this.setState({ menu_open: false });
+      }
       this.props.handleClearValue();
     }
   }, {
@@ -300,9 +252,62 @@ var Select = function (_React$Component) {
       this.props.handleChange(option);
     }
   }, {
+    key: 'generateInputContainer',
+    value: function generateInputContainer() {
+      var _this3 = this;
+
+      var label = void 0;
+      if (!this.state.entering_text && !this.props.selected_value) {
+        label = this.props.label;
+      } else {
+        label = ' ';
+      }
+
+      return _react2.default.createElement(
+        'div',
+        { className: this.props.classes.rmss_input_container },
+        _react2.default.createElement(
+          'div',
+          { className: this.props.classes.rmss_selected_value_container },
+          this.state.entering_text && this.state.input_value ? null : this.props.selected_value ? _react2.default.createElement(
+            'p',
+            null,
+            this.props.selected_value.label
+          ) : null
+        ),
+        _react2.default.createElement(_TextField2.default, {
+          fullWidth: true,
+          disabled: this.props.loading,
+          onChange: this.handleInputChange,
+          onClick: function onClick() {
+            return _this3.setState({ menu_open: true });
+          },
+          value: this.state.entering_text ? this.state.input_value : '',
+          onKeyDown: this.handleKeyDown,
+          onFocus: this.handleTextFocus,
+          onBlur: function onBlur() {
+            return _this3.setState({ entering_text: false });
+          },
+          placeholder: this.props.selected_value ? '' : this.props.placeholder,
+          label: label,
+          InputProps: {
+            endAdornment: _react2.default.createElement(
+              _InputAdornment2.default,
+              { position: 'end' },
+              _react2.default.createElement(
+                _IconButton2.default,
+                { onClick: this.handleClearValue },
+                this.props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : _react2.default.createElement(_Close2.default, null)
+              )
+            )
+          }
+        })
+      );
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       var classes = this.props.classes;
 
@@ -316,16 +321,25 @@ var Select = function (_React$Component) {
           'div',
           { className: classes.rmss_global_menu_container },
           _react2.default.createElement(
-            _Grow2.default,
-            { 'in': menu_open > 0 },
-            menu_open > 0 ? // prevents UI flicker
+            _ClickAwayListener2.default,
+            {
+              onClickAway: function onClickAway() {
+                console.log(' *** IN RMSS ***');
+                if (_this4.state.menu_open) {
+                  _this4.setState({ menu_open: false });
+                }
+              }
+              // this.state.menu_open ?
+              // () => this.setState({ menu_open: false }) :
+              // () => {}
+
+            },
             _react2.default.createElement(
-              _ClickAwayListener2.default,
+              _Grow2.default,
               {
-                onClickAway: this.state.menu_open ? function () {
-                  return _this3.setState({ menu_open: false });
-                } : function () {},
-                className: 'select-click-away-listener'
+                'in': menu_open,
+                mountOnEnter: true,
+                unmountOnExit: true
               },
               _react2.default.createElement(
                 _Paper2.default,
@@ -334,28 +348,28 @@ var Select = function (_React$Component) {
                   _MenuList2.default,
                   { id: 'rmss-menu-list' },
                   this.getFilteredOptions(this.state.input_value).map(function (opt) {
-                    var selected = opt.id == (_this3.props.selected_value || {}).id;
-                    var focused = opt.id == (_this3.state.focused_option || {}).id;
+                    var selected = opt.id == (_this4.props.selected_value || {}).id;
+                    var focused = opt.id == (_this4.state.focused_option || {}).id;
 
-                    return _this3.props.menuItemRenderer ? _this3.props.menuItemRenderer(opt) : _react2.default.createElement(
+                    return _react2.default.createElement(
                       _MenuItem2.default,
                       {
                         key: opt.id,
                         id: 'rmss-menu-item-' + opt.id,
                         onClick: function onClick() {
-                          return _this3.handleSelectOption(opt);
+                          return _this4.handleSelectOption(opt);
                         },
                         onMouseEnter: function onMouseEnter() {
-                          return _this3.setState({ focused_option: opt });
+                          return _this4.setState({ focused_option: opt });
                         },
                         className: classes.rmss_global_menu_item + ' ' + (selected && !focused ? 'selected' : focused ? 'focused' : '')
                       },
-                      _this3.props.menuItemRenderer ? _this3.props.menuItemRenderer(opt) : opt.label
+                      _this4.props.menuItemRenderer ? _this4.props.menuItemRenderer(opt) : opt.label
                     );
                   })
                 )
               )
-            ) : _react2.default.createElement('div', null)
+            )
           )
         )
       );

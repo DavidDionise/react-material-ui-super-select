@@ -30,6 +30,7 @@ class Select extends React.Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleClearValue = this.handleClearValue.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.generateInputContainer = this.generateInputContainer.bind(this);
   }
 
   componentWillMount() {
@@ -111,7 +112,11 @@ class Select extends React.Component {
       }
     }
   }
-  handleClearValue() {
+  handleClearValue(e) {
+    e.stopPropagation();
+    if (this.state.menu_open) {
+      this.setState({ menu_open: false });
+    }
     this.props.handleClearValue();
   }
   focusOption = (focused_option, key_code) => {
@@ -170,13 +175,10 @@ class Select extends React.Component {
     if (this.state.input_value.length > 0) {
       this.setState({
         entering_text: true,
-        menu_open: true,
       });
-    } else {
-      this.setState({ menu_open: true });
     }
   }
-  generateInputContainer = () => {
+  generateInputContainer() {
     let label;
     if (
       !this.state.entering_text &&
@@ -229,41 +231,48 @@ class Select extends React.Component {
       <div className={`${classes.rmss_global_container} ${this.props.container_class_name}`}>
         {this.generateInputContainer()}
         <div className={classes.rmss_global_menu_container}>
-          <Grow in={menu_open > 0}>
-            {menu_open > 0 ? (   // prevents UI flicker
-              <ClickAwayListener
-                onClickAway={
-                  this.state.menu_open ?
-                  () => this.setState({ menu_open: false }) :
-                  () => {}
+          <ClickAwayListener
+            onClickAway={
+              () => {
+                console.log(' *** IN RMSS ***');
+                if (this.state.menu_open) {
+                  this.setState({ menu_open: false })
                 }
-                className='select-click-away-listener'
-              >
-                <Paper classes={{ root: classes.rmss_global_menu_paper_container }}>
-                  <MenuList id='rmss-menu-list'>
-                    {this.getFilteredOptions(this.state.input_value).map(opt => {
-                      const selected = opt.id == (this.props.selected_value || {}).id;
-                      const focused = opt.id == (this.state.focused_option || {}).id;
+              }
+              // this.state.menu_open ?
+              // () => this.setState({ menu_open: false }) :
+              // () => {}
+            }
+          >
+            <Grow
+              in={menu_open}
+              mountOnEnter
+              unmountOnExit
+            >
+              <Paper classes={{ root: classes.rmss_global_menu_paper_container }}>
+                <MenuList id='rmss-menu-list'>
+                  {this.getFilteredOptions(this.state.input_value).map(opt => {
+                    const selected = opt.id == (this.props.selected_value || {}).id;
+                    const focused = opt.id == (this.state.focused_option || {}).id;
 
-                      return this.props.menuItemRenderer ? this.props.menuItemRenderer(opt) : (
-                        <MenuItem
-                          key={opt.id}
-                          id={`rmss-menu-item-${opt.id}`}
-                          onClick={() => this.handleSelectOption(opt)}
-                          onMouseEnter={() => this.setState({ focused_option: opt })}
-                          className={`${classes.rmss_global_menu_item} ${selected && !focused ? 'selected' : focused ? 'focused' : ''}`}
-                        >
-                          {this.props.menuItemRenderer ? (
-                            this.props.menuItemRenderer(opt)
-                          ) : opt.label}
-                        </MenuItem>
-                      );
-                    })}
-                  </MenuList>
-                </Paper>
-              </ClickAwayListener>
-            ) : <div />}
-          </Grow>
+                    return (
+                      <MenuItem
+                        key={opt.id}
+                        id={`rmss-menu-item-${opt.id}`}
+                        onClick={() => this.handleSelectOption(opt)}
+                        onMouseEnter={() => this.setState({ focused_option: opt })}
+                        className={`${classes.rmss_global_menu_item} ${selected && !focused ? 'selected' : focused ? 'focused' : ''}`}
+                      >
+                        {this.props.menuItemRenderer ? (
+                          this.props.menuItemRenderer(opt)
+                        ) : opt.label}
+                      </MenuItem>
+                    );
+                  })}
+                </MenuList>
+              </Paper>
+            </Grow>
+          </ClickAwayListener>
         </div>
       </div>
     )

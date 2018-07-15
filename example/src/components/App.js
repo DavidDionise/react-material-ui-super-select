@@ -1,3 +1,4 @@
+require('react-hot-loader');
 import React from 'react';
 import { Select, MultiSelect, Creatable } from 'react-material-ui-super-select';
 import withStyles from '@material-ui/core/styles/withStyles';
