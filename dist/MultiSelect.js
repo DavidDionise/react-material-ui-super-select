@@ -211,6 +211,7 @@ var MultiSelect = function (_Select) {
       } else {
         label = ' ';
       }
+      var disabled = this.props.loading || this.props.disabled;
 
       return _react2.default.createElement(
         'div',
@@ -223,7 +224,7 @@ var MultiSelect = function (_Select) {
           return _react2.default.createElement(_Chip2.default, {
             key: item.id,
             label: item.label,
-            onDelete: function onDelete() {
+            onDelete: disabled ? undefined : function () {
               return _this2.handleDeleteItem(item);
             },
             className: classes.rmss_chip
@@ -234,14 +235,14 @@ var MultiSelect = function (_Select) {
           { style: this.state.input_style },
           _react2.default.createElement(_TextField2.default, {
             fullWidth: true,
-            disabled: this.props.loading,
+            disabled: disabled,
             onChange: this.handleInputChange,
-            onClick: function onClick() {
+            onClick: disabled ? function () {} : function () {
               return _this2.setState({ menu_open: true });
             },
             value: this.state.entering_text ? this.state.input_value : '',
             onKeyDown: this.handleKeyDown,
-            onFocus: this.handleTextFocus,
+            onFocus: disabled ? function () {} : this.handleTextFocus,
             onBlur: function onBlur() {
               return _this2.setState({ entering_text: false });
             },

@@ -188,6 +188,7 @@ class Select extends React.Component {
     } else {
       label = ' ';
     }
+    const disabled = this.props.disabled || this.props.loading;
 
     return (
       <div className={this.props.classes.rmss_input_container}>
@@ -200,12 +201,12 @@ class Select extends React.Component {
         </div>
         <TextField
           fullWidth
-          disabled={this.props.loading}
+          disabled={disabled}
           onChange={this.handleInputChange}
-          onClick={() => this.setState({ menu_open: true })}
+          onClick={disabled ? () => {} : () => this.setState({ menu_open: true })}
           value={this.state.entering_text ? this.state.input_value : ''}
           onKeyDown={this.handleKeyDown}
-          onFocus={this.handleTextFocus}
+          onFocus={disabled ? () => {} : this.handleTextFocus}
           onBlur={() => this.setState({ entering_text: false })}
           placeholder={this.props.selected_value ? '' : this.props.placeholder}
           label={label}
@@ -228,20 +229,14 @@ class Select extends React.Component {
     const menu_open = this.state.menu_open && this.getFilteredOptions(this.state.input_value).length != 0;
 
     return (
-      <div className={`${classes.rmss_global_container} ${this.props.container_class_name}`}>
+      <div className={`${classes.rmss_global_container} ${this.props.containerClassName}`}>
         {this.generateInputContainer()}
         <div className={classes.rmss_global_menu_container}>
           <ClickAwayListener
             onClickAway={
-              () => {
-                console.log(' *** IN RMSS ***');
-                if (this.state.menu_open) {
-                  this.setState({ menu_open: false })
-                }
-              }
-              // this.state.menu_open ?
-              // () => this.setState({ menu_open: false }) :
-              // () => {}
+              this.state.menu_open ?
+              () => this.setState({ menu_open: false }) :
+              () => {}
             }
           >
             <Grow
@@ -286,7 +281,7 @@ Select.propTypes = {
       label: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  container_class_name: PropTypes.string,
+  containerClassName: PropTypes.string,
   handleChange: PropTypes.func.isRequired,
   textFieldRenderer: PropTypes.func,
   menuItemRenderer: PropTypes.func,
@@ -299,6 +294,7 @@ Select.propTypes = {
   label: PropTypes.string,
   handleClearValue: PropTypes.func,
   loading: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 Select.defaultProps = {
@@ -309,8 +305,9 @@ Select.defaultProps = {
   placeholder: 'Select ...',
   label: '',
   handleClearValue: () => {},
+  containerClassName: '',
   loading: false,
-  container_class_name: '',
+  disabled: false,
 };
 
 export default Select;

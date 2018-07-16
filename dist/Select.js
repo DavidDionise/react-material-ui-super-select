@@ -262,6 +262,7 @@ var Select = function (_React$Component) {
       } else {
         label = ' ';
       }
+      var disabled = this.props.disabled || this.props.loading;
 
       return _react2.default.createElement(
         'div',
@@ -277,14 +278,14 @@ var Select = function (_React$Component) {
         ),
         _react2.default.createElement(_TextField2.default, {
           fullWidth: true,
-          disabled: this.props.loading,
+          disabled: disabled,
           onChange: this.handleInputChange,
-          onClick: function onClick() {
+          onClick: disabled ? function () {} : function () {
             return _this3.setState({ menu_open: true });
           },
           value: this.state.entering_text ? this.state.input_value : '',
           onKeyDown: this.handleKeyDown,
-          onFocus: this.handleTextFocus,
+          onFocus: disabled ? function () {} : this.handleTextFocus,
           onBlur: function onBlur() {
             return _this3.setState({ entering_text: false });
           },
@@ -315,7 +316,7 @@ var Select = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: classes.rmss_global_container + ' ' + this.props.container_class_name },
+        { className: classes.rmss_global_container + ' ' + this.props.containerClassName },
         this.generateInputContainer(),
         _react2.default.createElement(
           'div',
@@ -323,16 +324,9 @@ var Select = function (_React$Component) {
           _react2.default.createElement(
             _ClickAwayListener2.default,
             {
-              onClickAway: function onClickAway() {
-                console.log(' *** IN RMSS ***');
-                if (_this4.state.menu_open) {
-                  _this4.setState({ menu_open: false });
-                }
-              }
-              // this.state.menu_open ?
-              // () => this.setState({ menu_open: false }) :
-              // () => {}
-
+              onClickAway: this.state.menu_open ? function () {
+                return _this4.setState({ menu_open: false });
+              } : function () {}
             },
             _react2.default.createElement(
               _Grow2.default,
@@ -384,7 +378,7 @@ Select.propTypes = {
     id: _propTypes2.default.string.isRequired,
     label: _propTypes2.default.string.isRequired
   })).isRequired,
-  container_class_name: _propTypes2.default.string,
+  containerClassName: _propTypes2.default.string,
   handleChange: _propTypes2.default.func.isRequired,
   textFieldRenderer: _propTypes2.default.func,
   menuItemRenderer: _propTypes2.default.func,
@@ -396,7 +390,8 @@ Select.propTypes = {
   placeholder: _propTypes2.default.string,
   label: _propTypes2.default.string,
   handleClearValue: _propTypes2.default.func,
-  loading: _propTypes2.default.bool
+  loading: _propTypes2.default.bool,
+  disabled: _propTypes2.default.bool
 };
 
 Select.defaultProps = {
@@ -407,8 +402,9 @@ Select.defaultProps = {
   placeholder: 'Select ...',
   label: '',
   handleClearValue: function handleClearValue() {},
+  containerClassName: '',
   loading: false,
-  container_class_name: ''
+  disabled: false
 };
 
 exports.default = Select;

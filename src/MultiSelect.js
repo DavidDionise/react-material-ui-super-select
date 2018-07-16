@@ -131,6 +131,7 @@ class MultiSelect extends Select {
     } else {
       label = ' ';
     }
+    const disabled = this.props.loading || this.props.disabled;
 
     return (
       <div className={classes.rmss_multi_input_container}>
@@ -140,19 +141,19 @@ class MultiSelect extends Select {
             <Chip
               key={item.id}
               label={item.label}
-              onDelete={() => this.handleDeleteItem(item)}
+              onDelete={disabled ? undefined : () => this.handleDeleteItem(item)}
               className={classes.rmss_chip}
             />
           ))}
           <div style={this.state.input_style}>
             <TextField
               fullWidth
-              disabled={this.props.loading}
+              disabled={disabled}
               onChange={this.handleInputChange}
-              onClick={() => this.setState({ menu_open: true })}
+              onClick={disabled ? () => {} : () => this.setState({ menu_open: true })}
               value={this.state.entering_text ? this.state.input_value : ''}
               onKeyDown={this.handleKeyDown}
-              onFocus={this.handleTextFocus}
+              onFocus={disabled ? () => {} : this.handleTextFocus}
               onBlur={() => this.setState({ entering_text: false })}
               placeholder={this.props.selected_value ? '' : this.props.placeholder}
               label={label}
