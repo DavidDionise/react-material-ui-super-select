@@ -53,7 +53,7 @@ export default theme => ({
     display: 'flex',
     flexDirection: 'row',
   },
-  rmss_selected_value_container: {
+  rmss_selectedValue_container: {
     position: 'absolute',
     bottom: '4px',
     '& p': {
@@ -89,7 +89,7 @@ export default theme => ({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  rmss_creatable_selected_value_container: {
+  rmss_creatable_selectedValue_container: {
     position: 'relative',
     display: 'flex',
     flexDirection: 'row',

@@ -164,7 +164,7 @@ class Select extends React.Component {
   }
   handleSelectOption(option) {
     this.setState({
-      menu_open: this.props.stay_open_after_selection != false,
+      menu_open: this.props.stayOpenAfterSelection != false,
       focused_option: null,
       input_value: '',
     });
@@ -182,7 +182,7 @@ class Select extends React.Component {
     let label;
     if (
       !this.state.entering_text &&
-      !this.props.selected_value
+      !this.props.selectedValue
     ) {
       label = this.props.label;
     } else {
@@ -192,10 +192,10 @@ class Select extends React.Component {
 
     return (
       <div className={this.props.classes.rmss_input_container}>
-        <div className={this.props.classes.rmss_selected_value_container}>
+        <div className={this.props.classes.rmss_selectedValue_container}>
           {this.state.entering_text && this.state.input_value ? null : (
-            this.props.selected_value ? (
-              <p>{this.props.selected_value.label}</p>
+            this.props.selectedValue ? (
+              <p>{this.props.selectedValue.label}</p>
             ) : null
           )}
         </div>
@@ -208,7 +208,7 @@ class Select extends React.Component {
           onKeyDown={this.handleKeyDown}
           onFocus={disabled ? () => {} : this.handleTextFocus}
           onBlur={() => this.setState({ entering_text: false })}
-          placeholder={this.props.selected_value ? '' : this.props.placeholder}
+          placeholder={this.props.selectedValue ? '' : this.props.placeholder}
           label={label}
           InputProps={{
             endAdornment: (
@@ -247,7 +247,7 @@ class Select extends React.Component {
               <Paper classes={{ root: classes.rmss_global_menu_paper_container }}>
                 <MenuList id='rmss-menu-list'>
                   {this.getFilteredOptions(this.state.input_value).map(opt => {
-                    const selected = opt.id == (this.props.selected_value || {}).id;
+                    const selected = opt.id == (this.props.selectedValue || {}).id;
                     const focused = opt.id == (this.state.focused_option || {}).id;
 
                     return (
@@ -285,8 +285,8 @@ Select.propTypes = {
   handleChange: PropTypes.func.isRequired,
   textFieldRenderer: PropTypes.func,
   menuItemRenderer: PropTypes.func,
-  stay_open_after_selection: PropTypes.bool,
-  selected_value: PropTypes.shape({
+  stayOpenAfterSelection: PropTypes.bool,
+  selectedValue: PropTypes.shape({
     id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
   }),
@@ -300,8 +300,8 @@ Select.propTypes = {
 Select.defaultProps = {
   textFieldRenderer: null,
   menuItemRenderer: null,
-  stay_open_after_selection: false,
-  selected_value: null,
+  stayOpenAfterSelection: false,
+  selectedValue: null,
   placeholder: 'Select ...',
   label: '',
   handleClearValue: () => {},

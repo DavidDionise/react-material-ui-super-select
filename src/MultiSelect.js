@@ -35,7 +35,7 @@ class MultiSelect extends Select {
   getFilteredOptions(input_value) {
     return _.differenceWith(
       Select.prototype.getFilteredOptions.call(this, input_value),
-      (this.props.selected_value || []),
+      (this.props.selectedValue || []),
       (item1, item2) => item1.id == item2.id
     );
   }
@@ -55,10 +55,10 @@ class MultiSelect extends Select {
       case 46: {
         if (
           this.state.input_value.length == 0 &&
-          this.props.selected_value &&
-          this.props.selected_value.length > 0
+          this.props.selectedValue &&
+          this.props.selectedValue.length > 0
         ) {
-          this.handleDeleteItem(this.props.selected_value[this.props.selected_value.length - 1]);
+          this.handleDeleteItem(this.props.selectedValue[this.props.selectedValue.length - 1]);
         }
         break;
       }
@@ -68,13 +68,13 @@ class MultiSelect extends Select {
     }
   }
   handleSelectOption(option) {
-    Select.prototype.handleSelectOption.call(this, [ ...(this.props.selected_value || []), option ]);
+    Select.prototype.handleSelectOption.call(this, [ ...(this.props.selectedValue || []), option ]);
   }
   handleDeleteItem = (item) => {
-    if (this.props.selected_value.length == 1) {
+    if (this.props.selectedValue.length == 1) {
       this.props.handleChange(null);
     } else {
-      this.props.handleChange(this.props.selected_value.filter(v => v.id != item.id));
+      this.props.handleChange(this.props.selectedValue.filter(v => v.id != item.id));
     }
   }
   lastChipRowWidth = () => {
@@ -125,7 +125,7 @@ class MultiSelect extends Select {
     let label;
     if (
       !this.state.entering_text &&
-      (this.props.selected_value || []).length == 0
+      (this.props.selectedValue || []).length == 0
     ) {
       label = this.props.label;
     } else {
@@ -135,7 +135,7 @@ class MultiSelect extends Select {
 
     return (
       <div className={classes.rmss_multi_input_container}>
-        {(this.props.selected_value || [])
+        {(this.props.selectedValue || [])
           .filter(item => this.props.options.find(opt => opt.id == item.id))
           .map(item => (
             <Chip
@@ -155,7 +155,7 @@ class MultiSelect extends Select {
               onKeyDown={this.handleKeyDown}
               onFocus={disabled ? () => {} : this.handleTextFocus}
               onBlur={() => this.setState({ entering_text: false })}
-              placeholder={this.props.selected_value ? '' : this.props.placeholder}
+              placeholder={this.props.selectedValue ? '' : this.props.placeholder}
               label={label}
               InputProps={{
                 endAdornment: (
@@ -180,7 +180,7 @@ class MultiSelect extends Select {
 
 MultiSelect.propTypes = {
   ...Select.propTypes,
-  selected_value: PropTypes.arrayOf(
+  selectedValue: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired,
@@ -190,7 +190,7 @@ MultiSelect.propTypes = {
 
 MultiSelect.defaultProps = {
   ...Select.defaultProps,
-  selected_value: null,
+  selectedValue: null,
 };
 
 export default MultiSelect;

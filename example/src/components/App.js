@@ -47,7 +47,7 @@ class App extends React.Component {
           options={this.state.select_options}
           handleChange={value => this.setState({ default_value: value })}
           handleClearValue={() => this.setState({ default_value: null })}
-          selected_value={this.state.default_value}
+          selectedValue={this.state.default_value}
         />
 
         <div className={classes.divider} />
@@ -58,8 +58,8 @@ class App extends React.Component {
           options={this.state.multi_options}
           handleChange={value => this.setState({ multi_value: value })}
           handleClearValue={() => this.setState({ multi_value: null })}
-          selected_value={this.state.multi_value}
-          stay_open_after_selection
+          selectedValue={this.state.multi_value}
+          stayOpenAfterSelection
         />
 
         <div className={classes.divider} />
@@ -70,7 +70,7 @@ class App extends React.Component {
           options={this.state.creatable_options}
           handleChange={value => this.setState({ creatable_value: value })}
           handleClearValue={() => this.setState({ creatable_value: null })}
-          selected_value={this.state.creatable_value}
+          selectedValue={this.state.creatable_value}
           onCreate={value => this.setState({ creatable_options: this.state.creatable_options.concat(value) })}
         />
       </div>

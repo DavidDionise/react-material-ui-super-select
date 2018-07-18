@@ -244,7 +244,7 @@ var Select = function (_React$Component) {
     key: 'handleSelectOption',
     value: function handleSelectOption(option) {
       this.setState({
-        menu_open: this.props.stay_open_after_selection != false,
+        menu_open: this.props.stayOpenAfterSelection != false,
         focused_option: null,
         input_value: ''
       });
@@ -257,7 +257,7 @@ var Select = function (_React$Component) {
       var _this3 = this;
 
       var label = void 0;
-      if (!this.state.entering_text && !this.props.selected_value) {
+      if (!this.state.entering_text && !this.props.selectedValue) {
         label = this.props.label;
       } else {
         label = ' ';
@@ -269,11 +269,11 @@ var Select = function (_React$Component) {
         { className: this.props.classes.rmss_input_container },
         _react2.default.createElement(
           'div',
-          { className: this.props.classes.rmss_selected_value_container },
-          this.state.entering_text && this.state.input_value ? null : this.props.selected_value ? _react2.default.createElement(
+          { className: this.props.classes.rmss_selectedValue_container },
+          this.state.entering_text && this.state.input_value ? null : this.props.selectedValue ? _react2.default.createElement(
             'p',
             null,
-            this.props.selected_value.label
+            this.props.selectedValue.label
           ) : null
         ),
         _react2.default.createElement(_TextField2.default, {
@@ -289,7 +289,7 @@ var Select = function (_React$Component) {
           onBlur: function onBlur() {
             return _this3.setState({ entering_text: false });
           },
-          placeholder: this.props.selected_value ? '' : this.props.placeholder,
+          placeholder: this.props.selectedValue ? '' : this.props.placeholder,
           label: label,
           InputProps: {
             endAdornment: _react2.default.createElement(
@@ -342,7 +342,7 @@ var Select = function (_React$Component) {
                   _MenuList2.default,
                   { id: 'rmss-menu-list' },
                   this.getFilteredOptions(this.state.input_value).map(function (opt) {
-                    var selected = opt.id == (_this4.props.selected_value || {}).id;
+                    var selected = opt.id == (_this4.props.selectedValue || {}).id;
                     var focused = opt.id == (_this4.state.focused_option || {}).id;
 
                     return _react2.default.createElement(
@@ -382,8 +382,8 @@ Select.propTypes = {
   handleChange: _propTypes2.default.func.isRequired,
   textFieldRenderer: _propTypes2.default.func,
   menuItemRenderer: _propTypes2.default.func,
-  stay_open_after_selection: _propTypes2.default.bool,
-  selected_value: _propTypes2.default.shape({
+  stayOpenAfterSelection: _propTypes2.default.bool,
+  selectedValue: _propTypes2.default.shape({
     id: _propTypes2.default.string.isRequired,
     label: _propTypes2.default.string.isRequired
   }),
@@ -397,8 +397,8 @@ Select.propTypes = {
 Select.defaultProps = {
   textFieldRenderer: null,
   menuItemRenderer: null,
-  stay_open_after_selection: false,
-  selected_value: null,
+  stayOpenAfterSelection: false,
+  selectedValue: null,
   placeholder: 'Select ...',
   label: '',
   handleClearValue: function handleClearValue() {},

@@ -79,10 +79,10 @@ var MultiSelect = function (_Select) {
     };
 
     _this.handleDeleteItem = function (item) {
-      if (_this.props.selected_value.length == 1) {
+      if (_this.props.selectedValue.length == 1) {
         _this.props.handleChange(null);
       } else {
-        _this.props.handleChange(_this.props.selected_value.filter(function (v) {
+        _this.props.handleChange(_this.props.selectedValue.filter(function (v) {
           return v.id != item.id;
         }));
       }
@@ -160,7 +160,7 @@ var MultiSelect = function (_Select) {
   }, {
     key: 'getFilteredOptions',
     value: function getFilteredOptions(input_value) {
-      return _lodash2.default.differenceWith(_Select3.default.prototype.getFilteredOptions.call(this, input_value), this.props.selected_value || [], function (item1, item2) {
+      return _lodash2.default.differenceWith(_Select3.default.prototype.getFilteredOptions.call(this, input_value), this.props.selectedValue || [], function (item1, item2) {
         return item1.id == item2.id;
       });
     }
@@ -182,8 +182,8 @@ var MultiSelect = function (_Select) {
         case 8:
         case 46:
           {
-            if (this.state.input_value.length == 0 && this.props.selected_value && this.props.selected_value.length > 0) {
-              this.handleDeleteItem(this.props.selected_value[this.props.selected_value.length - 1]);
+            if (this.state.input_value.length == 0 && this.props.selectedValue && this.props.selectedValue.length > 0) {
+              this.handleDeleteItem(this.props.selectedValue[this.props.selectedValue.length - 1]);
             }
             break;
           }
@@ -196,7 +196,7 @@ var MultiSelect = function (_Select) {
   }, {
     key: 'handleSelectOption',
     value: function handleSelectOption(option) {
-      _Select3.default.prototype.handleSelectOption.call(this, [].concat(_toConsumableArray(this.props.selected_value || []), [option]));
+      _Select3.default.prototype.handleSelectOption.call(this, [].concat(_toConsumableArray(this.props.selectedValue || []), [option]));
     }
   }, {
     key: 'generateInputContainer',
@@ -206,7 +206,7 @@ var MultiSelect = function (_Select) {
       var classes = this.props.classes;
 
       var label = void 0;
-      if (!this.state.entering_text && (this.props.selected_value || []).length == 0) {
+      if (!this.state.entering_text && (this.props.selectedValue || []).length == 0) {
         label = this.props.label;
       } else {
         label = ' ';
@@ -216,7 +216,7 @@ var MultiSelect = function (_Select) {
       return _react2.default.createElement(
         'div',
         { className: classes.rmss_multi_input_container },
-        (this.props.selected_value || []).filter(function (item) {
+        (this.props.selectedValue || []).filter(function (item) {
           return _this2.props.options.find(function (opt) {
             return opt.id == item.id;
           });
@@ -246,7 +246,7 @@ var MultiSelect = function (_Select) {
             onBlur: function onBlur() {
               return _this2.setState({ entering_text: false });
             },
-            placeholder: this.props.selected_value ? '' : this.props.placeholder,
+            placeholder: this.props.selectedValue ? '' : this.props.placeholder,
             label: label,
             InputProps: {
               endAdornment: _react2.default.createElement(
@@ -279,14 +279,14 @@ var MultiSelect = function (_Select) {
 }(_Select3.default);
 
 MultiSelect.propTypes = _extends({}, _Select3.default.propTypes, {
-  selected_value: _propTypes2.default.arrayOf(_propTypes2.default.shape({
+  selectedValue: _propTypes2.default.arrayOf(_propTypes2.default.shape({
     id: _propTypes2.default.string.isRequired,
     label: _propTypes2.default.string.isRequired
   }))
 });
 
 MultiSelect.defaultProps = _extends({}, _Select3.default.defaultProps, {
-  selected_value: null
+  selectedValue: null
 });
 
 exports.default = MultiSelect;
