@@ -161,11 +161,14 @@ class MultiSelect extends Select {
                   <InputAdornment position='end'>
                     {this.props.loading ? (
                       <CircularProgress size={20} />
-                    ) : this.props.selectedValue ? (
+                    ) : (
                       <IconButton onClick={this.handleClearValue}>
-                        <CloseIcon />
+                        <CloseIcon
+                          style={{ visibility: this.props.selectedValue ? 'visible' : 'hidden' }}
+                          size={15}
+                        />
                       </IconButton>
-                    ) : <div />}
+                    )}
                   </InputAdornment>
                 )
               }}
