@@ -74,10 +74,10 @@ var Select = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Select.__proto__ || Object.getPrototypeOf(Select)).call(this, props));
 
-    _this.focusOption = function (focused_option, key_code) {
-      _this.setState({ focused_option: focused_option });
+    _this.focusOption = function (focusedOption, key_code) {
+      _this.setState({ focusedOption: focusedOption });
 
-      var focused_element = (0, _jquery2.default)('#rmss-menu-item-' + focused_option.id)[0];
+      var focused_element = (0, _jquery2.default)('#rmss-menu-item-' + focusedOption.id)[0];
       var menu_container_element = (0, _jquery2.default)('.' + _this.props.classes.rmss_global_menu_paper_container)[0];
       var menu_list_element = (0, _jquery2.default)('#rmss-menu-list')[0];
       var menu_container_height = menu_container_element.clientHeight,
@@ -86,9 +86,9 @@ var Select = function (_React$Component) {
           focused_element_offset = focused_element.offsetTop;
       var menu_list_height = menu_list_element.clientHeight;
 
-      var filtered_options = _this.getFilteredOptions(_this.state.input_value);
+      var filtered_options = _this.getFilteredOptions(_this.state.inputValue);
       var focused_element_idx = filtered_options.findIndex(function (e) {
-        return e.id == focused_option.id;
+        return e.id == focusedOption.id;
       });
       var new_scroll_height = void 0;
       if (key_code == 38) {
@@ -118,20 +118,20 @@ var Select = function (_React$Component) {
     };
 
     _this.handleTextFocus = function () {
-      if (_this.state.input_value.length > 0) {
+      if (_this.state.inputValue.length > 0) {
         _this.setState({
-          entering_text: true
+          enteringText: true
         });
       }
     };
 
     _this.state = {
-      focused_option: null,
-      input_value: '',
-      menu_open: false,
-      entering_text: false,
+      focusedOption: null,
+      inputValue: '',
+      menuOpen: false,
+      enteringText: false,
       // multi select
-      input_style: { flex: '1' }
+      inputStyle: { flex: '1' }
     };
 
     _this.getFilteredOptions = _this.getFilteredOptions.bind(_this);
@@ -146,14 +146,14 @@ var Select = function (_React$Component) {
   _createClass(Select, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
-      this.setState({ focused_option: this.props.options[0] });
+      this.setState({ focusedOption: this.props.options[0] });
     }
   }, {
     key: 'getFilteredOptions',
-    value: function getFilteredOptions(input_value) {
-      if (input_value) {
+    value: function getFilteredOptions(inputValue) {
+      if (!this.props.manual && inputValue) {
         return this.props.options.filter(function (opt) {
-          return new RegExp(input_value, 'i').test(opt.id) || new RegExp(input_value, 'i').test(opt.label);
+          return new RegExp(inputValue, 'i').test(opt.id) || new RegExp(inputValue, 'i').test(opt.label);
         });
       } else {
         return this.props.options;
@@ -163,20 +163,23 @@ var Select = function (_React$Component) {
     key: 'handleInputChange',
     value: function handleInputChange(event) {
       var options = this.getFilteredOptions(event.target.value);
+      var inputValue = event.target.value || '';
       if (event.target.value) {
         this.setState({
-          input_value: event.target.value,
-          focused_option: options[0],
-          entering_text: true,
-          menu_open: true
+          inputValue: inputValue,
+          focusedOption: options[0],
+          enteringText: true,
+          menuOpen: true
         });
       } else {
         this.setState({
-          input_value: '',
-          focused_option: options[0],
-          entering_text: false
+          inputValue: inputValue,
+          focusedOption: options[0],
+          enteringText: false
         });
       }
+
+      this.props.handleInputChange(inputValue);
     }
   }, {
     key: 'handleKeyDown',
@@ -187,8 +190,8 @@ var Select = function (_React$Component) {
         // Enter
         case 13:
           {
-            if (this.state.focused_option) {
-              this.handleSelectOption(this.state.focused_option);
+            if (this.state.focusedOption) {
+              this.handleSelectOption(this.state.focusedOption);
             }
             break;
           }
@@ -196,37 +199,37 @@ var Select = function (_React$Component) {
         case 27:
           {
             this.setState({
-              menu_open: false,
-              focused_option: null
+              menuOpen: false,
+              focusedOption: null
             });
             break;
           }
         // Arrow Down
         case 40:
           {
-            var filtered_options = this.getFilteredOptions(this.state.input_value);
-            var next_focused_option = this.state.focused_option ? filtered_options.reduce(function (acc, opt, idx, options) {
-              if (opt.id == _this2.state.focused_option.id) {
+            var filtered_options = this.getFilteredOptions(this.state.inputValue);
+            var next_focusedOption = this.state.focusedOption ? filtered_options.reduce(function (acc, opt, idx, options) {
+              if (opt.id == _this2.state.focusedOption.id) {
                 acc = options[idx + 1] || options[0];
               }
               return acc;
             }, null) : filtered_options[0];
 
-            this.focusOption(next_focused_option, event.keyCode);
+            this.focusOption(next_focusedOption, event.keyCode);
             break;
           }
         // Arrow Up
         case 38:
           {
-            var _filtered_options = this.getFilteredOptions(this.state.input_value);
-            var _next_focused_option = this.state.focused_option ? _filtered_options.reduce(function (acc, opt, idx, options) {
-              if (opt.id == _this2.state.focused_option.id) {
+            var _filtered_options = this.getFilteredOptions(this.state.inputValue);
+            var _next_focusedOption = this.state.focusedOption ? _filtered_options.reduce(function (acc, opt, idx, options) {
+              if (opt.id == _this2.state.focusedOption.id) {
                 acc = options[idx - 1] || options[options.length - 1];
               }
               return acc;
             }, null) : _filtered_options[_filtered_options.length - 1];
 
-            this.focusOption(_next_focused_option, event.keyCode);
+            this.focusOption(_next_focusedOption, event.keyCode);
             break;
           }
       }
@@ -235,8 +238,8 @@ var Select = function (_React$Component) {
     key: 'handleClearValue',
     value: function handleClearValue(e) {
       e.stopPropagation();
-      if (this.state.menu_open) {
-        this.setState({ menu_open: false });
+      if (this.state.menuOpen) {
+        this.setState({ menuOpen: false });
       }
       this.props.handleClearValue();
     }
@@ -244,9 +247,9 @@ var Select = function (_React$Component) {
     key: 'handleSelectOption',
     value: function handleSelectOption(option) {
       this.setState({
-        menu_open: this.props.stayOpenAfterSelection != false,
-        focused_option: null,
-        input_value: ''
+        menuOpen: this.props.stayOpenAfterSelection != false,
+        focusedOption: null,
+        inputValue: ''
       });
 
       this.props.handleChange(option);
@@ -257,12 +260,11 @@ var Select = function (_React$Component) {
       var _this3 = this;
 
       var label = void 0;
-      if (!this.state.entering_text && !this.props.selectedValue) {
+      if (!this.state.enteringText && !this.props.selectedValue) {
         label = this.props.label;
       } else {
         label = ' ';
       }
-      var disabled = this.props.disabled || this.props.loading;
 
       return _react2.default.createElement(
         'div',
@@ -270,7 +272,7 @@ var Select = function (_React$Component) {
         _react2.default.createElement(
           'div',
           { className: this.props.classes.rmss_selectedValue_container },
-          this.state.entering_text && this.state.input_value ? null : this.props.selectedValue ? _react2.default.createElement(
+          this.state.enteringText && this.state.inputValue ? null : this.props.selectedValue ? _react2.default.createElement(
             'p',
             null,
             this.props.selectedValue.label
@@ -278,16 +280,16 @@ var Select = function (_React$Component) {
         ),
         _react2.default.createElement(_TextField2.default, {
           fullWidth: true,
-          disabled: disabled,
+          disabled: this.props.disabled,
           onChange: this.handleInputChange,
-          onClick: disabled ? function () {} : function () {
-            return _this3.setState({ menu_open: true });
+          onClick: this.props.disabled ? function () {} : function () {
+            return _this3.setState({ menuOpen: true });
           },
-          value: this.state.entering_text ? this.state.input_value : '',
+          value: this.state.enteringText ? this.state.inputValue : '',
           onKeyDown: this.handleKeyDown,
-          onFocus: disabled ? function () {} : this.handleTextFocus,
+          onFocus: this.props.disabled ? function () {} : this.handleTextFocus,
           onBlur: function onBlur() {
-            return _this3.setState({ entering_text: false });
+            return _this3.setState({ enteringText: false });
           },
           placeholder: this.props.selectedValue ? '' : this.props.placeholder,
           label: label,
@@ -295,10 +297,13 @@ var Select = function (_React$Component) {
             endAdornment: _react2.default.createElement(
               _InputAdornment2.default,
               { position: 'end' },
-              _react2.default.createElement(
+              this.props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : _react2.default.createElement(
                 _IconButton2.default,
                 { onClick: this.handleClearValue },
-                this.props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : _react2.default.createElement(_Close2.default, null)
+                _react2.default.createElement(_Close2.default, {
+                  style: { visibility: this.props.selectedValue ? 'visible' : 'hidden' },
+                  size: 15
+                })
               )
             )
           }
@@ -312,7 +317,7 @@ var Select = function (_React$Component) {
 
       var classes = this.props.classes;
 
-      var menu_open = this.state.menu_open && this.getFilteredOptions(this.state.input_value).length != 0;
+      var menuOpen = this.state.menuOpen && this.getFilteredOptions(this.state.inputValue).length != 0;
 
       return _react2.default.createElement(
         'div',
@@ -324,14 +329,14 @@ var Select = function (_React$Component) {
           _react2.default.createElement(
             _ClickAwayListener2.default,
             {
-              onClickAway: this.state.menu_open ? function () {
-                return _this4.setState({ menu_open: false });
+              onClickAway: this.state.menuOpen ? function () {
+                return _this4.setState({ menuOpen: false });
               } : function () {}
             },
             _react2.default.createElement(
               _Grow2.default,
               {
-                'in': menu_open,
+                'in': menuOpen,
                 mountOnEnter: true,
                 unmountOnExit: true
               },
@@ -341,9 +346,9 @@ var Select = function (_React$Component) {
                 _react2.default.createElement(
                   _MenuList2.default,
                   { id: 'rmss-menu-list' },
-                  this.getFilteredOptions(this.state.input_value).map(function (opt) {
+                  this.getFilteredOptions(this.state.inputValue).map(function (opt) {
                     var selected = opt.id == (_this4.props.selectedValue || {}).id;
-                    var focused = opt.id == (_this4.state.focused_option || {}).id;
+                    var focused = opt.id == (_this4.state.focusedOption || {}).id;
 
                     return _react2.default.createElement(
                       _MenuItem2.default,
@@ -354,7 +359,7 @@ var Select = function (_React$Component) {
                           return _this4.handleSelectOption(opt);
                         },
                         onMouseEnter: function onMouseEnter() {
-                          return _this4.setState({ focused_option: opt });
+                          return _this4.setState({ focusedOption: opt });
                         },
                         className: classes.rmss_global_menu_item + ' ' + (selected && !focused ? 'selected' : focused ? 'focused' : '')
                       },
@@ -391,7 +396,9 @@ Select.propTypes = {
   label: _propTypes2.default.string,
   handleClearValue: _propTypes2.default.func,
   loading: _propTypes2.default.bool,
-  disabled: _propTypes2.default.bool
+  disabled: _propTypes2.default.bool,
+  handleInputChange: _propTypes2.default.func,
+  manual: _propTypes2.default.bool
 };
 
 Select.defaultProps = {
@@ -404,7 +411,9 @@ Select.defaultProps = {
   handleClearValue: function handleClearValue() {},
   containerClassName: '',
   loading: false,
-  disabled: false
+  disabled: false,
+  handleInputChange: function handleInputChange() {},
+  manual: false
 };
 
 exports.default = Select;

@@ -17,12 +17,12 @@ class Select extends React.Component {
     super(props);
 
     this.state = {
-      focused_option: null,
-      input_value: '',
-      menu_open: false,
-      entering_text: false,
+      focusedOption: null,
+      inputValue: '',
+      menuOpen: false,
+      enteringText: false,
       // multi select
-      input_style: { flex: '1' },
+      inputStyle: { flex: '1' },
     };
 
     this.getFilteredOptions = this.getFilteredOptions.bind(this);
@@ -34,13 +34,13 @@ class Select extends React.Component {
   }
 
   componentWillMount() {
-    this.setState({ focused_option: this.props.options[0] });
+    this.setState({ focusedOption: this.props.options[0] });
   }
-  getFilteredOptions(input_value) {
-    if (input_value) {
+  getFilteredOptions(inputValue) {
+    if (!this.props.manual && inputValue) {
       return this.props.options.filter(opt => (
-        new RegExp(input_value, 'i').test(opt.id) ||
-        new RegExp(input_value, 'i').test(opt.label)
+        new RegExp(inputValue, 'i').test(opt.id) ||
+        new RegExp(inputValue, 'i').test(opt.label)
       ));
     } else {
       return this.props.options;
@@ -48,81 +48,84 @@ class Select extends React.Component {
   }
   handleInputChange(event) {
     const options = this.getFilteredOptions(event.target.value);
+    const inputValue = event.target.value || '';
     if (event.target.value) {
       this.setState({
-        input_value: event.target.value,
-        focused_option: options[0],
-        entering_text: true,
-        menu_open: true,
+        inputValue: inputValue,
+        focusedOption: options[0],
+        enteringText: true,
+        menuOpen: true,
       });
     } else {
       this.setState({
-        input_value: '',
-        focused_option: options[0],
-        entering_text: false,
+        inputValue: inputValue,
+        focusedOption: options[0],
+        enteringText: false,
       });
     }
+
+    this.props.handleInputChange(inputValue);
   }
   handleKeyDown(event) {
     switch (event.keyCode) {
       // Enter
       case 13: {
-        if (this.state.focused_option) {
-          this.handleSelectOption(this.state.focused_option);
+        if (this.state.focusedOption) {
+          this.handleSelectOption(this.state.focusedOption);
         }
         break;
       }
       // Escape
       case 27: {
         this.setState({
-          menu_open: false,
-          focused_option: null,
+          menuOpen: false,
+          focusedOption: null,
         });
         break;
       }
       // Arrow Down
       case 40: {
-        const filtered_options = this.getFilteredOptions(this.state.input_value);
-        const next_focused_option = this.state.focused_option ?
+        const filtered_options = this.getFilteredOptions(this.state.inputValue);
+        const next_focusedOption = this.state.focusedOption ?
           filtered_options.reduce((acc, opt, idx, options) => {
-            if (opt.id == this.state.focused_option.id) {
+            if (opt.id == this.state.focusedOption.id) {
               acc = options[idx + 1] || options[0];
             }
             return acc;
           }, null) :
           filtered_options[0];
 
-        this.focusOption(next_focused_option, event.keyCode);
+        this.focusOption(next_focusedOption, event.keyCode);
         break;
       }
       // Arrow Up
       case 38: {
-        const filtered_options = this.getFilteredOptions(this.state.input_value);
-        const next_focused_option = this.state.focused_option ?
+        const filtered_options = this.getFilteredOptions(this.state.inputValue);
+        const next_focusedOption = this.state.focusedOption ?
           filtered_options.reduce((acc, opt, idx, options) => {
-            if (opt.id == this.state.focused_option.id) {
+            if (opt.id == this.state.focusedOption.id) {
               acc = options[idx - 1] || options[options.length - 1];
             }
             return acc;
           }, null) :
           filtered_options[filtered_options.length - 1];
 
-        this.focusOption(next_focused_option, event.keyCode);
+        this.focusOption(next_focusedOption, event.keyCode);
         break;
       }
     }
   }
   handleClearValue(e) {
     e.stopPropagation();
-    if (this.state.menu_open) {
-      this.setState({ menu_open: false });
+    if (this.state.menuOpen) {
+      this.setState({ menuOpen: false });
     }
     this.props.handleClearValue();
   }
-  focusOption = (focused_option, key_code) => {
-    this.setState({ focused_option });
+  focusOption = (focusedOption, key_code) => {
+    this.setState({ focusedOption });
 
-    const focused_element = $(`#rmss-menu-item-${focused_option.id}`)[0];
+    const focused_element = $(`#rmss-menu-item-${focusedOption.id}`)[0];
     const menu_container_element = $(`.${this.props.classes.rmss_global_menu_paper_container}`)[0];
     const menu_list_element = $('#rmss-menu-list')[0];
     const {
@@ -134,9 +137,9 @@ class Select extends React.Component {
       offsetTop: focused_element_offset,
     } = focused_element;
     const { clientHeight: menu_list_height } = menu_list_element;
-    const filtered_options = this.getFilteredOptions(this.state.input_value);
+    const filtered_options = this.getFilteredOptions(this.state.inputValue);
     const focused_element_idx = filtered_options.findIndex(e => (
-      e.id == focused_option.id
+      e.id == focusedOption.id
     ));
     let new_scroll_height;
     if (key_code == 38) {           // Arrow up
@@ -164,36 +167,35 @@ class Select extends React.Component {
   }
   handleSelectOption(option) {
     this.setState({
-      menu_open: this.props.stayOpenAfterSelection != false,
-      focused_option: null,
-      input_value: '',
+      menuOpen: this.props.stayOpenAfterSelection != false,
+      focusedOption: null,
+      inputValue: '',
     });
 
     this.props.handleChange(option);
   }
   handleTextFocus = () => {
-    if (this.state.input_value.length > 0) {
+    if (this.state.inputValue.length > 0) {
       this.setState({
-        entering_text: true,
+        enteringText: true,
       });
     }
   }
   generateInputContainer() {
     let label;
     if (
-      !this.state.entering_text &&
+      !this.state.enteringText &&
       !this.props.selectedValue
     ) {
       label = this.props.label;
     } else {
       label = ' ';
     }
-    const disabled = this.props.disabled || this.props.loading;
 
     return (
       <div className={this.props.classes.rmss_input_container}>
         <div className={this.props.classes.rmss_selectedValue_container}>
-          {this.state.entering_text && this.state.input_value ? null : (
+          {this.state.enteringText && this.state.inputValue ? null : (
             this.props.selectedValue ? (
               <p>{this.props.selectedValue.label}</p>
             ) : null
@@ -201,21 +203,28 @@ class Select extends React.Component {
         </div>
         <TextField
           fullWidth
-          disabled={disabled}
+          disabled={this.props.disabled}
           onChange={this.handleInputChange}
-          onClick={disabled ? () => {} : () => this.setState({ menu_open: true })}
-          value={this.state.entering_text ? this.state.input_value : ''}
+          onClick={this.props.disabled ? () => {} : () => this.setState({ menuOpen: true })}
+          value={this.state.enteringText ? this.state.inputValue : ''}
           onKeyDown={this.handleKeyDown}
-          onFocus={disabled ? () => {} : this.handleTextFocus}
-          onBlur={() => this.setState({ entering_text: false })}
+          onFocus={this.props.disabled ? () => {} : this.handleTextFocus}
+          onBlur={() => this.setState({ enteringText: false })}
           placeholder={this.props.selectedValue ? '' : this.props.placeholder}
           label={label}
           InputProps={{
             endAdornment: (
               <InputAdornment position='end'>
-                <IconButton onClick={this.handleClearValue}>
-                  {this.props.loading ? <CircularProgress size={20} /> : <CloseIcon />}
-                </IconButton>
+                {this.props.loading ? (
+                  <CircularProgress size={20} />
+                ) : (
+                  <IconButton onClick={this.handleClearValue}>
+                    <CloseIcon
+                      style={{ visibility: this.props.selectedValue ? 'visible' : 'hidden' }}
+                      size={15}
+                    />
+                  </IconButton>
+                )}
               </InputAdornment>
             )
           }}
@@ -226,7 +235,7 @@ class Select extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const menu_open = this.state.menu_open && this.getFilteredOptions(this.state.input_value).length != 0;
+    const menuOpen = this.state.menuOpen && this.getFilteredOptions(this.state.inputValue).length != 0;
 
     return (
       <div className={`${classes.rmss_global_container} ${this.props.containerClassName}`}>
@@ -234,28 +243,28 @@ class Select extends React.Component {
         <div className={classes.rmss_global_menu_container}>
           <ClickAwayListener
             onClickAway={
-              this.state.menu_open ?
-              () => this.setState({ menu_open: false }) :
+              this.state.menuOpen ?
+              () => this.setState({ menuOpen: false }) :
               () => {}
             }
           >
             <Grow
-              in={menu_open}
+              in={menuOpen}
               mountOnEnter
               unmountOnExit
             >
               <Paper classes={{ root: classes.rmss_global_menu_paper_container }}>
                 <MenuList id='rmss-menu-list'>
-                  {this.getFilteredOptions(this.state.input_value).map(opt => {
+                  {this.getFilteredOptions(this.state.inputValue).map(opt => {
                     const selected = opt.id == (this.props.selectedValue || {}).id;
-                    const focused = opt.id == (this.state.focused_option || {}).id;
+                    const focused = opt.id == (this.state.focusedOption || {}).id;
 
                     return (
                       <MenuItem
                         key={opt.id}
                         id={`rmss-menu-item-${opt.id}`}
                         onClick={() => this.handleSelectOption(opt)}
-                        onMouseEnter={() => this.setState({ focused_option: opt })}
+                        onMouseEnter={() => this.setState({ focusedOption: opt })}
                         className={`${classes.rmss_global_menu_item} ${selected && !focused ? 'selected' : focused ? 'focused' : ''}`}
                       >
                         {this.props.menuItemRenderer ? (
@@ -295,6 +304,8 @@ Select.propTypes = {
   handleClearValue: PropTypes.func,
   loading: PropTypes.bool,
   disabled: PropTypes.bool,
+  handleInputChange: PropTypes.func,
+  manual: PropTypes.bool,
 };
 
 Select.defaultProps = {
@@ -308,6 +319,8 @@ Select.defaultProps = {
   containerClassName: '',
   loading: false,
   disabled: false,
+  handleInputChange: () => {},
+  manual: false,
 };
 
 export default Select;

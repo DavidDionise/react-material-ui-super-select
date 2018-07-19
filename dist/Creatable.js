@@ -67,19 +67,19 @@ var Creatable = function (_MultiSelect) {
         case 13:
           {
             event.preventDefault();
-            if (_this.state.focused_option) {
+            if (_this.state.focusedOption) {
               // if creation is possible . . .
-              if (_this.state.focused_option.id == RMSS_CREATABLE_VALUE && !_this.props.options.find(function (opt) {
-                return opt.value == _this.state.input_value;
+              if (_this.state.focusedOption.id == RMSS_CREATABLE_VALUE && !_this.props.options.find(function (opt) {
+                return opt.value == _this.state.inputValue;
               })) {
                 var new_option_props = {
-                  id: _this.state.input_value,
-                  label: _this.state.input_value
+                  id: _this.state.inputValue,
+                  label: _this.state.inputValue
                 };
                 _this.props.onCreate(new_option_props);
                 _this.handleSelectOption(new_option_props);
               } else {
-                _this.handleSelectOption(_this.state.focused_option);
+                _this.handleSelectOption(_this.state.focusedOption);
               }
             }
             break;
@@ -89,15 +89,15 @@ var Creatable = function (_MultiSelect) {
             _MultiSelect3.default.prototype.handleKeyDown.call(_this, event);
           }
       }
-    }, _this.getFilteredOptions = function (input_value) {
-      var filtered_options = _MultiSelect3.default.prototype.getFilteredOptions.call(_this, input_value);
+    }, _this.getFilteredOptions = function (inputValue) {
+      var filtered_options = _MultiSelect3.default.prototype.getFilteredOptions.call(_this, inputValue);
       var matched_option = _this.props.options.find(function (opt) {
-        return new RegExp('^' + (input_value || '') + '$', 'i').test(opt.id) || new RegExp('^' + (input_value || '') + '$', 'i').test(opt.label);
+        return new RegExp('^' + (inputValue || '') + '$', 'i').test(opt.id) || new RegExp('^' + (inputValue || '') + '$', 'i').test(opt.label);
       });
       // if the input doesn't match one of the options, AND creation
       //  is not already enabled, enable creation
-      if (input_value && !matched_option && !((filtered_options[0] || {}).id == RMSS_CREATABLE_VALUE)) {
-        return [{ id: RMSS_CREATABLE_VALUE, label: 'Create "' + input_value + '"' }].concat(_toConsumableArray(filtered_options));
+      if (inputValue && !matched_option && !((filtered_options[0] || {}).id == RMSS_CREATABLE_VALUE)) {
+        return [{ id: RMSS_CREATABLE_VALUE, label: 'Create "' + inputValue + '"' }].concat(_toConsumableArray(filtered_options));
       } else {
         return filtered_options;
       }

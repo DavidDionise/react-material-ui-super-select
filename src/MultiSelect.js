@@ -22,8 +22,8 @@ class MultiSelect extends Select {
 
    componentDidUpdate() {
      const updated_style = this.calculateTextFieldStyle();
-     if (!_.isEqual(updated_style, this.state.input_style)) {
-       this.setState({ input_style: updated_style });
+     if (!_.isEqual(updated_style, this.state.inputStyle)) {
+       this.setState({ inputStyle: updated_style });
      }
    }
   handleInputChange = event => {
@@ -32,9 +32,9 @@ class MultiSelect extends Select {
   handleClearValue = () => {
     Select.prototype.handleClearValue.call(this);
   }
-  getFilteredOptions(input_value) {
+  getFilteredOptions(inputValue) {
     return _.differenceWith(
-      Select.prototype.getFilteredOptions.call(this, input_value),
+      Select.prototype.getFilteredOptions.call(this, inputValue),
       (this.props.selectedValue || []),
       (item1, item2) => item1.id == item2.id
     );
@@ -43,9 +43,9 @@ class MultiSelect extends Select {
     switch (event.keyCode) {
       // Enter
       case 13: {
-        if (this.state.focused_option) {
+        if (this.state.focusedOption) {
           event.preventDefault();
-          this.handleSelectOption(this.state.focused_option);
+          this.handleSelectOption(this.state.focusedOption);
         }
         break;
       }
@@ -54,7 +54,7 @@ class MultiSelect extends Select {
       case 8:
       case 46: {
         if (
-          this.state.input_value.length == 0 &&
+          this.state.inputValue.length == 0 &&
           this.props.selectedValue &&
           this.props.selectedValue.length > 0
         ) {
@@ -105,16 +105,16 @@ class MultiSelect extends Select {
   }
   calculateTextFieldStyle = () => {
     const input_container = $(`.${this.props.classes.rmss_multi_input_container}`)[0];
-    const input_value_container = $(`.${this.props.classes.rmss_multi_text_field_width_tracker}`)[0];
-    if (!input_container || !input_value_container) {
+    const inputValue_container = $(`.${this.props.classes.rmss_multi_text_field_width_tracker}`)[0];
+    if (!input_container || !inputValue_container) {
       return { flex: '1' };
     }
 
     const { width: input_container_width } = input_container.getBoundingClientRect();
-    const { width: input_value_width } = input_value_container.getBoundingClientRect();
+    const { width: inputValue_width } = inputValue_container.getBoundingClientRect();
     const last_row_width = this.lastChipRowWidth();
 
-    if (input_value_width > input_container_width - last_row_width - 60) {
+    if (inputValue_width > input_container_width - last_row_width - 60) {
       return { width: `${input_container_width}px` };
     } else {
       return { flex: 1 };
@@ -124,14 +124,13 @@ class MultiSelect extends Select {
     const { classes } = this.props;
     let label;
     if (
-      !this.state.entering_text &&
+      !this.state.enteringText &&
       (this.props.selectedValue || []).length == 0
     ) {
       label = this.props.label;
     } else {
       label = ' ';
     }
-    const disabled = this.props.loading || this.props.disabled;
 
     return (
       <div className={classes.rmss_multi_input_container}>
@@ -141,34 +140,38 @@ class MultiSelect extends Select {
             <Chip
               key={item.id}
               label={item.label}
-              onDelete={disabled ? undefined : () => this.handleDeleteItem(item)}
+              onDelete={this.props.disabled ? undefined : () => this.handleDeleteItem(item)}
               className={classes.rmss_chip}
             />
           ))}
-          <div style={this.state.input_style}>
+          <div style={this.state.inputStyle}>
             <TextField
               fullWidth
-              disabled={disabled}
+              disabled={this.props.disabled}
               onChange={this.handleInputChange}
-              onClick={disabled ? () => {} : () => this.setState({ menu_open: true })}
-              value={this.state.entering_text ? this.state.input_value : ''}
+              onClick={this.props.disabled ? () => {} : () => this.setState({ menuOpen: true })}
+              value={this.state.enteringText ? this.state.inputValue : ''}
               onKeyDown={this.handleKeyDown}
-              onFocus={disabled ? () => {} : this.handleTextFocus}
-              onBlur={() => this.setState({ entering_text: false })}
+              onFocus={this.props.disabled ? () => {} : this.handleTextFocus}
+              onBlur={() => this.setState({ enteringText: false })}
               placeholder={this.props.selectedValue ? '' : this.props.placeholder}
               label={label}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position='end'>
-                    <IconButton onClick={this.handleClearValue}>
-                      {this.props.loading ? <CircularProgress size={20} /> : <CloseIcon />}
-                    </IconButton>
+                    {this.props.loading ? (
+                      <CircularProgress size={20} />
+                    ) : this.props.selectedValue ? (
+                      <IconButton onClick={this.handleClearValue}>
+                        <CloseIcon />
+                      </IconButton>
+                    ) : <div />}
                   </InputAdornment>
                 )
               }}
             />
           </div>
-          <div className={classes.rmss_multi_text_field_width_tracker}>{this.state.input_value}</div>
+          <div className={classes.rmss_multi_text_field_width_tracker}>{this.state.inputValue}</div>
       </div>
     )
   }

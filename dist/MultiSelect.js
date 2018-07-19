@@ -122,20 +122,20 @@ var MultiSelect = function (_Select) {
 
     _this.calculateTextFieldStyle = function () {
       var input_container = (0, _jquery2.default)('.' + _this.props.classes.rmss_multi_input_container)[0];
-      var input_value_container = (0, _jquery2.default)('.' + _this.props.classes.rmss_multi_text_field_width_tracker)[0];
-      if (!input_container || !input_value_container) {
+      var inputValue_container = (0, _jquery2.default)('.' + _this.props.classes.rmss_multi_text_field_width_tracker)[0];
+      if (!input_container || !inputValue_container) {
         return { flex: '1' };
       }
 
       var _input_container$getB = input_container.getBoundingClientRect(),
           input_container_width = _input_container$getB.width;
 
-      var _input_value_containe = input_value_container.getBoundingClientRect(),
-          input_value_width = _input_value_containe.width;
+      var _inputValue_container = inputValue_container.getBoundingClientRect(),
+          inputValue_width = _inputValue_container.width;
 
       var last_row_width = _this.lastChipRowWidth();
 
-      if (input_value_width > input_container_width - last_row_width - 60) {
+      if (inputValue_width > input_container_width - last_row_width - 60) {
         return { width: input_container_width + 'px' };
       } else {
         return { flex: 1 };
@@ -153,14 +153,14 @@ var MultiSelect = function (_Select) {
     key: 'componentDidUpdate',
     value: function componentDidUpdate() {
       var updated_style = this.calculateTextFieldStyle();
-      if (!_lodash2.default.isEqual(updated_style, this.state.input_style)) {
-        this.setState({ input_style: updated_style });
+      if (!_lodash2.default.isEqual(updated_style, this.state.inputStyle)) {
+        this.setState({ inputStyle: updated_style });
       }
     }
   }, {
     key: 'getFilteredOptions',
-    value: function getFilteredOptions(input_value) {
-      return _lodash2.default.differenceWith(_Select3.default.prototype.getFilteredOptions.call(this, input_value), this.props.selectedValue || [], function (item1, item2) {
+    value: function getFilteredOptions(inputValue) {
+      return _lodash2.default.differenceWith(_Select3.default.prototype.getFilteredOptions.call(this, inputValue), this.props.selectedValue || [], function (item1, item2) {
         return item1.id == item2.id;
       });
     }
@@ -171,9 +171,9 @@ var MultiSelect = function (_Select) {
         // Enter
         case 13:
           {
-            if (this.state.focused_option) {
+            if (this.state.focusedOption) {
               event.preventDefault();
-              this.handleSelectOption(this.state.focused_option);
+              this.handleSelectOption(this.state.focusedOption);
             }
             break;
           }
@@ -182,7 +182,7 @@ var MultiSelect = function (_Select) {
         case 8:
         case 46:
           {
-            if (this.state.input_value.length == 0 && this.props.selectedValue && this.props.selectedValue.length > 0) {
+            if (this.state.inputValue.length == 0 && this.props.selectedValue && this.props.selectedValue.length > 0) {
               this.handleDeleteItem(this.props.selectedValue[this.props.selectedValue.length - 1]);
             }
             break;
@@ -206,12 +206,11 @@ var MultiSelect = function (_Select) {
       var classes = this.props.classes;
 
       var label = void 0;
-      if (!this.state.entering_text && (this.props.selectedValue || []).length == 0) {
+      if (!this.state.enteringText && (this.props.selectedValue || []).length == 0) {
         label = this.props.label;
       } else {
         label = ' ';
       }
-      var disabled = this.props.loading || this.props.disabled;
 
       return _react2.default.createElement(
         'div',
@@ -224,7 +223,7 @@ var MultiSelect = function (_Select) {
           return _react2.default.createElement(_Chip2.default, {
             key: item.id,
             label: item.label,
-            onDelete: disabled ? undefined : function () {
+            onDelete: _this2.props.disabled ? undefined : function () {
               return _this2.handleDeleteItem(item);
             },
             className: classes.rmss_chip
@@ -232,19 +231,19 @@ var MultiSelect = function (_Select) {
         }),
         _react2.default.createElement(
           'div',
-          { style: this.state.input_style },
+          { style: this.state.inputStyle },
           _react2.default.createElement(_TextField2.default, {
             fullWidth: true,
-            disabled: disabled,
+            disabled: this.props.disabled,
             onChange: this.handleInputChange,
-            onClick: disabled ? function () {} : function () {
-              return _this2.setState({ menu_open: true });
+            onClick: this.props.disabled ? function () {} : function () {
+              return _this2.setState({ menuOpen: true });
             },
-            value: this.state.entering_text ? this.state.input_value : '',
+            value: this.state.enteringText ? this.state.inputValue : '',
             onKeyDown: this.handleKeyDown,
-            onFocus: disabled ? function () {} : this.handleTextFocus,
+            onFocus: this.props.disabled ? function () {} : this.handleTextFocus,
             onBlur: function onBlur() {
-              return _this2.setState({ entering_text: false });
+              return _this2.setState({ enteringText: false });
             },
             placeholder: this.props.selectedValue ? '' : this.props.placeholder,
             label: label,
@@ -252,11 +251,11 @@ var MultiSelect = function (_Select) {
               endAdornment: _react2.default.createElement(
                 _InputAdornment2.default,
                 { position: 'end' },
-                _react2.default.createElement(
+                this.props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : this.props.selectedValue ? _react2.default.createElement(
                   _IconButton2.default,
                   { onClick: this.handleClearValue },
-                  this.props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : _react2.default.createElement(_Close2.default, null)
-                )
+                  _react2.default.createElement(_Close2.default, null)
+                ) : _react2.default.createElement('div', null)
               )
             }
           })
@@ -264,7 +263,7 @@ var MultiSelect = function (_Select) {
         _react2.default.createElement(
           'div',
           { className: classes.rmss_multi_text_field_width_tracker },
-          this.state.input_value
+          this.state.inputValue
         )
       );
     }
