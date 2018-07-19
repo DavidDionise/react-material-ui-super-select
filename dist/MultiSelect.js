@@ -251,11 +251,14 @@ var MultiSelect = function (_Select) {
               endAdornment: _react2.default.createElement(
                 _InputAdornment2.default,
                 { position: 'end' },
-                this.props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : this.props.selectedValue ? _react2.default.createElement(
+                this.props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : _react2.default.createElement(
                   _IconButton2.default,
                   { onClick: this.handleClearValue },
-                  _react2.default.createElement(_Close2.default, null)
-                ) : _react2.default.createElement('div', null)
+                  _react2.default.createElement(_Close2.default, {
+                    style: { visibility: this.props.selectedValue ? 'visible' : 'hidden' },
+                    size: 15
+                  })
+                )
               )
             }
           })
