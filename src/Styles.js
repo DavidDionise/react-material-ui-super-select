@@ -1,6 +1,10 @@
 export default theme => ({
   // Global
+  rmss_outer_container: {
+    position: 'relative',
+  },
   rmss_global_container: {
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
   },
@@ -33,7 +37,7 @@ export default theme => ({
   },
   rmss_global_close_button_container: {
     color: theme.palette.grey[700],
-    fontSize: '20px',
+    fontSize: '16px',
     '&:hover': {
       cursor: 'pointer',
     }
@@ -45,6 +49,11 @@ export default theme => ({
     width: '100%',
     zIndex: 100,
   },
+  rmss_global_input_adornment_container: {
+    width: '50px',
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
 
   // Select
   rmss_input_container: {
@@ -53,7 +62,7 @@ export default theme => ({
     display: 'flex',
     flexDirection: 'row',
   },
-  rmss_selectedValue_container: {
+  rmss_selected_value_container: {
     position: 'absolute',
     bottom: '4px',
     '& p': {

@@ -9,7 +9,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 exports.default = function (theme) {
   return {
     // Global
+    rmss_outer_container: {
+      position: 'relative'
+    },
     rmss_global_container: {
+      position: 'relative',
       display: 'flex',
       flexDirection: 'column'
     },
@@ -42,7 +46,7 @@ exports.default = function (theme) {
     },
     rmss_global_close_button_container: {
       color: theme.palette.grey[700],
-      fontSize: '20px',
+      fontSize: '16px',
       '&:hover': {
         cursor: 'pointer'
       }
@@ -54,6 +58,11 @@ exports.default = function (theme) {
       width: '100%',
       zIndex: 100
     },
+    rmss_global_input_adornment_container: {
+      width: '50px',
+      display: 'flex',
+      justifyContent: 'flex-end'
+    },
 
     // Select
     rmss_input_container: {
@@ -62,7 +71,7 @@ exports.default = function (theme) {
       display: 'flex',
       flexDirection: 'row'
     },
-    rmss_selectedValue_container: {
+    rmss_selected_value_container: {
       position: 'absolute',
       bottom: '4px',
       '& p': _extends({}, theme.typography.subheading, {

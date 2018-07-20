@@ -271,7 +271,7 @@ var Select = function (_React$Component) {
         { className: this.props.classes.rmss_input_container },
         _react2.default.createElement(
           'div',
-          { className: this.props.classes.rmss_selectedValue_container },
+          { className: this.props.classes.rmss_selected_value_container },
           this.state.enteringText && this.state.inputValue ? null : this.props.selectedValue ? _react2.default.createElement(
             'p',
             null,
@@ -296,15 +296,15 @@ var Select = function (_React$Component) {
           InputProps: {
             endAdornment: _react2.default.createElement(
               _InputAdornment2.default,
-              { position: 'end' },
-              this.props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : _react2.default.createElement(
+              {
+                position: 'end',
+                classes: { root: this.props.classes.rmss_global_input_adornment_container }
+              },
+              this.props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : this.props.selectedValue ? _react2.default.createElement(
                 _IconButton2.default,
                 { onClick: this.handleClearValue },
-                _react2.default.createElement(_Close2.default, {
-                  style: { visibility: this.props.selectedValue ? 'visible' : 'hidden' },
-                  size: 15
-                })
-              )
+                _react2.default.createElement(_Close2.default, { classes: { root: this.props.classes.rmss_global_close_button_container } })
+              ) : _react2.default.createElement('div', null)
             )
           }
         })
@@ -321,51 +321,55 @@ var Select = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: classes.rmss_global_container + ' ' + this.props.containerClassName },
-        this.generateInputContainer(),
+        { className: classes.rmss_outer_container },
         _react2.default.createElement(
           'div',
-          { className: classes.rmss_global_menu_container },
+          { className: classes.rmss_global_container + ' ' + this.props.containerClassName },
+          this.generateInputContainer(),
           _react2.default.createElement(
-            _ClickAwayListener2.default,
-            {
-              onClickAway: this.state.menuOpen ? function () {
-                return _this4.setState({ menuOpen: false });
-              } : function () {}
-            },
+            'div',
+            { className: classes.rmss_global_menu_container },
             _react2.default.createElement(
-              _Grow2.default,
+              _ClickAwayListener2.default,
               {
-                'in': menuOpen,
-                mountOnEnter: true,
-                unmountOnExit: true
+                onClickAway: this.state.menuOpen ? function () {
+                  return _this4.setState({ menuOpen: false });
+                } : function () {}
               },
               _react2.default.createElement(
-                _Paper2.default,
-                { classes: { root: classes.rmss_global_menu_paper_container } },
+                _Grow2.default,
+                {
+                  'in': menuOpen,
+                  mountOnEnter: true,
+                  unmountOnExit: true
+                },
                 _react2.default.createElement(
-                  _MenuList2.default,
-                  { id: 'rmss-menu-list' },
-                  this.getFilteredOptions(this.state.inputValue).map(function (opt) {
-                    var selected = opt.id == (_this4.props.selectedValue || {}).id;
-                    var focused = opt.id == (_this4.state.focusedOption || {}).id;
+                  _Paper2.default,
+                  { classes: { root: classes.rmss_global_menu_paper_container } },
+                  _react2.default.createElement(
+                    _MenuList2.default,
+                    { id: 'rmss-menu-list' },
+                    this.getFilteredOptions(this.state.inputValue).map(function (opt) {
+                      var selected = opt.id == (_this4.props.selectedValue || {}).id;
+                      var focused = opt.id == (_this4.state.focusedOption || {}).id;
 
-                    return _react2.default.createElement(
-                      _MenuItem2.default,
-                      {
-                        key: opt.id,
-                        id: 'rmss-menu-item-' + opt.id,
-                        onClick: function onClick() {
-                          return _this4.handleSelectOption(opt);
+                      return _react2.default.createElement(
+                        _MenuItem2.default,
+                        {
+                          key: opt.id,
+                          id: 'rmss-menu-item-' + opt.id,
+                          onClick: function onClick() {
+                            return _this4.handleSelectOption(opt);
+                          },
+                          onMouseEnter: function onMouseEnter() {
+                            return _this4.setState({ focusedOption: opt });
+                          },
+                          className: classes.rmss_global_menu_item + ' ' + (selected && !focused ? 'selected' : focused ? 'focused' : '')
                         },
-                        onMouseEnter: function onMouseEnter() {
-                          return _this4.setState({ focusedOption: opt });
-                        },
-                        className: classes.rmss_global_menu_item + ' ' + (selected && !focused ? 'selected' : focused ? 'focused' : '')
-                      },
-                      _this4.props.menuItemRenderer ? _this4.props.menuItemRenderer(opt) : opt.label
-                    );
-                  })
+                        _this4.props.menuItemRenderer ? _this4.props.menuItemRenderer(opt) : opt.label
+                      );
+                    })
+                  )
                 )
               )
             )
