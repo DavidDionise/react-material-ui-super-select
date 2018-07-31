@@ -246,7 +246,7 @@ var MultiSelect = function (_Select) {
               return _this2.setState({ enteringText: false });
             },
             placeholder: this.props.selectedValue ? '' : this.props.placeholder,
-            label: label,
+            label: this.props.hideLabel ? undefined : label,
             InputProps: {
               endAdornment: _react2.default.createElement(
                 _InputAdornment2.default,

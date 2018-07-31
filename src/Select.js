@@ -211,7 +211,7 @@ class Select extends React.Component {
           onFocus={this.props.disabled ? () => {} : this.handleTextFocus}
           onBlur={() => this.setState({ enteringText: false })}
           placeholder={this.props.selectedValue ? '' : this.props.placeholder}
-          label={label}
+          label={this.props.hideLabel ? undefined : label}
           InputProps={{
             endAdornment: (
               <InputAdornment
@@ -308,6 +308,7 @@ Select.propTypes = {
   disabled: PropTypes.bool,
   handleInputChange: PropTypes.func,
   manual: PropTypes.bool,
+  hideLabel: PropTypes.bool,
 };
 
 Select.defaultProps = {
@@ -323,6 +324,7 @@ Select.defaultProps = {
   disabled: false,
   handleInputChange: () => {},
   manual: false,
+  hideLabel: false,
 };
 
 export default Select;

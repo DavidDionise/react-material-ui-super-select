@@ -155,7 +155,7 @@ class MultiSelect extends Select {
               onFocus={this.props.disabled ? () => {} : this.handleTextFocus}
               onBlur={() => this.setState({ enteringText: false })}
               placeholder={this.props.selectedValue ? '' : this.props.placeholder}
-              label={label}
+              label={this.props.hideLabel ? undefined : label}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position='end'>

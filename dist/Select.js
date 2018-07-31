@@ -292,7 +292,7 @@ var Select = function (_React$Component) {
             return _this3.setState({ enteringText: false });
           },
           placeholder: this.props.selectedValue ? '' : this.props.placeholder,
-          label: label,
+          label: this.props.hideLabel ? undefined : label,
           InputProps: {
             endAdornment: _react2.default.createElement(
               _InputAdornment2.default,
@@ -402,7 +402,8 @@ Select.propTypes = {
   loading: _propTypes2.default.bool,
   disabled: _propTypes2.default.bool,
   handleInputChange: _propTypes2.default.func,
-  manual: _propTypes2.default.bool
+  manual: _propTypes2.default.bool,
+  hideLabel: _propTypes2.default.bool
 };
 
 Select.defaultProps = {
@@ -417,7 +418,8 @@ Select.defaultProps = {
   loading: false,
   disabled: false,
   handleInputChange: function handleInputChange() {},
-  manual: false
+  manual: false,
+  hideLabel: false
 };
 
 exports.default = Select;
