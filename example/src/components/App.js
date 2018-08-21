@@ -110,6 +110,8 @@ class App extends React.Component {
           onCreate={value => this.setState({ creatable_options: this.state.creatable_options.concat(value) })}
         />
 
+        <div className={classes.divider} />
+
         <h4>Manual (Use of 'loading' prop)</h4>
         <Select
           manual
