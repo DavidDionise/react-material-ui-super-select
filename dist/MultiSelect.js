@@ -94,23 +94,7 @@ var MultiSelect = function (_React$Component) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MultiSelect.__proto__ || Object.getPrototypeOf(MultiSelect)).call.apply(_ref, [this].concat(args))), _this), _this.chipInLastRow = function (chip) {
-      var chipElements = (0, _jquery2.default)('.' + _this.props.classes.rmss_chip);
-      if (chipElements.length == 0) {
-        return 0;
-      }
-
-      var lastRowHeight = Array.from(chipElements).reduce(function (acc, chipElem) {
-        var chipOffset = chipElem.offsetTop;
-
-        if (chipOffset >= acc) {
-          acc = chipOffset;
-        }
-        return acc;
-      }, 0);
-
-      return chip.offsetTop == lastRowHeight;
-    }, _this.lastChipRowWidth = function () {
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MultiSelect.__proto__ || Object.getPrototypeOf(MultiSelect)).call.apply(_ref, [this].concat(args))), _this), _this.lastChipRowWidth = function () {
       var chipElements = (0, _jquery2.default)('.' + _this.props.classes.rmss_chip);
       if (chipElements.length == 0) {
         return 0;
@@ -161,22 +145,6 @@ var MultiSelect = function (_React$Component) {
       }
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
-  // componentDidUpdate() {
-  //   const chipsList = $(`.${this.props.classes.rmss_chip}`);
-  //   for (const chip of chipsList) {
-  //     if (!this.chipInLastRow(chip)) {
-  //       $(chip).css({ marginBottom: '4px' });
-  //     } else {
-  //       $(chip).css({ marginBottom: '0px' });
-  //     }
-  //   }
-  // }
-  /**
-   * @description - Determines whether a chip is in the last row
-   *  of selected chips. Needed so a margin can be added if-and-only-if
-   *  the chip is not in the last row
-   */
-
   /**
    * @description - Helper in 'calculateTextFieldStyle'
    */
@@ -199,13 +167,13 @@ var MultiSelect = function (_React$Component) {
           multi: true,
           creatable: this.props.creatable,
           calculateTextFieldStyle: this.calculateTextFieldStyle
-        }, _lodash2.default.pick(this.props, ['options', 'containerClassName', 'handleSelectOption', 'handleCreate', 'stayOpenAfterSelection', 'selectedValue', 'handleClearValue', 'loading', 'handleInputChange', 'manual'])),
+        }, _lodash2.default.pick(this.props, ['options', 'containerClassName', 'handleChange', 'handleCreate', 'stayOpenAfterSelection', 'selectedValue', 'handleClearValue', 'loading', 'handleInputChange', 'manual'])),
         function (_ref2) {
           var getFilteredOptions = _ref2.getFilteredOptions,
               handleInputChange = _ref2.handleInputChange,
               handleClearValue = _ref2.handleClearValue,
               handleKeyDown = _ref2.handleKeyDown,
-              handleSelectOption = _ref2.handleSelectOption,
+              handleChange = _ref2.handleChange,
               handleDeleteItem = _ref2.handleDeleteItem,
               toggleEnteringText = _ref2.toggleEnteringText,
               toggleMenuOpen = _ref2.toggleMenuOpen,
@@ -295,7 +263,7 @@ var MultiSelect = function (_React$Component) {
               onClickAway: function onClickAway() {
                 return _menuOpen ? toggleMenuOpen(false) : null;
               },
-              handleSelectOption: handleSelectOption,
+              handleChange: handleChange,
               handleMouseEnterOption: setFocusedOption,
               selectedValue: _this2.props.selectedValue,
               focusedOption: focusedOption
@@ -311,6 +279,7 @@ var MultiSelect = function (_React$Component) {
 
 MultiSelect.propTypes = _extends({}, _Select2.default.propTypes, {
   creatable: _propTypes2.default.bool,
+  handleCreate: _propTypes2.default.func,
   selectedValue: _propTypes2.default.arrayOf(_propTypes2.default.shape({
     id: _propTypes2.default.string.isRequired,
     label: _propTypes2.default.string.isRequired
@@ -318,6 +287,7 @@ MultiSelect.propTypes = _extends({}, _Select2.default.propTypes, {
 });
 
 MultiSelect.defaultProps = {
+  handleCreate: function handleCreate() {},
   creatable: false
 };
 

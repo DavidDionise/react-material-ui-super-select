@@ -18,38 +18,6 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Styles from './Styles';
 
 class MultiSelect extends React.Component {
-  // componentDidUpdate() {
-  //   const chipsList = $(`.${this.props.classes.rmss_chip}`);
-  //   for (const chip of chipsList) {
-  //     if (!this.chipInLastRow(chip)) {
-  //       $(chip).css({ marginBottom: '4px' });
-  //     } else {
-  //       $(chip).css({ marginBottom: '0px' });
-  //     }
-  //   }
-  // }
-  /**
-   * @description - Determines whether a chip is in the last row
-   *  of selected chips. Needed so a margin can be added if-and-only-if
-   *  the chip is not in the last row
-   */
-  chipInLastRow = (chip) => {
-    const chipElements = $(`.${this.props.classes.rmss_chip}`);
-    if (chipElements.length == 0) {
-      return 0;
-    }
-
-    const lastRowHeight = Array.from(chipElements)
-      .reduce((acc, chipElem) => {
-        const { offsetTop: chipOffset } = chipElem;
-        if (chipOffset >= acc) {
-          acc = chipOffset;
-        }
-        return acc;
-      }, 0);
-
-    return chip.offsetTop == lastRowHeight;
-  }
   /**
    * @description - Helper in 'calculateTextFieldStyle'
    */
@@ -111,7 +79,7 @@ class MultiSelect extends React.Component {
           this.props, [
             'options',
             'containerClassName',
-            'handleSelectOption',
+            'handleChange',
             'handleCreate',
             'stayOpenAfterSelection',
             'selectedValue',
@@ -126,7 +94,7 @@ class MultiSelect extends React.Component {
           handleInputChange,
           handleClearValue,
           handleKeyDown,
-          handleSelectOption,
+          handleChange,
           handleDeleteItem,
           toggleEnteringText,
           toggleMenuOpen,
@@ -213,7 +181,7 @@ class MultiSelect extends React.Component {
                     toggleMenuOpen(false) :
                     null
                 )}
-                handleSelectOption={handleSelectOption}
+                handleChange={handleChange}
                 handleMouseEnterOption={setFocusedOption}
                 selectedValue={this.props.selectedValue}
                 focusedOption={focusedOption}
@@ -229,6 +197,7 @@ class MultiSelect extends React.Component {
 MultiSelect.propTypes = {
   ...Select.propTypes,
   creatable: PropTypes.bool,
+  handleCreate: PropTypes.func,
   selectedValue: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -238,6 +207,7 @@ MultiSelect.propTypes = {
 };
 
 MultiSelect.defaultProps = {
+  handleCreate: () => {},
   creatable: false,
 };
 

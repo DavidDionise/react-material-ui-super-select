@@ -81,7 +81,7 @@ class App extends React.Component {
         <Select
           label='Select'
           options={this.state.selectOptions}
-          handleSelectOption={value => this.setState({ defaultValue: value })}
+          handleChange={value => this.setState({ defaultValue: value })}
           handleClearValue={() => this.setState({ defaultValue: null })}
           selectedValue={this.state.defaultValue}
         />
@@ -92,7 +92,7 @@ class App extends React.Component {
         <MultiSelect
           label='MultiSelect'
           options={this.state.multiOptions}
-          handleSelectOption={value => this.setState({ multiValue: value })}
+          handleChange={value => this.setState({ multiValue: value })}
           handleClearValue={() => this.setState({ multiValue: null })}
           selectedValue={this.state.multiValue}
           stayOpenAfterSelection
@@ -105,7 +105,7 @@ class App extends React.Component {
         <Creatable
           label='Creatable'
           options={this.state.creatableOptions}
-          handleSelectOption={value => this.setState({ creatableValue: value })}
+          handleChange={value => this.setState({ creatableValue: value })}
           handleClearValue={() => this.setState({ creatableValue: null })}
           selectedValue={this.state.creatableValue}
           handleCreate={value => this.setState({ creatableOptions: this.state.creatableOptions.concat(value) })}
@@ -119,7 +119,7 @@ class App extends React.Component {
           loading={this.state.manualLoading}
           options={this.state.manualOptions}
           handleInputChange={this.handleManualInputChange}
-          handleSelectOption={value => this.setState({ manualValue: value })}
+          handleChange={value => this.setState({ manualValue: value })}
           handleClearValue={() => this.setState({ manualValue: null })}
           selectedValue={this.state.manualValue}
           label='Manual'

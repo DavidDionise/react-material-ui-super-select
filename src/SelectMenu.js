@@ -32,7 +32,7 @@ const SelectMenu = props => (
                 <MenuItem
                   key={opt.id}
                   id={`rmss-menu-item-${opt.id}`}
-                  onClick={() => props.handleSelectOption(opt)}
+                  onClick={() => props.handleChange(opt)}
                   onMouseEnter={() => props.handleMouseEnterOption(opt)}
                   className={`${props.classes.rmss_global_menu_item} ${selected && !focused ? 'selected' : focused ? 'focused' : ''}`}
                 >
@@ -56,7 +56,7 @@ SelectMenu.propTypes = {
   ).isRequired,
   classes: PropTypes.object.isRequired,
   onClickAway: PropTypes.func.isRequired,
-  handleSelectOption: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
   handleMouseEnterOption: PropTypes.func.isRequired,
   selectedValue: PropTypes.oneOfType([
     PropTypes.object,

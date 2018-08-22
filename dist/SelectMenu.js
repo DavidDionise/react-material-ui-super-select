@@ -77,7 +77,7 @@ var SelectMenu = function SelectMenu(props) {
                   key: opt.id,
                   id: 'rmss-menu-item-' + opt.id,
                   onClick: function onClick() {
-                    return props.handleSelectOption(opt);
+                    return props.handleChange(opt);
                   },
                   onMouseEnter: function onMouseEnter() {
                     return props.handleMouseEnterOption(opt);
@@ -99,7 +99,7 @@ SelectMenu.propTypes = {
   options: _propTypes2.default.arrayOf(_propTypes2.default.object).isRequired,
   classes: _propTypes2.default.object.isRequired,
   onClickAway: _propTypes2.default.func.isRequired,
-  handleSelectOption: _propTypes2.default.func.isRequired,
+  handleChange: _propTypes2.default.func.isRequired,
   handleMouseEnterOption: _propTypes2.default.func.isRequired,
   selectedValue: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.arrayOf(_propTypes2.default.object)]),
   focusedOption: _propTypes2.default.object,

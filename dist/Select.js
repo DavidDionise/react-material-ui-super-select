@@ -61,13 +61,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Select = function Select(props) {
   return _react2.default.createElement(
     _SelectContainer2.default,
-    _lodash2.default.pick(props, ['options', 'containerClassName', 'handleSelectOption', 'stayOpenAfterSelection', 'selectedValue', 'handleClearValue', 'loading', 'handleInputChange', 'manual']),
+    _lodash2.default.pick(props, ['options', 'containerClassName', 'handleChange', 'stayOpenAfterSelection', 'selectedValue', 'handleClearValue', 'loading', 'handleInputChange', 'manual']),
     function (_ref) {
       var getFilteredOptions = _ref.getFilteredOptions,
           handleInputChange = _ref.handleInputChange,
           handleClearValue = _ref.handleClearValue,
           handleKeyDown = _ref.handleKeyDown,
-          handleSelectOption = _ref.handleSelectOption,
+          handleChange = _ref.handleChange,
           handleBlur = _ref.handleBlur,
           toggleEnteringText = _ref.toggleEnteringText,
           toggleMenuOpen = _ref.toggleMenuOpen,
@@ -144,7 +144,7 @@ var Select = function Select(props) {
           onClickAway: function onClickAway() {
             return _menuOpen ? toggleMenuOpen(false) : null;
           },
-          handleSelectOption: handleSelectOption,
+          handleChange: handleChange,
           handleMouseEnterOption: setFocusedOption,
           selectedValue: props.selectedValue,
           focusedOption: focusedOption
@@ -164,7 +164,7 @@ Select.propTypes = {
     label: _propTypes2.default.string.isRequired
   }),
   containerClassName: _propTypes2.default.string,
-  handleSelectOption: _propTypes2.default.func.isRequired,
+  handleChange: _propTypes2.default.func.isRequired,
   handleInputChange: _propTypes2.default.func,
   handleClearValue: _propTypes2.default.func,
   MenuItem: _propTypes2.default.node,

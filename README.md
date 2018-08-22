@@ -31,7 +31,7 @@ class App extends React.Component {
       <Select
         label='Select'
         options={this.state.options}
-        handleSelectOption={value => this.setState({ value })}
+        handleChange={value => this.setState({ value })}
         handleClearValue={() => this.setState({ value: null })}
         selectedValue={this.state.value}
         containerClassName="select-container"
@@ -57,8 +57,7 @@ Name | Data Type | Default | Description
 `options`| `Array<{ id: String, label: string }>` | | *required* - Used to render the options list. Only `label` will be displayed. `id` MUST be unique among the other elements in the list
 `selectedValue` | `{ id: String, label: String }` *or* `Array<{ id: String, label: String}>` | null | For the `Select` component, this must be an object that matches one of the objects in the `options` prop. For the `MultiSelect` and `Creatable` components, this must be an array of objects that each match objects in the `options` prop.
 `containerClassName` | | `String` | Concatenated className to the component's outer `<div>`
-`handleSelectOption` | `Function` | | Function called when an option is selected. Parameter will be the selected option
-`handleInputChange` | `Function` | | Function called when the select input field is changed. Parameter will be input field's event
+`handleChange` | `Function` | | Function called when an option is selected. In the `Select` component, the
 `handleClearValue` | `Function` | | Function called when the clear button is clicked
 `MenuItem` | `Node` | | Optional component to render in place of the default menu item. Will receive a prop named `option`, which will be the option that is being rendered
 `stayOpenAfterSelection` | `Boolean` | `false` | If set to true, the menu will stay open after a selection has been made
@@ -68,3 +67,4 @@ Name | Data Type | Default | Description
 `disabled` | `Boolean` | `false` | If true, all functionality will be disabled, and select field will be read-only
 `manual` | `Boolean` | `false` | Under the hood, this package filters the visible options based on user input. If `manual` is true, the component won't do any filtering, and all management of options filtering will need to be done manually.
 `hideLabel` | `Boolean` | `false` | If set to true, the label will be hidden
+`handleCreate` | `Function` | | Only applicalble for the `Creatable` component; called after a user hits 'Enter' to create a new option

@@ -18,7 +18,7 @@ class SelectContainer extends React.Component {
         PropTypes.object,
       ),
     ]),
-    handleSelectOption: PropTypes.func.isRequired,
+    handleChange: PropTypes.func.isRequired,
     handleInputChange: PropTypes.func.isRequired,
     handleCreate: PropTypes.func,
     calculateTextFieldStyle: PropTypes.func,
@@ -160,16 +160,16 @@ class SelectContainer extends React.Component {
                 label: this.state.inputValue
               };
               this.props.handleCreate(newOptionProps);
-              this.handleSelectOption(newOptionProps);
+              this.handleChange(newOptionProps);
             } else {
-              this.handleSelectOption(this.state.focusedOption);
+              this.handleChange(this.state.focusedOption);
             }
           }
           break;
         }
 
         if (this.state.focusedOption) {
-          this.handleSelectOption(this.state.focusedOption);
+          this.handleChange(this.state.focusedOption);
         }
         break;
       }
@@ -295,7 +295,7 @@ class SelectContainer extends React.Component {
       }, 100);
     }
   }
-  handleSelectOption = (option) => {
+  handleChange = (option) => {
     this.setState({
       menuOpen: this.props.stayOpenAfterSelection != false,
       focusedOption: null,
@@ -304,16 +304,16 @@ class SelectContainer extends React.Component {
     });
 
     if (this.props.multi) {
-      this.props.handleSelectOption([ ...(this.props.selectedValue || []), option ]);
+      this.props.handleChange([ ...(this.props.selectedValue || []), option ]);
     } else {
-      this.props.handleSelectOption(option);
+      this.props.handleChange(option);
     }
   }
   handleDeleteItem = (item) => {
     if (this.props.selectedValue.length == 1) {
-      this.props.handleSelectOption(null);
+      this.props.handleChange(null);
     } else {
-      this.props.handleSelectOption(this.props.selectedValue.filter(v => v.id != item.id));
+      this.props.handleChange(this.props.selectedValue.filter(v => v.id != item.id));
     }
   }
 
@@ -329,7 +329,7 @@ class SelectContainer extends React.Component {
             handleInputChange: this.handleInputChange,
             handleClearValue: this.handleClearValue,
             handleKeyDown: this.handleKeyDown,
-            handleSelectOption: this.handleSelectOption,
+            handleChange: this.handleChange,
             toggleMenuOpen: bool => (
               this.state.menuOpen != bool ?
                 this.setState({ menuOpen: bool }) :

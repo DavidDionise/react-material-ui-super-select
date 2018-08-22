@@ -20,7 +20,7 @@ const Select = props => (
       props, [
         'options',
         'containerClassName',
-        'handleSelectOption',
+        'handleChange',
         'stayOpenAfterSelection',
         'selectedValue',
         'handleClearValue',
@@ -34,7 +34,7 @@ const Select = props => (
       handleInputChange,
       handleClearValue,
       handleKeyDown,
-      handleSelectOption,
+      handleChange,
       handleBlur,
       toggleEnteringText,
       toggleMenuOpen,
@@ -114,7 +114,7 @@ const Select = props => (
                 toggleMenuOpen(false) :
                 null
             )}
-            handleSelectOption={handleSelectOption}
+            handleChange={handleChange}
             handleMouseEnterOption={setFocusedOption}
             selectedValue={props.selectedValue}
             focusedOption={focusedOption}
@@ -137,7 +137,7 @@ Select.propTypes = {
     label: PropTypes.string.isRequired,
   }),
   containerClassName: PropTypes.string,
-  handleSelectOption: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
   handleInputChange: PropTypes.func,
   handleClearValue: PropTypes.func,
   MenuItem: PropTypes.node,

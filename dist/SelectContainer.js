@@ -142,16 +142,16 @@ var SelectContainer = (_dec = (0, _withStyles2.default)(_Styles2.default), _dec(
                     label: _this.state.inputValue
                   };
                   _this.props.handleCreate(newOptionProps);
-                  _this.handleSelectOption(newOptionProps);
+                  _this.handleChange(newOptionProps);
                 } else {
-                  _this.handleSelectOption(_this.state.focusedOption);
+                  _this.handleChange(_this.state.focusedOption);
                 }
               }
               break;
             }
 
             if (_this.state.focusedOption) {
-              _this.handleSelectOption(_this.state.focusedOption);
+              _this.handleChange(_this.state.focusedOption);
             }
             break;
           }
@@ -257,7 +257,7 @@ var SelectContainer = (_dec = (0, _withStyles2.default)(_Styles2.default), _dec(
           (0, _jquery2.default)(menuContainerElement).scrollTop(newScrollHeight);
         }, 100);
       }
-    }, _this.handleSelectOption = function (option) {
+    }, _this.handleChange = function (option) {
       _this.setState({
         menuOpen: _this.props.stayOpenAfterSelection != false,
         focusedOption: null,
@@ -266,15 +266,15 @@ var SelectContainer = (_dec = (0, _withStyles2.default)(_Styles2.default), _dec(
       });
 
       if (_this.props.multi) {
-        _this.props.handleSelectOption([].concat(_toConsumableArray(_this.props.selectedValue || []), [option]));
+        _this.props.handleChange([].concat(_toConsumableArray(_this.props.selectedValue || []), [option]));
       } else {
-        _this.props.handleSelectOption(option);
+        _this.props.handleChange(option);
       }
     }, _this.handleDeleteItem = function (item) {
       if (_this.props.selectedValue.length == 1) {
-        _this.props.handleSelectOption(null);
+        _this.props.handleChange(null);
       } else {
-        _this.props.handleSelectOption(_this.props.selectedValue.filter(function (v) {
+        _this.props.handleChange(_this.props.selectedValue.filter(function (v) {
           return v.id != item.id;
         }));
       }
@@ -315,7 +315,7 @@ var SelectContainer = (_dec = (0, _withStyles2.default)(_Styles2.default), _dec(
             handleInputChange: this.handleInputChange,
             handleClearValue: this.handleClearValue,
             handleKeyDown: this.handleKeyDown,
-            handleSelectOption: this.handleSelectOption,
+            handleChange: this.handleChange,
             toggleMenuOpen: function toggleMenuOpen(bool) {
               return _this2.state.menuOpen != bool ? _this2.setState({ menuOpen: bool }) : null;
             },
@@ -341,7 +341,7 @@ SelectContainer.propTypes = {
   children: _propTypes2.default.func.isRequired,
   // from parent
   selectedValue: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.arrayOf(_propTypes2.default.object)]),
-  handleSelectOption: _propTypes2.default.func.isRequired,
+  handleChange: _propTypes2.default.func.isRequired,
   handleInputChange: _propTypes2.default.func.isRequired,
   handleCreate: _propTypes2.default.func,
   calculateTextFieldStyle: _propTypes2.default.func,
