@@ -54,6 +54,11 @@ export default theme => ({
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  rmss_input_and_label_container: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
 
   // Select
   rmss_input_container: {

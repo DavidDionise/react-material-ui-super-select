@@ -3,28 +3,66 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Styles from './Styles';
 
-const RMSS_CREATABLE_VALUE = Symbol('RMSS_CREATABLE_VALUE');
+const RMSS_CREATABLE_VALUE = '__RMSS_CREATABLE_VALUE__'
 
 @withStyles(Styles)
 class SelectContainer extends React.Component {
+  static propTypes = {
+    children: PropTypes.func.isRequired,
+    // from parent
+    selectedValue: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.arrayOf(
+        PropTypes.object,
+      ),
+    ]),
+    handleSelectOption: PropTypes.func.isRequired,
+    handleInputChange: PropTypes.func.isRequired,
+    handleCreate: PropTypes.func,
+    calculateTextFieldStyle: PropTypes.func,
+    handleClearValue: PropTypes.func.isRequired,
+    containerClassName: PropTypes.string,
+    stayOpenAfterSelection: PropTypes.bool,
+    manual: PropTypes.bool,
+    multi: PropTypes.bool,
+    creatable: PropTypes.bool,
+    // from withStyles
+    classes: PropTypes.object,
+  };
+
+  static defaultProps = {
+    selectedValue: null,
+    handleClearValue: () => {},
+    handleInputChange: () => {},
+    handleCreate: () => {},
+    calculateTextFieldStyle: () => {},
+    containerClassName: '',
+    containerClassName: '',
+    stayOpenAfterSelection: false,
+    manual: false,
+    multi: false,
+    creatable: false,
+    classes: {},
+  };
+
   state = {
     focusedOption: null,
     inputValue: '',
+    inputFocused: false,
     menuOpen: false,
     enteringText: false,
     // multi select
     inputStyle: { flex: '1' },
   };
-  displayName = Component.name;
 
   componentWillMount() {
     this.setState({ focusedOption: this.props.options[0] });
   }
   componentDidUpdate() {
     if (this.props.multi) {
-      const updated_style = this.calculateTextFieldStyle();
-      if (!_.isEqual(updated_style, this.state.inputStyle)) {
-        this.setState({ inputStyle: updated_style });
+      const updatedStyle = this.props.calculateTextFieldStyle();
+      if (!_.isEqual(updatedStyle, this.state.inputStyle)) {
+        this.setState({ inputStyle: updatedStyle });
       }
     }
   }
@@ -52,7 +90,7 @@ class SelectContainer extends React.Component {
       if (
         inputValue &&
         !matchedOption &&
-        !((filtered_options[0] || {}).id == RMSS_CREATABLE_VALUE)
+        !((multiFilteredOptions[0] || {}).id == RMSS_CREATABLE_VALUE)
       ) {
         return [
           { id: RMSS_CREATABLE_VALUE, label: `Create "${inputValue}"` },
@@ -68,9 +106,18 @@ class SelectContainer extends React.Component {
     return baseFilteredOptions;
   }
   handleInputChange = (event) => {
-    const options = this.getFilteredOptions(event.target.value);
-    const inputValue = event.target.value || '';
-    if (event.target.value) {
+    const { value } = event && event.target || {};
+    const options = this.getFilteredOptions(value);
+    let inputValue;
+    if (value) {
+      inputValue = value.startsWith(' ') ?
+        value.substr(1) :
+        value;
+    } else {
+      inputValue = '';
+    }
+
+    if (value) {
       this.setState({
         inputValue: inputValue,
         focusedOption: options[0],
@@ -87,14 +134,14 @@ class SelectContainer extends React.Component {
 
     this.props.handleInputChange(inputValue);
   }
-  handleClearValue (event) {
+  handleClearValue = (event) => {
     event.stopPropagation();
     if (this.state.menuOpen) {
       this.setState({ menuOpen: false });
     }
     this.props.handleClearValue();
   }
-  handleKeyDown(event) {
+  handleKeyDown = (event) => {
     switch (event.keyCode) {
       // Enter
       case 13: {
@@ -106,12 +153,12 @@ class SelectContainer extends React.Component {
               this.state.focusedOption.id == RMSS_CREATABLE_VALUE &&
               !this.props.options.find(opt => opt.value == this.state.inputValue)
             ) {
-              const new_option_props = {
+              const newOptionProps = {
                 id: this.state.inputValue,
                 label: this.state.inputValue
               };
-              this.props.handleCreate(new_option_props);
-              this.handleSelectOption(new_option_props);
+              this.props.handleCreate(newOptionProps);
+              this.handleSelectOption(newOptionProps);
             } else {
               this.handleSelectOption(this.state.focusedOption);
             }
@@ -121,6 +168,20 @@ class SelectContainer extends React.Component {
 
         if (this.state.focusedOption) {
           this.handleSelectOption(this.state.focusedOption);
+        }
+        break;
+      }
+      // Back Space
+      // Delete
+      case 8:
+      case 46: {
+        if (
+          this.props.multi &&
+          this.state.inputValue.length == 0 &&
+          this.props.selectedValue &&
+          this.props.selectedValue.length > 0
+        ) {
+          this.handleDeleteItem(this.props.selectedValue[this.props.selectedValue.length - 1]);
         }
         break;
       }
@@ -134,32 +195,32 @@ class SelectContainer extends React.Component {
       }
       // Arrow Down
       case 40: {
-        const filtered_options = this.getFilteredOptions(this.state.inputValue);
-        const next_focusedOption = this.state.focusedOption ?
-          filtered_options.reduce((acc, opt, idx, options) => {
+        const filteredOptions = this.getFilteredOptions(this.state.inputValue);
+        const nextFocusedOption = this.state.focusedOption ?
+          filteredOptions.reduce((acc, opt, idx, options) => {
             if (opt.id == this.state.focusedOption.id) {
               acc = options[idx + 1] || options[0];
             }
             return acc;
           }, null) :
-          filtered_options[0];
+          filteredOptions[0];
 
-        this.handleFocusOption(next_focusedOption, event.keyCode);
+        this.handleFocusOption(nextFocusedOption, event.keyCode);
         break;
       }
       // Arrow Up
       case 38: {
-        const filtered_options = this.getFilteredOptions(this.state.inputValue);
-        const next_focusedOption = this.state.focusedOption ?
-          filtered_options.reduce((acc, opt, idx, options) => {
+        const filteredOptions = this.getFilteredOptions(this.state.inputValue);
+        const nextFocusedOption = this.state.focusedOption ?
+          filteredOptions.reduce((acc, opt, idx, options) => {
             if (opt.id == this.state.focusedOption.id) {
               acc = options[idx - 1] || options[options.length - 1];
             }
             return acc;
           }, null) :
-          filtered_options[filtered_options.length - 1];
+          filteredOptions[filteredOptions.length - 1];
 
-        this.handleFocusOption(next_focusedOption, event.keyCode);
+        this.handleFocusOption(nextFocusedOption, event.keyCode);
         break;
       }
     }
@@ -207,90 +268,31 @@ class SelectContainer extends React.Component {
       }, 100);
     }
   }
-  handleSelectOption (option) => {
+  handleSelectOption = (option) => {
     this.setState({
       menuOpen: this.props.stayOpenAfterSelection != false,
       focusedOption: null,
       inputValue: '',
     });
 
-    this.props.handleSelectOption(option);
+    if (this.props.multi) {
+      this.props.handleSelectOption([ ...(this.props.selectedValue || []), option ]);
+    } else {
+      this.props.handleSelectOption(option);
+    }
   }
-  handleDeleteOption = (option) => {
+  handleDeleteItem = (item) => {
     if (this.props.selectedValue.length == 1) {
       this.props.handleSelectOption(null);
     } else {
       this.props.handleSelectOption(this.props.selectedValue.filter(v => v.id != item.id));
     }
   }
-  handleKeyDown(event) {
-    switch (event.keyCode) {
-      // Enter
-      case 13: {
-        if (this.state.focusedOption) {
-          event.preventDefault();
-          this.handleSelectOption(this.state.focusedOption);
-        }
-        break;
-      }
-      // Escape
-      case 27: {
-        this.setState({
-          menuOpen: false,
-          focusedOption: null,
-        });
-        break;
-      }
-      // Arrow Down
-      case 40: {
-        const filtered_options = this.getFilteredOptions(this.state.inputValue);
-        const next_focusedOption = this.state.focusedOption ?
-          filtered_options.reduce((acc, opt, idx, options) => {
-            if (opt.id == this.state.focusedOption.id) {
-              acc = options[idx + 1] || options[0];
-            }
-            return acc;
-          }, null) :
-          filtered_options[0];
 
-        this.focusOption(next_focusedOption, event.keyCode);
-        break;
-      }
-      // Arrow Up
-      case 38: {
-        const filtered_options = this.getFilteredOptions(this.state.inputValue);
-        const next_focusedOption = this.state.focusedOption ?
-          filtered_options.reduce((acc, opt, idx, options) => {
-            if (opt.id == this.state.focusedOption.id) {
-              acc = options[idx - 1] || options[options.length - 1];
-            }
-            return acc;
-          }, null) :
-          filtered_options[filtered_options.length - 1];
-
-        this.focusOption(next_focusedOption, event.keyCode);
-        break;
-      }
-      // Back Space
-      // Delete
-      case 8:
-      case 46: {
-        if (
-          this.props.multi &&
-          this.state.inputValue.length == 0 &&
-          this.props.selectedValue &&
-          this.props.selectedValue.length > 0
-        ) {
-          this.handleDeleteItem(this.props.selectedValue[this.props.selectedValue.length - 1]);
-        }
-        break;
-      }
-    }
-  }
   render() {
     return (
-      <div className={classes.rmss_outer_container}>
-        <div className={`${classes.rmss_global_container} ${this.props.containerClassName}`}>
+      <div className={this.props.classes.rmss_outer_container}>
+        <div className={`${this.props.classes.rmss_global_container} ${this.props.containerClassName}`}>
           {this.props.children({
             getFilteredOptions: this.getFilteredOptions,
             handleInputChange: this.handleInputChange,
@@ -301,14 +303,17 @@ class SelectContainer extends React.Component {
               this.state.menuOpen != bool ?
                 this.setState({ menuOpen: bool }) :
                 null
-            )
+            ),
             toggleEnteringText: bool => (
               this.state.enteringText != bool ?
-                this.setState({ enteringText: bool }) :
+                this.setState({
+                  enteringText: bool,
+                  inputValue: this.state.inputValue == ' ' ? '' : this.state.inputValue,
+                }) :
                 null
-            )
-            setFocusedOption: opt => this.setState({ focusedOption: opt })
-            classes: this.props.classes,
+            ),
+            setFocusedOption: opt => this.setState({ focusedOption: opt }),
+            handleDeleteItem: this.handleDeleteItem,
             ...this.state,
           })}
         </div>
@@ -318,38 +323,3 @@ class SelectContainer extends React.Component {
 }
 
 export default SelectContainer;
-
-SelectContainer.propTypes = {
-  children: PropTypes.func.isRequired,
-  // from parent
-  selectedValue: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.arrayOf(
-      PropTypes.object,
-    ),
-  ]),
-  handleSelectOption: PropTypes.func.isRequired,
-  handleInputChange: PropTypes.func.isRequired,
-  handleCreate: PropTypes.func,
-  handleClearValue: PropTypes.func.isRequired,
-  containerClassName: PropTypes.string,
-  stayOpenAfterSelection: PropTypes.bool,
-  manual: PropTypes.bool,
-  multi: PropTypes.bool,
-  creatable: PropTypes.bool,
-  // from withStyles
-  classes: PropTypes.object.isRequired,
-};
-
-SelectContainer.defaultProps = {
-  selectedValue: null,
-  handleClearValue: () => {},
-  handleInputChange: () => {},
-  handleCreate: () => {},
-  containerClassName: '',
-  containerClassName: '',
-  stayOpenAfterSelection: false,
-  manual: false,
-  multi: false,
-  creatable: false,
-};

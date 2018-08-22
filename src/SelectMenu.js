@@ -6,6 +6,9 @@ import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import withStyles from '@material-ui/core/styles/withStyles';
+import Styles from './Styles';
+
 const SelectMenu = props => (
   <div className={props.classes.rmss_global_menu_container}>
     <ClickAwayListener
@@ -19,19 +22,19 @@ const SelectMenu = props => (
         <Paper classes={{ root: props.classes.rmss_global_menu_paper_container }}>
           <MenuList id='rmss-menu-list'>
             {props.options.map(opt => {
-              const selected = opt.id == (props.selectedValue || {}).id;
-              const focused = opt.id == (state.focusedOption || {}).id;
+              const selected = props.multi ? false : opt.id == (props.selectedValue || {}).id;
+              const focused = props.multi ? false : opt.id == (props.focusedOption || {}).id;
 
               return (
                 <MenuItem
                   key={opt.id}
                   id={`rmss-menu-item-${opt.id}`}
                   onClick={() => props.handleSelectOption(opt)}
-                  onMouseEnter={() => props.handleMouseEnterOption({ focusedOption: opt })}
+                  onMouseEnter={() => props.handleMouseEnterOption(opt)}
                   className={`${props.classes.rmss_global_menu_item} ${selected && !focused ? 'selected' : focused ? 'focused' : ''}`}
                 >
-                  {this.props.menuItemRenderer ? (
-                    this.props.menuItemRenderer(opt)
+                  {props.menuItemRenderer ? (
+                    props.menuItemRenderer(opt)
                   ) : opt.label}
                 </MenuItem>
               );
@@ -52,7 +55,10 @@ SelectMenu.propTypes = {
   onClickAway: PropTypes.func.isRequired,
   handleSelectOption: PropTypes.func.isRequired,
   handleMouseEnterOption: PropTypes.func.isRequired,
-  selectedValue: PropTypes.object,
+  selectedValue: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.arrayOf(PropTypes.object)
+  ]),
   focusedOption: PropTypes.object,
   menuItemRenderer: PropTypes.func,
 };
@@ -62,3 +68,5 @@ SelectMenu.defaultProps = {
   focusedOption: null,
   menuItemRenderer: null,
 };
+
+export default withStyles(Styles)(SelectMenu);

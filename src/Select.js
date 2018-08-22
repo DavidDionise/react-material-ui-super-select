@@ -1,116 +1,130 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import InputLabel from '@material-ui/core/InputLabel';
+
 import SelectContainer from './SelectContainer';
 import SelectMenu from './SelectMenu';
 
-class Select extends React.Component {
-  render() {
-    return (
-      <SelectContainer
-        {..._.pick(
-          this.props, [
-            'containerClassName',
-            'handleSelectOption',
-            'stayOpenAfterSelection',
-            'selectedValue',
-            'handleClearValue',
-            'loading',
-            'handleInputChange',
-            'manual',
-          ])}
-      >
-        {({
-          getFilteredOptions,
-          handleInputChange,
-          handleClearValue,
-          handleKeyDown,
-          handleSelectOption,
-          toggleEnteringText,
-          toggleMenuOpen,
-          handleSelectOption,
-          setFocusedOption,
-          classes,
-          // from state
-          menuOpen,
-          inputValue,
-          focusedOption,
-          enteringText,
-        }) => {
-          const menuOpen = menuOpen && getFilteredOptions(inputValue).length != 0;
-          const value = enteringText ? inputValue : selectedValue ? ' ' : '';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Styles from './Styles';
 
-          return (
-            <React.Fragment>
-              <div className={classes.rmss_input_container}>
-                <div className={classes.rmss_selected_value_container}>
-                  {enteringText && inputValue ? null : (
-                    this.props.selectedValue ? (
-                      <p>{this.props.selectedValue.label}</p>
-                    ) : null
-                  )}
-                </div>
-                <TextField
-                  fullWidth
-                  disabled={this.props.disabled}
-                  onChange={this.handleInputChange}
-                  onClick={() => this.props.disabled ? null : toggleMenuOpen(true)}
-                  value={value}
-                  onKeyDown={handleKeyDown}
-                  onFocus={() => (
-                    this.props.disabled ?
+const Select = props => (
+  <SelectContainer
+    {..._.pick(
+      props, [
+        'options',
+        'containerClassName',
+        'handleSelectOption',
+        'stayOpenAfterSelection',
+        'selectedValue',
+        'handleClearValue',
+        'loading',
+        'handleInputChange',
+        'manual',
+      ])}
+  >
+    {({
+      getFilteredOptions,
+      handleInputChange,
+      handleClearValue,
+      handleKeyDown,
+      handleSelectOption,
+      handleBlur,
+      toggleEnteringText,
+      toggleMenuOpen,
+      setFocusedOption,
+      // from state
+      menuOpen,
+      inputValue,
+      focusedOption,
+      enteringText,
+    }) => {
+      const _menuOpen = menuOpen && getFilteredOptions(inputValue).length != 0;
+      const value = enteringText ? inputValue : (props.selectedValue ? ' ' : '');
+
+      return (
+        <React.Fragment>
+          <div className={props.classes.rmss_input_container}>
+            <div className={props.classes.rmss_selected_value_container}>
+              {enteringText && inputValue ? null : (
+                props.selectedValue ? (
+                  <p>{props.selectedValue.label}</p>
+                ) : null
+              )}
+            </div>
+            <div className={props.classes.rmss_input_and_label_container}>
+              {!props.hideLabel ? (
+                <InputLabel
+                  shrink
+                  focused={enteringText || _menuOpen}
+                >
+                  {props.label}
+                </InputLabel>
+              ) : null}
+              <TextField
+                fullWidth
+                disabled={props.disabled}
+                onChange={handleInputChange}
+                onClick={() => props.disabled ? null : toggleMenuOpen(true)}
+                value={value}
+                onKeyDown={handleKeyDown}
+                onBlur={() => (
+                  props.disabled ?
                     null :
-                      inputValue.length > 0 ?
-                        toggleEnteringText(true) :
-                        null
-                  )}
-                  onBlur={() => toggleEnteringText(false)}
-                  placeholder={this.props.selectedValue ? '' : this.props.placeholder}
-                  label={this.props.hideLabel ? undefined : this.props.label}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment
-                        position='end'
-                        classes={{ root: classes.rmss_global_input_adornment_container }}
-                      >
-                        {this.props.loading ? (
-                          <CircularProgress size={20} />
-                        ) : this.props.selectedValue ? (
-                          <IconButton onClick={handleClearValue}>
-                            <CloseIcon classes={{ root: classes.rmss_global_close_button_container }} />
-                          </IconButton>
-                        ) : <div />}
-                      </InputAdornment>
-                    )
-                  }}
-                />
-              </div>
-
-              <SelectMenu
-                open={menuOpen}
-                options={getFilteredOptions(inputValue)}
-                classes={classes}
-                onClickAway={() => (
-                  menuOpen ?
-                  null :
-                  toggleMenuOpen(false)
+                    toggleEnteringText(false)
                 )}
-                handleSelectOption={handleSelectOption}
-                handleMouseEnterOption={setFocusedOption}
-                selectedValue={selectedValue}
-                focusedOption={focusedOption}
+                onFocus={() => (
+                  props.disabled ?
+                    null :
+                    inputValue.length > 0 ?
+                      toggleEnteringText(true) :
+                      null
+                )}
+                placeholder={props.selectedValue ? '' : props.placeholder}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment
+                      position='end'
+                      classes={{ root: props.classes.rmss_global_input_adornment_container }}
+                    >
+                      {props.loading ? (
+                        <CircularProgress size={20} />
+                      ) : props.selectedValue ? (
+                        <IconButton onClick={handleClearValue}>
+                          <CloseIcon classes={{ root: props.classes.rmss_global_close_button_container }} />
+                        </IconButton>
+                      ) : <div />}
+                    </InputAdornment>
+                  )
+                }}
               />
-            </React.Fragment>
-          )
-        }}
-      </SelectContainer>
-    )
-  }
-}
+            </div>
+          </div>
+
+          <SelectMenu
+            open={_menuOpen}
+            options={getFilteredOptions(inputValue)}
+            onClickAway={() => (
+              _menuOpen ?
+                toggleMenuOpen(false) :
+                null
+            )}
+            handleSelectOption={handleSelectOption}
+            handleMouseEnterOption={setFocusedOption}
+            selectedValue={props.selectedValue}
+            focusedOption={focusedOption}
+          />
+        </React.Fragment>
+      )
+    }}
+  </SelectContainer>
+)
 
 Select.propTypes = {
   options: PropTypes.arrayOf(
@@ -146,7 +160,6 @@ Select.defaultProps = {
   menuItemRenderer: null,
   stayOpenAfterSelection: false,
   selectedValue: null,
-  placeholder: 'Select ...',
   label: '',
   loading: false,
   disabled: false,
@@ -154,4 +167,4 @@ Select.defaultProps = {
   hideLabel: false,
 };
 
-export default Select;
+export default withStyles(Styles)(Select);
