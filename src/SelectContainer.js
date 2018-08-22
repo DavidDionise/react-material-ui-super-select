@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import $ from 'jquery';
+
 import withStyles from '@material-ui/core/styles/withStyles';
 import Styles from './Styles';
 
@@ -29,7 +31,6 @@ class SelectContainer extends React.Component {
     // from withStyles
     classes: PropTypes.object,
   };
-
   static defaultProps = {
     selectedValue: null,
     handleClearValue: () => {},
@@ -54,6 +55,7 @@ class SelectContainer extends React.Component {
     // multi select
     inputStyle: { flex: '1' },
   };
+  containerRef = React.createRef();
 
   componentWillMount() {
     this.setState({ focusedOption: this.props.options[0] });
@@ -196,31 +198,47 @@ class SelectContainer extends React.Component {
       // Arrow Down
       case 40: {
         const filteredOptions = this.getFilteredOptions(this.state.inputValue);
-        const nextFocusedOption = this.state.focusedOption ?
-          filteredOptions.reduce((acc, opt, idx, options) => {
-            if (opt.id == this.state.focusedOption.id) {
-              acc = options[idx + 1] || options[0];
-            }
-            return acc;
-          }, null) :
-          filteredOptions[0];
+        if (
+          !this.state.menuOpen &&
+          filteredOptions.length > 0
+        ) {
+          this.setState({
+            menuOpen: true,
+            focusedOption: filteredOptions[0],
+          });
+        } else if (filteredOptions.length == 0) {
+          return;
+        } else {
+          const nextFocusedOption = this.state.focusedOption ?
+            filteredOptions.reduce((acc, opt, idx, options) => {
+              if (opt.id == this.state.focusedOption.id) {
+                acc = options[idx + 1] || options[0];
+              }
+              return acc;
+            }, null) :
+            filteredOptions[0];
 
-        this.handleFocusOption(nextFocusedOption, event.keyCode);
+          this.handleFocusOption(nextFocusedOption, event.keyCode);
+        }
         break;
       }
       // Arrow Up
       case 38: {
         const filteredOptions = this.getFilteredOptions(this.state.inputValue);
-        const nextFocusedOption = this.state.focusedOption ?
-          filteredOptions.reduce((acc, opt, idx, options) => {
-            if (opt.id == this.state.focusedOption.id) {
-              acc = options[idx - 1] || options[options.length - 1];
-            }
-            return acc;
-          }, null) :
-          filteredOptions[filteredOptions.length - 1];
+        if (filteredOptions.length == 0) {
+          return;
+        } else {
+          const nextFocusedOption = this.state.focusedOption ?
+            filteredOptions.reduce((acc, opt, idx, options) => {
+              if (opt.id == this.state.focusedOption.id) {
+                acc = options[idx - 1] || options[options.length - 1];
+              }
+              return acc;
+            }, null) :
+            filteredOptions[filteredOptions.length - 1];
 
-        this.handleFocusOption(nextFocusedOption, event.keyCode);
+          this.handleFocusOption(nextFocusedOption, event.keyCode);
+        }
         break;
       }
     }
@@ -228,9 +246,19 @@ class SelectContainer extends React.Component {
   handleFocusOption = (focusedOption, keyCode) => {
     this.setState({ focusedOption });
 
-    const focusedElement = $(`#rmss-menu-item-${focusedOption.id}`)[0];
-    const menuContainerElement = $(`.${this.props.classes.rmss_global_menu_paper_container}`)[0];
-    const menuListElement = $('#rmss-menu-list')[0];
+    const focusedElement = $(
+      `#rmss-menu-item-${focusedOption.id}`,
+      this.containerRef.current,
+    )[0];
+    const menuContainerElement = $(
+      '#rmss-menu-list-container',
+      this.containerRef.current,
+    )[0];
+    const menuListElement = $(
+      `#rmss-menu-list`,
+      this.containerRef.current,
+    )[0];
+
     const {
       clientHeight: menuContainerHeight,
       scrollTop: menuContainerScrollTop,
@@ -260,7 +288,6 @@ class SelectContainer extends React.Component {
     } else {
       console.warn(`Calling 'handleFocusOption' with a keyCode that is neither arrow up or arrow down.`);
     }
-
     if (newScrollHeight !== undefined) {
       // prevents UI flicker
       setTimeout(() => {
@@ -273,6 +300,7 @@ class SelectContainer extends React.Component {
       menuOpen: this.props.stayOpenAfterSelection != false,
       focusedOption: null,
       inputValue: '',
+      enteringText: false,
     });
 
     if (this.props.multi) {
@@ -291,7 +319,10 @@ class SelectContainer extends React.Component {
 
   render() {
     return (
-      <div className={this.props.classes.rmss_outer_container}>
+      <div
+        className={this.props.classes.rmss_outer_container}
+        ref={this.containerRef}
+      >
         <div className={`${this.props.classes.rmss_global_container} ${this.props.containerClassName}`}>
           {this.props.children({
             getFilteredOptions: this.getFilteredOptions,

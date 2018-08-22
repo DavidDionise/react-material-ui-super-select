@@ -46,7 +46,6 @@ const Select = props => (
       enteringText,
     }) => {
       const _menuOpen = menuOpen && getFilteredOptions(inputValue).length != 0;
-      const value = enteringText ? inputValue : (props.selectedValue ? ' ' : '');
 
       return (
         <React.Fragment>
@@ -72,7 +71,7 @@ const Select = props => (
                 disabled={props.disabled}
                 onChange={handleInputChange}
                 onClick={() => props.disabled ? null : toggleMenuOpen(true)}
-                value={value}
+                value={props.selectedValue && !enteringText ? '' : inputValue}
                 onKeyDown={handleKeyDown}
                 onBlur={() => (
                   props.disabled ?

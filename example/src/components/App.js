@@ -96,6 +96,7 @@ class App extends React.Component {
           handleClearValue={() => this.setState({ multiValue: null })}
           selectedValue={this.state.multiValue}
           stayOpenAfterSelection
+          containerClassName="multi-select-container"
         />
 
         <div className={classes.divider} />
@@ -112,7 +113,7 @@ class App extends React.Component {
 
         <div className={classes.divider} />
 
-        <h4>Manual (Use of 'loading' prop)</h4>
+        <h4>Manual (Type one of 'one', 'two', ... 'nine' to view the effect of the 'loading' prop)</h4>
         <Select
           manual
           loading={this.state.manualLoading}

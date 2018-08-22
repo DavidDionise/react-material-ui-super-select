@@ -17,9 +17,44 @@ import SelectMenu from './SelectMenu';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Styles from './Styles';
 
-const MultiSelect = props => {
-  const lastChipRowWidth = () => {
-    const chipElements = $(`.${props.classes.rmss_chip}`);
+class MultiSelect extends React.Component {
+  // componentDidUpdate() {
+  //   const chipsList = $(`.${this.props.classes.rmss_chip}`);
+  //   for (const chip of chipsList) {
+  //     if (!this.chipInLastRow(chip)) {
+  //       $(chip).css({ marginBottom: '4px' });
+  //     } else {
+  //       $(chip).css({ marginBottom: '0px' });
+  //     }
+  //   }
+  // }
+  /**
+   * @description - Determines whether a chip is in the last row
+   *  of selected chips. Needed so a margin can be added if-and-only-if
+   *  the chip is not in the last row
+   */
+  chipInLastRow = (chip) => {
+    const chipElements = $(`.${this.props.classes.rmss_chip}`);
+    if (chipElements.length == 0) {
+      return 0;
+    }
+
+    const lastRowHeight = Array.from(chipElements)
+      .reduce((acc, chipElem) => {
+        const { offsetTop: chipOffset } = chipElem;
+        if (chipOffset >= acc) {
+          acc = chipOffset;
+        }
+        return acc;
+      }, 0);
+
+    return chip.offsetTop == lastRowHeight;
+  }
+  /**
+   * @description - Helper in 'calculateTextFieldStyle'
+   */
+  lastChipRowWidth = () => {
+    const chipElements = $(`.${this.props.classes.rmss_chip}`);
     if (chipElements.length == 0) {
       return 0;
     }
@@ -44,16 +79,21 @@ const MultiSelect = props => {
 
     return lastRowWidth;
   }
-  const calculateTextFieldStyle = () => {
-    const inputContainer = $(`.${props.classes.rmss_multi_input_container}`)[0];
-    const inputValueContainer = $(`.${props.classes.rmss_multi_text_field_width_tracker}`)[0];
+  /**
+   * @description - In the MultiSelect components, the text field width
+   *  must change depending on the width of selected chips; this function
+   *  helps determine the appropriate styling for the text input width
+   */
+  calculateTextFieldStyle = () => {
+    const inputContainer = $(`.${this.props.classes.rmss_multi_input_container}`)[0];
+    const inputValueContainer = $(`.${this.props.classes.rmss_multi_text_field_width_tracker}`)[0];
     if (!inputContainer || !inputValueContainer) {
       return { flex: '1' };
     }
 
     const { width: inputContainerWidth } = inputContainer.getBoundingClientRect();
     const { width: inputValueWidth } = inputValueContainer.getBoundingClientRect();
-    const lastRowWidth = lastChipRowWidth();
+    const lastRowWidth = this.lastChipRowWidth();
     if (inputValueWidth > inputContainerWidth - lastRowWidth - 60) {
       return { width: `${inputContainerWidth}px` };
     } else {
@@ -61,136 +101,129 @@ const MultiSelect = props => {
     }
   }
 
-  return (
-    <SelectContainer
-      multi
-      creatable={props.creatable}
-      calculateTextFieldStyle={calculateTextFieldStyle}
-      {..._.pick(
-        props, [
-          'options',
-          'containerClassName',
-          'handleSelectOption',
-          'handleCreate',
-          'stayOpenAfterSelection',
-          'selectedValue',
-          'handleClearValue',
-          'loading',
-          'handleInputChange',
-          'manual',
-        ])}
-    >
-      {({
-        getFilteredOptions,
-        handleInputChange,
-        handleClearValue,
-        handleKeyDown,
-        handleSelectOption,
-        handleDeleteItem,
-        toggleEnteringText,
-        toggleMenuOpen,
-        setFocusedOption,
-        // from state
-        menuOpen,
-        inputValue,
-        focusedOption,
-        enteringText,
-        inputStyle,
-      }) => {
-        const _menuOpen = menuOpen && getFilteredOptions(inputValue).length != 0;
-        let value;
-        if (enteringText) {
-          value = (inputValue || '').startsWith(' ') ?
-            value.substr(1) :
-            inputValue;
-        } else if (props.selectedValue) {
-          value = ' ';
-        } else {
-          value = '';
-        }
+  render() {
+    return (
+      <SelectContainer
+        multi
+        creatable={this.props.creatable}
+        calculateTextFieldStyle={this.calculateTextFieldStyle}
+        {..._.pick(
+          this.props, [
+            'options',
+            'containerClassName',
+            'handleSelectOption',
+            'handleCreate',
+            'stayOpenAfterSelection',
+            'selectedValue',
+            'handleClearValue',
+            'loading',
+            'handleInputChange',
+            'manual',
+          ])}
+      >
+        {({
+          getFilteredOptions,
+          handleInputChange,
+          handleClearValue,
+          handleKeyDown,
+          handleSelectOption,
+          handleDeleteItem,
+          toggleEnteringText,
+          toggleMenuOpen,
+          setFocusedOption,
+          // from state
+          menuOpen,
+          inputValue,
+          focusedOption,
+          enteringText,
+          inputStyle,
+        }) => {
+          const _menuOpen = menuOpen && getFilteredOptions(inputValue).length != 0;
 
-        return (
-          <React.Fragment>
-            {!props.hideLabel ? (
-              <InputLabel
-                shrink
-                focused={enteringText || _menuOpen}
-              >
-                {props.label}
-              </InputLabel>
-            ) : null}
-            <div className={props.classes.rmss_multi_input_container}>
-              {(props.selectedValue || [])
-                .filter(item => props.options.find(opt => opt.id == item.id))
-                .map(item => (
-                  <Chip
-                    key={item.id}
-                    label={item.label}
-                    onDelete={props.disabled ? undefined : () => handleDeleteItem(item)}
-                    className={props.classes.rmss_chip}
-                  />
-                ))}
-                <div
-                  className={props.classes.rmss_input_and_label_container}
-                  style={inputStyle}
+          return (
+            <React.Fragment>
+              {!this.props.hideLabel ? (
+                <InputLabel
+                  shrink
+                  focused={enteringText || _menuOpen}
                 >
-                  <TextField
-                    fullWidth
-                    disabled={props.disabled}
-                    onChange={handleInputChange}
-                    onClick={() => (
-                      props.disabled ?
-                      null :
-                      toggleMenuOpen(true)
-                    )}
-                    onFocus={() => (
-                      props.disabled ?
-                      null :
-                        inputValue.length > 0 ?
-                          toggleEnteringText(true) :
-                          null
-                    )}
-                    value={value}
-                    onKeyDown={handleKeyDown}
-                    onBlur={() => toggleEnteringText(false)}
-                    placeholder={props.selectedValue ? '' : props.placeholder}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position='end'>
-                          {props.loading ? (
-                            <CircularProgress size={20} />
-                          ) : props.selectedValue ? (
-                            <IconButton onClick={handleClearValue}>
-                              <CloseIcon />
-                            </IconButton>
-                          ) : <div />}
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                  <div className={props.classes.rmss_multi_text_field_width_tracker}>{inputValue}</div>
-                </div>
-            </div>
+                  {this.props.label}
+                </InputLabel>
+              ) : null}
+              <div className={this.props.classes.rmss_multi_input_container}>
+                {(this.props.selectedValue || [])
+                  .filter(item => this.props.options.find(opt => opt.id == item.id))
+                  .map(item => (
+                    <Chip
+                      id={item.id}
+                      key={item.id}
+                      label={item.label}
+                      onDelete={this.props.disabled ? undefined : () => handleDeleteItem(item)}
+                      className={this.props.classes.rmss_chip}
+                    />
+                  ))}
+                  <div
+                    className={this.props.classes.rmss_input_and_label_container}
+                    style={inputStyle}
+                  >
+                    <TextField
+                      fullWidth
+                      disabled={this.props.disabled}
+                      onChange={handleInputChange}
+                      onClick={() => (
+                        this.props.disabled ?
+                        null :
+                        toggleMenuOpen(true)
+                      )}
+                      onFocus={() => (
+                        this.props.disabled ?
+                        null :
+                          inputValue.length > 0 ?
+                            toggleEnteringText(true) :
+                            null
+                      )}
+                      value={this.props.selectedValue && !enteringText ? '' : inputValue}
+                      onKeyDown={handleKeyDown}
+                      onBlur={() => toggleEnteringText(false)}
+                      placeholder={this.props.selectedValue ? '' : this.props.placeholder}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            {this.props.loading ? (
+                              <CircularProgress size={20} />
+                            ) : this.props.selectedValue ? (
+                              <IconButton onClick={handleClearValue}>
+                                <CloseIcon />
+                              </IconButton>
+                            ) : <div />}
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                    <div className={this.props.classes.rmss_multi_text_field_width_tracker}>{inputValue}</div>
+                  </div>
+              </div>
 
-            <SelectMenu
-              multi
-              open={_menuOpen}
-              options={getFilteredOptions(inputValue)}
-              onClickAway={() => (
-                _menuOpen ?
-                toggleMenuOpen(false) :
-                null
-              )}
-              handleSelectOption={handleSelectOption}
-              handleMouseEnterOption={setFocusedOption}
-              selectedValue={props.selectedValue}
-              focusedOption={focusedOption}
-            />
-          </React.Fragment>
-        )
-      }}
-    </SelectContainer>
-  );
+              <SelectMenu
+                multi
+                open={_menuOpen}
+                options={getFilteredOptions(inputValue)}
+                onClickAway={() => (
+                  _menuOpen ?
+                    toggleMenuOpen(false) :
+                    null
+                )}
+                handleSelectOption={handleSelectOption}
+                handleMouseEnterOption={setFocusedOption}
+                selectedValue={this.props.selectedValue}
+                focusedOption={focusedOption}
+              />
+            </React.Fragment>
+          )
+        }}
+      </SelectContainer>
+    );
+  }
 }
 
 MultiSelect.propTypes = {

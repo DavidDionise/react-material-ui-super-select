@@ -19,11 +19,14 @@ const SelectMenu = props => (
         mountOnEnter
         unmountOnExit
       >
-        <Paper classes={{ root: props.classes.rmss_global_menu_paper_container }}>
-          <MenuList id='rmss-menu-list'>
+        <Paper
+          classes={{ root: props.classes.rmss_global_menu_paper_container }}
+          id="rmss-menu-list-container"
+        >
+          <MenuList id="rmss-menu-list">
             {props.options.map(opt => {
               const selected = props.multi ? false : opt.id == (props.selectedValue || {}).id;
-              const focused = props.multi ? false : opt.id == (props.focusedOption || {}).id;
+              const focused = opt.id == (props.focusedOption || {}).id;
 
               return (
                 <MenuItem
@@ -67,6 +70,7 @@ SelectMenu.defaultProps = {
   selectedValue: null,
   focusedOption: null,
   menuItemRenderer: null,
+  chipInLastRow: null,
 };
 
 export default withStyles(Styles)(SelectMenu);
