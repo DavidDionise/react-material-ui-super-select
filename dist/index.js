@@ -5,13 +5,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Creatable = exports.MultiSelect = exports.Select = undefined;
 
-var _withStyles = require('@material-ui/core/styles/withStyles');
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _withStyles2 = _interopRequireDefault(_withStyles);
+var _react = require('react');
 
-var _Styles = require('./Styles');
-
-var _Styles2 = _interopRequireDefault(_Styles);
+var _react2 = _interopRequireDefault(_react);
 
 var _Select = require('./Select');
 
@@ -21,17 +19,12 @@ var _MultiSelect = require('./MultiSelect');
 
 var _MultiSelect2 = _interopRequireDefault(_MultiSelect);
 
-var _Creatable = require('./Creatable');
-
-var _Creatable2 = _interopRequireDefault(_Creatable);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Select = (0, _withStyles2.default)(_Styles2.default)(_Select2.default);
-var MultiSelect = (0, _withStyles2.default)(_Styles2.default)(_MultiSelect2.default);
-var Creatable = (0, _withStyles2.default)(_Styles2.default)(_Creatable2.default);
+var Creatable = function Creatable(props) {
+  return _react2.default.createElement(_MultiSelect2.default, _extends({}, props, { creatable: true }));
+};
 
-exports.default = Select;
-exports.Select = Select;
-exports.MultiSelect = MultiSelect;
+exports.Select = _Select2.default;
+exports.MultiSelect = _MultiSelect2.default;
 exports.Creatable = Creatable;

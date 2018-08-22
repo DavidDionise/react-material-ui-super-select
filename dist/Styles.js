@@ -63,6 +63,11 @@ exports.default = function (theme) {
       display: 'flex',
       justifyContent: 'flex-end'
     },
+    rmss_input_and_label_container: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100%'
+    },
 
     // Select
     rmss_input_container: {
@@ -94,7 +99,8 @@ exports.default = function (theme) {
       'visibility': 'hidden'
     }, theme.typography.subheading),
     rmss_chip: {
-      margin: theme.spacing.unit + 'px ' + theme.spacing.unit + 'px 0 0'
+      margin: '2px ' + theme.spacing.unit + 'px 0 0',
+      height: '30px'
     },
 
     // Creatable

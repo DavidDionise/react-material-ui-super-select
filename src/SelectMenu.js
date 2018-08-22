@@ -36,8 +36,8 @@ const SelectMenu = props => (
                   onMouseEnter={() => props.handleMouseEnterOption(opt)}
                   className={`${props.classes.rmss_global_menu_item} ${selected && !focused ? 'selected' : focused ? 'focused' : ''}`}
                 >
-                  {props.menuItemRenderer ? (
-                    props.menuItemRenderer(opt)
+                  {props.MenuItem ? (
+                    <MenuItem option={opt} />
                   ) : opt.label}
                 </MenuItem>
               );
@@ -63,13 +63,13 @@ SelectMenu.propTypes = {
     PropTypes.arrayOf(PropTypes.object)
   ]),
   focusedOption: PropTypes.object,
-  menuItemRenderer: PropTypes.func,
+  MenuItem: PropTypes.func,
 };
 
 SelectMenu.defaultProps = {
   selectedValue: null,
   focusedOption: null,
-  menuItemRenderer: null,
+  MenuItem: null,
   chipInLastRow: null,
 };
 
