@@ -56,7 +56,7 @@ Name | Data Type | Default | Description
 --- | --- | --- | --- |
 `options`| `Array<{ id: String, label: string }>` | | *required* - Used to render the options list. Only `label` will be displayed. `id` MUST be unique among the other elements in the list
 `selectedValue` | `{ id: String, label: String }` *or* `Array<{ id: String, label: String}>` | null | For the `Select` component, this must be an object that matches one of the objects in the `options` prop. For the `MultiSelect` and `Creatable` components, this must be an array of objects that each match objects in the `options` prop.
-`containerClassName` | | `String` | Concatenated className to the component's outer `<div>`
+`containerClassName` | `String` | | Concatenated className to the component's outer `<div>`
 `handleChange` | `Function` | | Function called when an option is selected. In the `Select` component, the
 `handleClearValue` | `Function` | | Function called when the clear button is clicked
 `MenuItem` | `Node` | | Optional component to render in place of the default menu item. Will receive a prop named `option`, which will be the option that is being rendered
