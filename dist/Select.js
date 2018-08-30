@@ -68,9 +68,8 @@ var Select = function Select(props) {
           handleClearValue = _ref.handleClearValue,
           handleKeyDown = _ref.handleKeyDown,
           handleChange = _ref.handleChange,
+          handleClickTextInput = _ref.handleClickTextInput,
           onClickAway = _ref.onClickAway,
-          toggleEnteringText = _ref.toggleEnteringText,
-          toggleMenuOpen = _ref.toggleMenuOpen,
           setFocusedOption = _ref.setFocusedOption,
           menuOpen = _ref.menuOpen,
           inputValue = _ref.inputValue,
@@ -78,6 +77,9 @@ var Select = function Select(props) {
           enteringText = _ref.enteringText;
 
       var _menuOpen = menuOpen && getFilteredOptions(inputValue).length != 0;
+      var _placeholder = !props.selectedValue ? props.placeholder : '';
+      var showMUILabel = !props.hideLabel && !props.selectedValue && props.label;
+      var showManualLabel = !props.hideLabel && props.selectedValue && props.label;
 
       return _react2.default.createElement(
         'div',
@@ -97,7 +99,7 @@ var Select = function Select(props) {
           _react2.default.createElement(
             'div',
             { className: props.classes.rmss_input_and_label_container },
-            !props.hideLabel ? _react2.default.createElement(
+            showManualLabel ? _react2.default.createElement(
               _InputLabel2.default,
               {
                 shrink: true,
@@ -109,18 +111,11 @@ var Select = function Select(props) {
               fullWidth: true,
               disabled: props.disabled,
               onChange: handleInputChange,
-              onClick: function onClick() {
-                return props.disabled ? null : toggleMenuOpen(true);
-              },
+              onClick: handleClickTextInput,
               value: props.selectedValue && !enteringText ? '' : inputValue,
               onKeyDown: handleKeyDown,
-              onBlur: function onBlur() {
-                return props.disabled ? null : toggleEnteringText(false);
-              },
-              onFocus: function onFocus() {
-                return props.disabled ? null : inputValue.length > 0 ? toggleEnteringText(true) : null;
-              },
-              placeholder: props.selectedValue ? '' : props.placeholder,
+              label: showMUILabel ? props.label : undefined,
+              placeholder: _placeholder,
               InputProps: {
                 endAdornment: _react2.default.createElement(
                   _InputAdornment2.default,

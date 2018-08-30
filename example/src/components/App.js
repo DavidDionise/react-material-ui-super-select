@@ -80,6 +80,7 @@ class App extends React.Component {
         <h4>Default Select</h4>
         <Select
           label='Select'
+          placeholder='Select an option'
           options={this.state.selectOptions}
           handleChange={value => this.setState({ defaultValue: value })}
           handleClearValue={() => this.setState({ defaultValue: null })}

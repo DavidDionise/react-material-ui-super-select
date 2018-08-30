@@ -60,6 +60,9 @@ class SelectContainer extends React.Component {
   componentWillMount() {
     this.setState({ focusedOption: this.props.options[0] });
   }
+  componentDidMount() {
+    this.mounted = true;
+  }
   componentDidUpdate() {
     if (this.props.multi) {
       const updatedStyle = this.props.calculateTextFieldStyle();
@@ -67,6 +70,9 @@ class SelectContainer extends React.Component {
         this.setState({ inputStyle: updatedStyle });
       }
     }
+  }
+  componentWillUnmount() {
+    this.mounted = false;
   }
   getFilteredOptions = (inputValue) => {
     const baseFilteredOptions = !this.props.manual && inputValue ?
@@ -314,6 +320,14 @@ class SelectContainer extends React.Component {
       this.props.handleChange(option);
     }
   }
+  handleClickTextInput = () => (
+    !this.props.disabled ?
+      this.setState({
+        enteringText: true,
+        menuOpen: true,
+      }) :
+      null
+  )
   handleDeleteItem = (item) => {
     if (this.props.selectedValue.length == 1) {
       this.props.handleChange(null);
@@ -336,19 +350,7 @@ class SelectContainer extends React.Component {
             handleKeyDown: this.handleKeyDown,
             onClickAway: this.onClickAway,
             handleChange: this.handleChange,
-            toggleMenuOpen: bool => (
-              this.state.menuOpen != bool ?
-                this.setState({ menuOpen: bool }) :
-                null
-            ),
-            toggleEnteringText: bool => (
-              this.state.enteringText != bool ?
-                this.setState({
-                  enteringText: bool,
-                  inputValue: this.state.inputValue == ' ' ? '' : this.state.inputValue,
-                }) :
-                null
-            ),
+            handleClickTextInput: this.handleClickTextInput,
             setFocusedOption: opt => this.setState({ focusedOption: opt }),
             handleDeleteItem: this.handleDeleteItem,
             ...this.state,

@@ -272,6 +272,11 @@ var SelectContainer = (_dec = (0, _withStyles2.default)(_Styles2.default), _dec(
       } else {
         _this.props.handleChange(option);
       }
+    }, _this.handleClickTextInput = function () {
+      return !_this.props.disabled ? _this.setState({
+        enteringText: true,
+        menuOpen: true
+      }) : null;
     }, _this.handleDeleteItem = function (item) {
       if (_this.props.selectedValue.length == 1) {
         _this.props.handleChange(null);
@@ -289,6 +294,11 @@ var SelectContainer = (_dec = (0, _withStyles2.default)(_Styles2.default), _dec(
       this.setState({ focusedOption: this.props.options[0] });
     }
   }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.mounted = true;
+    }
+  }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate() {
       if (this.props.multi) {
@@ -297,6 +307,11 @@ var SelectContainer = (_dec = (0, _withStyles2.default)(_Styles2.default), _dec(
           this.setState({ inputStyle: updatedStyle });
         }
       }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.mounted = false;
     }
   }, {
     key: 'render',
@@ -319,15 +334,7 @@ var SelectContainer = (_dec = (0, _withStyles2.default)(_Styles2.default), _dec(
             handleKeyDown: this.handleKeyDown,
             onClickAway: this.onClickAway,
             handleChange: this.handleChange,
-            toggleMenuOpen: function toggleMenuOpen(bool) {
-              return _this2.state.menuOpen != bool ? _this2.setState({ menuOpen: bool }) : null;
-            },
-            toggleEnteringText: function toggleEnteringText(bool) {
-              return _this2.state.enteringText != bool ? _this2.setState({
-                enteringText: bool,
-                inputValue: _this2.state.inputValue == ' ' ? '' : _this2.state.inputValue
-              }) : null;
-            },
+            handleClickTextInput: this.handleClickTextInput,
             setFocusedOption: function setFocusedOption(opt) {
               return _this2.setState({ focusedOption: opt });
             },

@@ -35,9 +35,8 @@ const Select = props => (
       handleClearValue,
       handleKeyDown,
       handleChange,
+      handleClickTextInput,
       onClickAway,
-      toggleEnteringText,
-      toggleMenuOpen,
       setFocusedOption,
       // from state
       menuOpen,
@@ -46,6 +45,17 @@ const Select = props => (
       enteringText,
     }) => {
       const _menuOpen = menuOpen && getFilteredOptions(inputValue).length != 0;
+      const _placeholder = !props.selectedValue ? props.placeholder : '';
+      const showMUILabel = (
+        !props.hideLabel &&
+        !props.selectedValue &&
+        props.label
+      );
+      const showManualLabel = (
+        !props.hideLabel &&
+        props.selectedValue &&
+        props.label
+      );
 
       return (
         <div>
@@ -58,7 +68,7 @@ const Select = props => (
               )}
             </div>
             <div className={props.classes.rmss_input_and_label_container}>
-              {!props.hideLabel ? (
+              {showManualLabel ? (
                 <InputLabel
                   shrink
                   focused={enteringText || _menuOpen}
@@ -70,22 +80,11 @@ const Select = props => (
                 fullWidth
                 disabled={props.disabled}
                 onChange={handleInputChange}
-                onClick={() => props.disabled ? null : toggleMenuOpen(true)}
+                onClick={handleClickTextInput}
                 value={props.selectedValue && !enteringText ? '' : inputValue}
                 onKeyDown={handleKeyDown}
-                onBlur={() => (
-                  props.disabled ?
-                    null :
-                    toggleEnteringText(false)
-                )}
-                onFocus={() => (
-                  props.disabled ?
-                    null :
-                    inputValue.length > 0 ?
-                      toggleEnteringText(true) :
-                      null
-                )}
-                placeholder={props.selectedValue ? '' : props.placeholder}
+                label={showMUILabel ? props.label : undefined}
+                placeholder={_placeholder}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment
