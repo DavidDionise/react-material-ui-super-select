@@ -174,6 +174,7 @@ var MultiSelect = function (_React$Component) {
               handleClearValue = _ref2.handleClearValue,
               handleKeyDown = _ref2.handleKeyDown,
               handleChange = _ref2.handleChange,
+              onClickAway = _ref2.onClickAway,
               handleDeleteItem = _ref2.handleDeleteItem,
               toggleEnteringText = _ref2.toggleEnteringText,
               toggleMenuOpen = _ref2.toggleMenuOpen,
@@ -260,9 +261,7 @@ var MultiSelect = function (_React$Component) {
               multi: true,
               open: _menuOpen,
               options: getFilteredOptions(inputValue),
-              onClickAway: function onClickAway() {
-                return _menuOpen ? toggleMenuOpen(false) : null;
-              },
+              onClickAway: onClickAway,
               handleChange: handleChange,
               handleMouseEnterOption: setFocusedOption,
               selectedValue: _this2.props.selectedValue,

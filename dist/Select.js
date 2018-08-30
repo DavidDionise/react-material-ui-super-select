@@ -68,7 +68,7 @@ var Select = function Select(props) {
           handleClearValue = _ref.handleClearValue,
           handleKeyDown = _ref.handleKeyDown,
           handleChange = _ref.handleChange,
-          handleBlur = _ref.handleBlur,
+          onClickAway = _ref.onClickAway,
           toggleEnteringText = _ref.toggleEnteringText,
           toggleMenuOpen = _ref.toggleMenuOpen,
           setFocusedOption = _ref.setFocusedOption,
@@ -80,7 +80,7 @@ var Select = function Select(props) {
       var _menuOpen = menuOpen && getFilteredOptions(inputValue).length != 0;
 
       return _react2.default.createElement(
-        _react2.default.Fragment,
+        'div',
         null,
         _react2.default.createElement(
           'div',
@@ -141,9 +141,7 @@ var Select = function Select(props) {
         _react2.default.createElement(_SelectMenu2.default, {
           open: _menuOpen,
           options: getFilteredOptions(inputValue),
-          onClickAway: function onClickAway() {
-            return _menuOpen ? toggleMenuOpen(false) : null;
-          },
+          onClickAway: onClickAway,
           handleChange: handleChange,
           handleMouseEnterOption: setFocusedOption,
           selectedValue: props.selectedValue,

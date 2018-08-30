@@ -95,6 +95,7 @@ class MultiSelect extends React.Component {
           handleClearValue,
           handleKeyDown,
           handleChange,
+          onClickAway,
           handleDeleteItem,
           toggleEnteringText,
           toggleMenuOpen,
@@ -176,11 +177,7 @@ class MultiSelect extends React.Component {
                 multi
                 open={_menuOpen}
                 options={getFilteredOptions(inputValue)}
-                onClickAway={() => (
-                  _menuOpen ?
-                    toggleMenuOpen(false) :
-                    null
-                )}
+                onClickAway={onClickAway}
                 handleChange={handleChange}
                 handleMouseEnterOption={setFocusedOption}
                 selectedValue={this.props.selectedValue}

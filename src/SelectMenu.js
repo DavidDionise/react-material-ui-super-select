@@ -13,38 +13,41 @@ const SelectMenu = props => (
   <div className={props.classes.rmss_global_menu_container}>
     <ClickAwayListener
       onClickAway={props.onClickAway}
+      target="window"
     >
-      <Grow
-        in={props.open}
-        mountOnEnter
-        unmountOnExit
-      >
-        <Paper
-          classes={{ root: props.classes.rmss_global_menu_paper_container }}
-          id="rmss-menu-list-container"
+      <div>
+        <Grow
+          in={props.open}
+          mountOnEnter
+          unmountOnExit
         >
-          <MenuList id="rmss-menu-list">
-            {props.options.map(opt => {
-              const selected = props.multi ? false : opt.id == (props.selectedValue || {}).id;
-              const focused = opt.id == (props.focusedOption || {}).id;
+          <Paper
+            classes={{ root: props.classes.rmss_global_menu_paper_container }}
+            id="rmss-menu-list-container"
+          >
+            <MenuList id="rmss-menu-list">
+              {props.options.map(opt => {
+                const selected = props.multi ? false : opt.id == (props.selectedValue || {}).id;
+                const focused = opt.id == (props.focusedOption || {}).id;
 
-              return (
-                <MenuItem
-                  key={opt.id}
-                  id={`rmss-menu-item-${opt.id}`}
-                  onClick={() => props.handleChange(opt)}
-                  onMouseEnter={() => props.handleMouseEnterOption(opt)}
-                  className={`${props.classes.rmss_global_menu_item} ${selected && !focused ? 'selected' : focused ? 'focused' : ''}`}
-                >
-                  {props.MenuItem ? (
-                    <MenuItem option={opt} />
-                  ) : opt.label}
-                </MenuItem>
-              );
-            })}
-          </MenuList>
-        </Paper>
-      </Grow>
+                return (
+                  <MenuItem
+                    key={opt.id}
+                    id={`rmss-menu-item-${opt.id}`}
+                    onClick={() => props.handleChange(opt)}
+                    onMouseEnter={() => props.handleMouseEnterOption(opt)}
+                    className={`${props.classes.rmss_global_menu_item} ${selected && !focused ? 'selected' : focused ? 'focused' : ''}`}
+                  >
+                    {props.MenuItem ? (
+                      <MenuItem option={opt} />
+                    ) : opt.label}
+                  </MenuItem>
+                );
+              })}
+            </MenuList>
+          </Paper>
+        </Grow>
+      </div>
     </ClickAwayListener>
   </div>
 );

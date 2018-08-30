@@ -257,6 +257,8 @@ var SelectContainer = (_dec = (0, _withStyles2.default)(_Styles2.default), _dec(
           (0, _jquery2.default)(menuContainerElement).scrollTop(newScrollHeight);
         }, 100);
       }
+    }, _this.onClickAway = function () {
+      return _this.state.menuOpen ? _this.setState({ menuOpen: false }) : function () {};
     }, _this.handleChange = function (option) {
       _this.setState({
         menuOpen: _this.props.stayOpenAfterSelection != false,
@@ -315,6 +317,7 @@ var SelectContainer = (_dec = (0, _withStyles2.default)(_Styles2.default), _dec(
             handleInputChange: this.handleInputChange,
             handleClearValue: this.handleClearValue,
             handleKeyDown: this.handleKeyDown,
+            onClickAway: this.onClickAway,
             handleChange: this.handleChange,
             toggleMenuOpen: function toggleMenuOpen(bool) {
               return _this2.state.menuOpen != bool ? _this2.setState({ menuOpen: bool }) : null;

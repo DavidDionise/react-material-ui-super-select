@@ -35,7 +35,7 @@ const Select = props => (
       handleClearValue,
       handleKeyDown,
       handleChange,
-      handleBlur,
+      onClickAway,
       toggleEnteringText,
       toggleMenuOpen,
       setFocusedOption,
@@ -48,7 +48,7 @@ const Select = props => (
       const _menuOpen = menuOpen && getFilteredOptions(inputValue).length != 0;
 
       return (
-        <React.Fragment>
+        <div>
           <div className={props.classes.rmss_input_container}>
             <div className={props.classes.rmss_selected_value_container}>
               {enteringText && inputValue ? null : (
@@ -109,17 +109,13 @@ const Select = props => (
           <SelectMenu
             open={_menuOpen}
             options={getFilteredOptions(inputValue)}
-            onClickAway={() => (
-              _menuOpen ?
-                toggleMenuOpen(false) :
-                null
-            )}
+            onClickAway={onClickAway}
             handleChange={handleChange}
             handleMouseEnterOption={setFocusedOption}
             selectedValue={props.selectedValue}
             focusedOption={focusedOption}
           />
-        </React.Fragment>
+        </div>
       )
     }}
   </SelectContainer>

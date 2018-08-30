@@ -49,44 +49,49 @@ var SelectMenu = function SelectMenu(props) {
     _react2.default.createElement(
       _ClickAwayListener2.default,
       {
-        onClickAway: props.onClickAway
+        onClickAway: props.onClickAway,
+        target: 'window'
       },
       _react2.default.createElement(
-        _Grow2.default,
-        {
-          'in': props.open,
-          mountOnEnter: true,
-          unmountOnExit: true
-        },
+        'div',
+        null,
         _react2.default.createElement(
-          _Paper2.default,
+          _Grow2.default,
           {
-            classes: { root: props.classes.rmss_global_menu_paper_container },
-            id: 'rmss-menu-list-container'
+            'in': props.open,
+            mountOnEnter: true,
+            unmountOnExit: true
           },
           _react2.default.createElement(
-            _MenuList2.default,
-            { id: 'rmss-menu-list' },
-            props.options.map(function (opt) {
-              var selected = props.multi ? false : opt.id == (props.selectedValue || {}).id;
-              var focused = opt.id == (props.focusedOption || {}).id;
+            _Paper2.default,
+            {
+              classes: { root: props.classes.rmss_global_menu_paper_container },
+              id: 'rmss-menu-list-container'
+            },
+            _react2.default.createElement(
+              _MenuList2.default,
+              { id: 'rmss-menu-list' },
+              props.options.map(function (opt) {
+                var selected = props.multi ? false : opt.id == (props.selectedValue || {}).id;
+                var focused = opt.id == (props.focusedOption || {}).id;
 
-              return _react2.default.createElement(
-                _MenuItem2.default,
-                {
-                  key: opt.id,
-                  id: 'rmss-menu-item-' + opt.id,
-                  onClick: function onClick() {
-                    return props.handleChange(opt);
+                return _react2.default.createElement(
+                  _MenuItem2.default,
+                  {
+                    key: opt.id,
+                    id: 'rmss-menu-item-' + opt.id,
+                    onClick: function onClick() {
+                      return props.handleChange(opt);
+                    },
+                    onMouseEnter: function onMouseEnter() {
+                      return props.handleMouseEnterOption(opt);
+                    },
+                    className: props.classes.rmss_global_menu_item + ' ' + (selected && !focused ? 'selected' : focused ? 'focused' : '')
                   },
-                  onMouseEnter: function onMouseEnter() {
-                    return props.handleMouseEnterOption(opt);
-                  },
-                  className: props.classes.rmss_global_menu_item + ' ' + (selected && !focused ? 'selected' : focused ? 'focused' : '')
-                },
-                props.MenuItem ? _react2.default.createElement(_MenuItem2.default, { option: opt }) : opt.label
-              );
-            })
+                  props.MenuItem ? _react2.default.createElement(_MenuItem2.default, { option: opt }) : opt.label
+                );
+              })
+            )
           )
         )
       )

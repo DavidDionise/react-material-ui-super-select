@@ -295,6 +295,11 @@ class SelectContainer extends React.Component {
       }, 100);
     }
   }
+  onClickAway = () => (
+    this.state.menuOpen ?
+      this.setState({ menuOpen: false }) :
+      () => {}
+  )
   handleChange = (option) => {
     this.setState({
       menuOpen: this.props.stayOpenAfterSelection != false,
@@ -329,6 +334,7 @@ class SelectContainer extends React.Component {
             handleInputChange: this.handleInputChange,
             handleClearValue: this.handleClearValue,
             handleKeyDown: this.handleKeyDown,
+            onClickAway: this.onClickAway,
             handleChange: this.handleChange,
             toggleMenuOpen: bool => (
               this.state.menuOpen != bool ?
