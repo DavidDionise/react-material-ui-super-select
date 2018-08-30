@@ -1,6 +1,6 @@
 {
   "name": "react-material-ui-super-select",
-  "version": "1.1.12",
+  "version": "1.1.13",
   "description": "Upgraded select drop down using the Material UI theme",
   "main": "dist/index.js",
   "scripts": {
