@@ -109,12 +109,13 @@ const MultiSelect = (props) => {
         const _placeholder = !props.selectedValue ? props.placeholder : '';
         const showMUILabel = (
           !props.hideLabel &&
-          !props.selectedValue &&
+          (!props.selectedValue || props.selectedValue.length === 0) &&
           props.label
         );
         const showManualLabel = (
           !props.hideLabel &&
           props.selectedValue &&
+          props.selectedValue.length > 0 &&
           props.label
         );
 
@@ -155,10 +156,13 @@ const MultiSelect = (props) => {
                     placeholder={_placeholder}
                     InputProps={{
                       endAdornment: (
-                        <InputAdornment position='end'>
+                        <InputAdornment
+                          position='end'
+                          classes={{ root: props.classes.rmss_global_input_adornment_container }}
+                        >
                           {props.loading ? (
                             <CircularProgress size={20} />
-                          ) : props.selectedValue ? (
+                          ) : props.selectedValue && props.selectedValue.length > 0 ? (
                             <IconButton onClick={handleClearValue}>
                               <CloseIcon />
                             </IconButton>

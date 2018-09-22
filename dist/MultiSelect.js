@@ -158,8 +158,8 @@ var MultiSelect = function MultiSelect(props) {
 
       var _menuOpen = menuOpen && getFilteredOptions(inputValue).length != 0;
       var _placeholder = !props.selectedValue ? props.placeholder : '';
-      var showMUILabel = !props.hideLabel && !props.selectedValue && props.label;
-      var showManualLabel = !props.hideLabel && props.selectedValue && props.label;
+      var showMUILabel = !props.hideLabel && (!props.selectedValue || props.selectedValue.length === 0) && props.label;
+      var showManualLabel = !props.hideLabel && props.selectedValue && props.selectedValue.length > 0 && props.label;
 
       return _react2.default.createElement(
         _react2.default.Fragment,
@@ -208,8 +208,11 @@ var MultiSelect = function MultiSelect(props) {
               InputProps: {
                 endAdornment: _react2.default.createElement(
                   _InputAdornment2.default,
-                  { position: 'end' },
-                  props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : props.selectedValue ? _react2.default.createElement(
+                  {
+                    position: 'end',
+                    classes: { root: props.classes.rmss_global_input_adornment_container }
+                  },
+                  props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : props.selectedValue && props.selectedValue.length > 0 ? _react2.default.createElement(
                     _IconButton2.default,
                     { onClick: handleClearValue },
                     _react2.default.createElement(_Close2.default, null)
