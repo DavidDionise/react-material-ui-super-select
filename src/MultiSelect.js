@@ -72,7 +72,6 @@ const MultiSelect = (props) => {
   return (
     <SelectContainer
       multi
-      creatable={props.creatable}
       calculateTextFieldStyle={calculateTextFieldStyle}
       {..._.pick(
         props, [
@@ -86,6 +85,8 @@ const MultiSelect = (props) => {
           'loading',
           'handleInputChange',
           'manual',
+          'creatable',
+          'disabled',
         ])}
     >
       {({
@@ -164,7 +165,7 @@ const MultiSelect = (props) => {
                             <CircularProgress size={20} />
                           ) : props.selectedValue && props.selectedValue.length > 0 ? (
                             <IconButton onClick={handleClearValue}>
-                              <CloseIcon />
+                              <CloseIcon classes={{ root: props.classes.rmss_global_close_button_container }} />
                             </IconButton>
                           ) : <div />}
                         </InputAdornment>

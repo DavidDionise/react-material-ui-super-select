@@ -28,6 +28,7 @@ class SelectContainer extends React.Component {
     manual: PropTypes.bool,
     multi: PropTypes.bool,
     creatable: PropTypes.bool,
+    disabled: PropTypes.bool,
     // from withStyles
     classes: PropTypes.object,
   };
@@ -43,6 +44,7 @@ class SelectContainer extends React.Component {
     manual: false,
     multi: false,
     creatable: false,
+    disabled: false,
     classes: {},
   };
 
@@ -203,6 +205,9 @@ class SelectContainer extends React.Component {
       }
       // Arrow Down
       case 40: {
+        if (this.props.disabled) {
+          break;
+        }
         const filteredOptions = this.getFilteredOptions(this.state.inputValue);
         if (
           !this.state.menuOpen &&
@@ -230,6 +235,9 @@ class SelectContainer extends React.Component {
       }
       // Arrow Up
       case 38: {
+        if (this.props.disabled) {
+          break;
+        }
         const filteredOptions = this.getFilteredOptions(this.state.inputValue);
         if (filteredOptions.length == 0) {
           return;

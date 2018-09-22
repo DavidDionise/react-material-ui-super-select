@@ -27,6 +27,7 @@ const Select = props => (
         'loading',
         'handleInputChange',
         'manual',
+        'disabled',
       ])}
   >
     {({
