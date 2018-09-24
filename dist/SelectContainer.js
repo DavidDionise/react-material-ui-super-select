@@ -177,6 +177,9 @@ var SelectContainer = (_dec = (0, _withStyles2.default)(_Styles2.default), _dec(
         // Arrow Down
         case 40:
           {
+            if (_this.props.disabled) {
+              break;
+            }
             var filteredOptions = _this.getFilteredOptions(_this.state.inputValue);
             if (!_this.state.menuOpen && filteredOptions.length > 0) {
               _this.setState({
@@ -200,6 +203,9 @@ var SelectContainer = (_dec = (0, _withStyles2.default)(_Styles2.default), _dec(
         // Arrow Up
         case 38:
           {
+            if (_this.props.disabled) {
+              break;
+            }
             var _filteredOptions = _this.getFilteredOptions(_this.state.inputValue);
             if (_filteredOptions.length == 0) {
               return;
@@ -361,6 +367,7 @@ SelectContainer.propTypes = {
   manual: _propTypes2.default.bool,
   multi: _propTypes2.default.bool,
   creatable: _propTypes2.default.bool,
+  disabled: _propTypes2.default.bool,
   // from withStyles
   classes: _propTypes2.default.object
 };
@@ -371,5 +378,5 @@ SelectContainer.defaultProps = (_SelectContainer$defa = {
   handleCreate: function handleCreate() {},
   calculateTextFieldStyle: function calculateTextFieldStyle() {},
   containerClassName: ''
-}, _defineProperty(_SelectContainer$defa, 'containerClassName', ''), _defineProperty(_SelectContainer$defa, 'stayOpenAfterSelection', false), _defineProperty(_SelectContainer$defa, 'manual', false), _defineProperty(_SelectContainer$defa, 'multi', false), _defineProperty(_SelectContainer$defa, 'creatable', false), _defineProperty(_SelectContainer$defa, 'classes', {}), _SelectContainer$defa);
+}, _defineProperty(_SelectContainer$defa, 'containerClassName', ''), _defineProperty(_SelectContainer$defa, 'stayOpenAfterSelection', false), _defineProperty(_SelectContainer$defa, 'manual', false), _defineProperty(_SelectContainer$defa, 'multi', false), _defineProperty(_SelectContainer$defa, 'creatable', false), _defineProperty(_SelectContainer$defa, 'disabled', false), _defineProperty(_SelectContainer$defa, 'classes', {}), _SelectContainer$defa);
 exports.default = SelectContainer;

@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import SearchIcon from '@material-ui/icons/Search';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InputLabel from '@material-ui/core/InputLabel';
 
@@ -96,9 +97,17 @@ const Select = props => (
                         <CircularProgress size={20} />
                       ) : props.selectedValue ? (
                         <IconButton onClick={handleClearValue}>
-                          <CloseIcon classes={{ root: props.classes.rmss_global_close_button_container }} />
+                          <CloseIcon
+                            classes={{ root: `${props.classes.rmss_global_input_end_adornement_container} close-button` }}
+                          />
                         </IconButton>
-                      ) : <div />}
+                      ) : (
+                        props.showSearchIcon ? (
+                          <SearchIcon
+                            classes={{ root: props.classes.rmss_global_input_end_adornement_container }}
+                          />
+                        ) : <div />
+                      )}
                     </InputAdornment>
                   )
                 }}
@@ -144,6 +153,7 @@ Select.propTypes = {
   disabled: PropTypes.bool,
   manual: PropTypes.bool,
   hideLabel: PropTypes.bool,
+  showSearchIcon: PropTypes.bool,
 };
 
 Select.defaultProps = {
@@ -158,6 +168,7 @@ Select.defaultProps = {
   disabled: false,
   manual: false,
   hideLabel: false,
+  showSearchIcon: true,
 };
 
 export default withStyles(Styles)(Select);

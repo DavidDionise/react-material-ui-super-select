@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CloseIcon from '@material-ui/icons/Close';
+import SearchIcon from '@material-ui/icons/Search';
 import $ from 'jquery';
 
 import SelectContainer from './SelectContainer';
@@ -165,9 +166,17 @@ const MultiSelect = (props) => {
                             <CircularProgress size={20} />
                           ) : props.selectedValue && props.selectedValue.length > 0 ? (
                             <IconButton onClick={handleClearValue}>
-                              <CloseIcon classes={{ root: props.classes.rmss_global_close_button_container }} />
+                              <CloseIcon
+                                classes={{ root: `${props.classes.rmss_global_input_end_adornement_container} close-button` }}
+                              />
                             </IconButton>
-                          ) : <div />}
+                          ) : (
+                            props.showSearchIcon ? (
+                              <SearchIcon
+                                classes={{ root: props.classes.rmss_global_input_end_adornement_container }}
+                              />
+                            ) : <div />)
+                          }
                         </InputAdornment>
                       )
                     }}
@@ -208,6 +217,7 @@ MultiSelect.propTypes = {
 MultiSelect.defaultProps = {
   handleCreate: () => {},
   creatable: false,
+  showSearchIcon: true,
 };
 
 export default withStyles(Styles)(MultiSelect);

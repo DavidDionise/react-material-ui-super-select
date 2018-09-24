@@ -32,6 +32,10 @@ var _Close = require('@material-ui/icons/Close');
 
 var _Close2 = _interopRequireDefault(_Close);
 
+var _Search = require('@material-ui/icons/Search');
+
+var _Search2 = _interopRequireDefault(_Search);
+
 var _CircularProgress = require('@material-ui/core/CircularProgress');
 
 var _CircularProgress2 = _interopRequireDefault(_CircularProgress);
@@ -61,7 +65,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Select = function Select(props) {
   return _react2.default.createElement(
     _SelectContainer2.default,
-    _lodash2.default.pick(props, ['options', 'containerClassName', 'handleChange', 'stayOpenAfterSelection', 'selectedValue', 'handleClearValue', 'loading', 'handleInputChange', 'manual']),
+    _lodash2.default.pick(props, ['options', 'containerClassName', 'handleChange', 'stayOpenAfterSelection', 'selectedValue', 'handleClearValue', 'loading', 'handleInputChange', 'manual', 'disabled']),
     function (_ref) {
       var getFilteredOptions = _ref.getFilteredOptions,
           handleInputChange = _ref.handleInputChange,
@@ -126,8 +130,12 @@ var Select = function Select(props) {
                   props.loading ? _react2.default.createElement(_CircularProgress2.default, { size: 20 }) : props.selectedValue ? _react2.default.createElement(
                     _IconButton2.default,
                     { onClick: handleClearValue },
-                    _react2.default.createElement(_Close2.default, { classes: { root: props.classes.rmss_global_close_button_container } })
-                  ) : _react2.default.createElement('div', null)
+                    _react2.default.createElement(_Close2.default, {
+                      classes: { root: props.classes.rmss_global_input_end_adornement_container + ' close-button' }
+                    })
+                  ) : props.showSearchIcon ? _react2.default.createElement(_Search2.default, {
+                    classes: { root: props.classes.rmss_global_input_end_adornement_container }
+                  }) : _react2.default.createElement('div', null)
                 )
               }
             })
@@ -167,7 +175,8 @@ Select.propTypes = {
   loading: _propTypes2.default.bool,
   disabled: _propTypes2.default.bool,
   manual: _propTypes2.default.bool,
-  hideLabel: _propTypes2.default.bool
+  hideLabel: _propTypes2.default.bool,
+  showSearchIcon: _propTypes2.default.bool
 };
 
 Select.defaultProps = {
@@ -181,7 +190,8 @@ Select.defaultProps = {
   loading: false,
   disabled: false,
   manual: false,
-  hideLabel: false
+  hideLabel: false,
+  showSearchIcon: true
 };
 
 exports.default = (0, _withStyles2.default)(_Styles2.default)(Select);

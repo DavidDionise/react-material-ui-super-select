@@ -92,8 +92,7 @@ class App extends React.Component {
         <h4>Multi Select</h4>
         <MultiSelect
           label='MultiSelect'
-          placeholder="sick"
-          disabled
+          placeholder="Multi"
           options={this.state.multiOptions}
           handleChange={value => this.setState({ multiValue: value })}
           handleClearValue={() => this.setState({ multiValue: null })}

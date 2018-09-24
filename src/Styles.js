@@ -35,11 +35,14 @@ export default theme => ({
     display: 'inline-block',
     width: '20px',
   },
-  rmss_global_close_button_container: {
+  rmss_global_input_end_adornement_container: {
     color: theme.palette.grey[700],
-    fontSize: '16px',
     '&:hover': {
       cursor: 'pointer',
+    },
+
+    '&.close-button': {
+      fontSize: '16px',
     }
   },
   rmss_global_menu_paper_container: {
