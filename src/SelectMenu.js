@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
@@ -9,48 +10,63 @@ import MenuItem from '@material-ui/core/MenuItem';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Styles from './Styles';
 
-const SelectMenu = props => (
-  <div className={props.classes.rmss_global_menu_container}>
-    <ClickAwayListener
-      onClickAway={props.onClickAway}
-      target="window"
-    >
-      <div>
-        <Grow
-          in={props.open}
-          mountOnEnter
-          unmountOnExit
-        >
-          <Paper
-            classes={{ root: props.classes.rmss_global_menu_paper_container }}
-            id="rmss-menu-list-container"
-          >
-            <MenuList id="rmss-menu-list">
-              {props.options.map(opt => {
-                const selected = props.multi ? false : opt.id == (props.selectedValue || {}).id;
-                const focused = opt.id == (props.focusedOption || {}).id;
+class SelectMenu extends React.Component {
+  shouldComponentUpdate(nextProps) {
+    if (
+      _.isEqual(nextProps.options, this.props.options) &&
+      nextProps.open === this.props.open
+    ) {
+      return false;
+    }
 
-                return (
-                  <MenuItem
-                    key={opt.id}
-                    id={`rmss-menu-item-${opt.id}`}
-                    onClick={() => props.handleChange(opt)}
-                    onMouseEnter={() => props.handleMouseEnterOption(opt)}
-                    className={`${props.classes.rmss_global_menu_item} ${selected && !focused ? 'selected' : focused ? 'focused' : ''}`}
-                  >
-                    {props.MenuItem ? (
-                      <MenuItem option={opt} />
-                    ) : opt.label}
-                  </MenuItem>
-                );
-              })}
-            </MenuList>
-          </Paper>
-        </Grow>
+    return true;
+  }
+
+  render() {
+    return (
+      <div className={this.props.classes.rmss_global_menu_container}>
+        <ClickAwayListener
+          onClickAway={this.props.onClickAway}
+          target="window"
+        >
+          <div>
+            <Grow
+              in={this.props.open}
+              mountOnEnter
+              unmountOnExit
+            >
+              <Paper
+                classes={{ root: this.props.classes.rmss_global_menu_paper_container }}
+                id="rmss-menu-list-container"
+              >
+                <MenuList id="rmss-menu-list">
+                  {this.props.options.map(opt => {
+                    const selected = this.props.multi ? false : opt.id == (this.props.selectedValue || {}).id;
+                    const focused = opt.id == (this.props.focusedOption || {}).id;
+
+                    return (
+                      <MenuItem
+                        key={opt.id}
+                        id={`rmss-menu-item-${opt.id}`}
+                        onClick={() => this.props.handleChange(opt)}
+                        onMouseEnter={() => this.props.handleMouseEnterOption(opt)}
+                        className={`${this.props.classes.rmss_global_menu_item} ${selected && !focused ? 'selected' : focused ? 'focused' : ''}`}
+                      >
+                        {this.props.MenuItem ? (
+                          <MenuItem option={opt} />
+                        ) : opt.label}
+                      </MenuItem>
+                    );
+                  })}
+                </MenuList>
+              </Paper>
+            </Grow>
+          </div>
+        </ClickAwayListener>
       </div>
-    </ClickAwayListener>
-  </div>
-);
+    );
+  }
+}
 
 SelectMenu.propTypes = {
   open: PropTypes.bool.isRequired,

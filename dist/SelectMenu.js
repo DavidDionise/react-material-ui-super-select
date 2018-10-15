@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -11,6 +13,10 @@ var _react2 = _interopRequireDefault(_react);
 var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
 
 var _ClickAwayListener = require('@material-ui/core/ClickAwayListener');
 
@@ -42,62 +48,94 @@ var _Styles2 = _interopRequireDefault(_Styles);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var SelectMenu = function SelectMenu(props) {
-  return _react2.default.createElement(
-    'div',
-    { className: props.classes.rmss_global_menu_container },
-    _react2.default.createElement(
-      _ClickAwayListener2.default,
-      {
-        onClickAway: props.onClickAway,
-        target: 'window'
-      },
-      _react2.default.createElement(
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SelectMenu = function (_React$Component) {
+  _inherits(SelectMenu, _React$Component);
+
+  function SelectMenu() {
+    _classCallCheck(this, SelectMenu);
+
+    return _possibleConstructorReturn(this, (SelectMenu.__proto__ || Object.getPrototypeOf(SelectMenu)).apply(this, arguments));
+  }
+
+  _createClass(SelectMenu, [{
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps) {
+      if (_lodash2.default.isEqual(nextProps.options, this.props.options) && nextProps.open === this.props.open) {
+        return false;
+      }
+
+      return true;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      return _react2.default.createElement(
         'div',
-        null,
+        { className: this.props.classes.rmss_global_menu_container },
         _react2.default.createElement(
-          _Grow2.default,
+          _ClickAwayListener2.default,
           {
-            'in': props.open,
-            mountOnEnter: true,
-            unmountOnExit: true
+            onClickAway: this.props.onClickAway,
+            target: 'window'
           },
           _react2.default.createElement(
-            _Paper2.default,
-            {
-              classes: { root: props.classes.rmss_global_menu_paper_container },
-              id: 'rmss-menu-list-container'
-            },
+            'div',
+            null,
             _react2.default.createElement(
-              _MenuList2.default,
-              { id: 'rmss-menu-list' },
-              props.options.map(function (opt) {
-                var selected = props.multi ? false : opt.id == (props.selectedValue || {}).id;
-                var focused = opt.id == (props.focusedOption || {}).id;
+              _Grow2.default,
+              {
+                'in': this.props.open,
+                mountOnEnter: true,
+                unmountOnExit: true
+              },
+              _react2.default.createElement(
+                _Paper2.default,
+                {
+                  classes: { root: this.props.classes.rmss_global_menu_paper_container },
+                  id: 'rmss-menu-list-container'
+                },
+                _react2.default.createElement(
+                  _MenuList2.default,
+                  { id: 'rmss-menu-list' },
+                  this.props.options.map(function (opt) {
+                    var selected = _this2.props.multi ? false : opt.id == (_this2.props.selectedValue || {}).id;
+                    var focused = opt.id == (_this2.props.focusedOption || {}).id;
 
-                return _react2.default.createElement(
-                  _MenuItem2.default,
-                  {
-                    key: opt.id,
-                    id: 'rmss-menu-item-' + opt.id,
-                    onClick: function onClick() {
-                      return props.handleChange(opt);
-                    },
-                    onMouseEnter: function onMouseEnter() {
-                      return props.handleMouseEnterOption(opt);
-                    },
-                    className: props.classes.rmss_global_menu_item + ' ' + (selected && !focused ? 'selected' : focused ? 'focused' : '')
-                  },
-                  props.MenuItem ? _react2.default.createElement(_MenuItem2.default, { option: opt }) : opt.label
-                );
-              })
+                    return _react2.default.createElement(
+                      _MenuItem2.default,
+                      {
+                        key: opt.id,
+                        id: 'rmss-menu-item-' + opt.id,
+                        onClick: function onClick() {
+                          return _this2.props.handleChange(opt);
+                        },
+                        onMouseEnter: function onMouseEnter() {
+                          return _this2.props.handleMouseEnterOption(opt);
+                        },
+                        className: _this2.props.classes.rmss_global_menu_item + ' ' + (selected && !focused ? 'selected' : focused ? 'focused' : '')
+                      },
+                      _this2.props.MenuItem ? _react2.default.createElement(_MenuItem2.default, { option: opt }) : opt.label
+                    );
+                  })
+                )
+              )
             )
           )
         )
-      )
-    )
-  );
-};
+      );
+    }
+  }]);
+
+  return SelectMenu;
+}(_react2.default.Component);
 
 SelectMenu.propTypes = {
   open: _propTypes2.default.bool.isRequired,
