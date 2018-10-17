@@ -14,6 +14,7 @@ class SelectMenu extends React.Component {
   shouldComponentUpdate(nextProps) {
     if (
       _.isEqual(nextProps.options, this.props.options) &&
+      _.isEqual(nextProps.focusedOption, this.props.focusedOption) &&
       nextProps.open === this.props.open
     ) {
       return false;
@@ -52,9 +53,7 @@ class SelectMenu extends React.Component {
                         onMouseEnter={() => this.props.handleMouseEnterOption(opt)}
                         className={`${this.props.classes.rmss_global_menu_item} ${selected && !focused ? 'selected' : focused ? 'focused' : ''}`}
                       >
-                        {this.props.MenuItem ? (
-                          <MenuItem option={opt} />
-                        ) : opt.label}
+                        {this.props.MenuItem ? <MenuItem option={opt} /> : opt.label}
                       </MenuItem>
                     );
                   })}

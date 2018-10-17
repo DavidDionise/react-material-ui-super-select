@@ -121,8 +121,8 @@ const Select = props => (
             onClickAway={onClickAway}
             handleChange={handleChange}
             handleMouseEnterOption={setFocusedOption}
-            selectedValue={props.selectedValue}
             focusedOption={focusedOption}
+            selectedValue={props.selectedValue}
           />
         </div>
       )

@@ -66,7 +66,7 @@ var SelectMenu = function (_React$Component) {
   _createClass(SelectMenu, [{
     key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps) {
-      if (_lodash2.default.isEqual(nextProps.options, this.props.options) && nextProps.open === this.props.open) {
+      if (_lodash2.default.isEqual(nextProps.options, this.props.options) && _lodash2.default.isEqual(nextProps.focusedOption, this.props.focusedOption) && nextProps.open === this.props.open) {
         return false;
       }
 
